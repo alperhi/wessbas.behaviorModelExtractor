@@ -239,7 +239,7 @@ public class BehaviorModelExtractor {
                 new ABMToRBMTransformer();
 
         final RBMToRBMUnifier rbmToRBMUnifier =
-                new RBMToRBMUnifier(clusteringMethod);
+                new RBMToRBMUnifier();
 
         final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer =
                 new RBMToMarkovMatrixTransformer(this.markovMatrixHandler);
@@ -248,17 +248,19 @@ public class BehaviorModelExtractor {
         // ----  start transformation process  ----;
 
         final BehaviorModelAbsolute[] behaviorModelsAbsolute =
-                sessionToAbmTransformer.
-                transformSessionsToBehaviorModels(
+                sessionToAbmTransformer.transformSessionsToBehaviorModels(
                         this.sessionRepository.getSessions(),
                         this.useCaseRepository.getUseCases());
 
         final BehaviorModelRelative[] behaviorModelsRelative =
-                abmToRbmTransformer.
-                transform(behaviorModelsAbsolute);
+                abmToRbmTransformer.transform(behaviorModelsAbsolute);
 
         final BehaviorMixEntry[] behaviorMixEntries =
-                rbmToRBMUnifier.transform(behaviorModelsRelative);
+                rbmToRBMUnifier.transform(
+                        behaviorModelsRelative,
+                        clusteringMethod,
+                        this.useCaseRepository,
+                        BehaviorModelExtractor.FINAL_VERTEX_NAME);
 
         // (RBM-to-matrix transformation is nested into file writer below);
 

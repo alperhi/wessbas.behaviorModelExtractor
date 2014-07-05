@@ -13,8 +13,6 @@ import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.Vertex;
 
-import org.eclipse.emf.common.util.EList;
-
 /**
  * This class provides methods for transforming user session traces to
  * "absolute" Behavior Models.
@@ -364,8 +362,7 @@ public class SessionToABMTransformer {
             final Vertex srcVertex,
             final Vertex dstVertex) {
 
-        final EList<Transition> transitions =
-                srcVertex.getOutgoingTransitions();
+        final List<Transition> transitions = srcVertex.getOutgoingTransitions();
 
         for (final Transition transition : transitions) {
 
