@@ -27,7 +27,7 @@
       <!-- @generated behavior -->
       <package
             uri="http://behavior/1.0"
-            class="dynamod.behavior.BehaviorPackage"
+            class="net.sf.markov4jmeter.behavior.BehaviorPackage"
             genModel="model/behavior.genmodel"/>
    </extension>
 
@@ -35,6 +35,6 @@
       <!-- @generated behavior -->
       <parser
             type="behavior"
-            class="dynamod.behavior.util.BehaviorResourceFactoryImpl"/>
+            class="net.sf.markov4jmeter.behavior.util.BehaviorResourceFactoryImpl"/>
    </extension>
 </plugin>

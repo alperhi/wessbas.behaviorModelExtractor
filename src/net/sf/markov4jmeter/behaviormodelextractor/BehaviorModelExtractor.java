@@ -23,6 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.sf.markov4jmeter.behavior.BehaviorFactory;
+import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
+import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
+import net.sf.markov4jmeter.behavior.SessionRepository;
+import net.sf.markov4jmeter.behavior.UseCaseRepository;
+import net.sf.markov4jmeter.behavior.impl.BehaviorPackageImpl;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.BehaviorModelWriter;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.MarkovMatrixHandler;
@@ -32,15 +39,11 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.ParseExcept
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.Parser;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.SessionData;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToRBMUnifier;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
-import dynamod.behavior.BehaviorFactory;
-import dynamod.behavior.BehaviorModelAbsolute;
-import dynamod.behavior.BehaviorModelRelative;
-import dynamod.behavior.SessionRepository;
-import dynamod.behavior.UseCaseRepository;
-import dynamod.behavior.impl.BehaviorPackageImpl;
 
 /**
  * This is the main class of the Behavior Model Extractor.
@@ -205,7 +208,8 @@ public class BehaviorModelExtractor {
     public void extract (
             final String inputFile,
             final String outputFile,
-            final String outputDotFile)
+            final String outputDotFile,
+            final String clusteringMethod)
                     throws IOException, ParseException, ExtractionException {
 
         if ( !this.isInitialized ) {
@@ -225,16 +229,23 @@ public class BehaviorModelExtractor {
                 this.useCaseMapping,
                 this.useCaseIdGenerator);
 
+
+        // ----  initialize transformers  ----;
+
         final SessionToABMTransformer sessionToAbmTransformer =
                 new SessionToABMTransformer();
 
         final ABMToRBMTransformer abmToRbmTransformer =
                 new ABMToRBMTransformer();
 
-        final BehaviorModelWriter behaviorModelWriter =
-                new BehaviorModelWriter(
-                        this.markovMatrixHandler,
-                        this.dotGraphGenerator);
+        final RBMToRBMUnifier rbmToRBMUnifier =
+                new RBMToRBMUnifier(clusteringMethod);
+
+        final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer =
+                new RBMToMarkovMatrixTransformer(this.markovMatrixHandler);
+
+
+        // ----  start transformation process  ----;
 
         final BehaviorModelAbsolute[] behaviorModelsAbsolute =
                 sessionToAbmTransformer.
@@ -246,9 +257,22 @@ public class BehaviorModelExtractor {
                 abmToRbmTransformer.
                 transform(behaviorModelsAbsolute);
 
+        final BehaviorMixEntry[] behaviorMixEntries =
+                rbmToRBMUnifier.transform(behaviorModelsRelative);
+
+        // (RBM-to-matrix transformation is nested into file writer below);
+
+
+        // ----  write output files  ----;
+
+        final BehaviorModelWriter behaviorModelWriter =
+                new BehaviorModelWriter(
+                        rbmToMarkovMatrixTransformer,  // last transformation;
+                        this.dotGraphGenerator);
+
         // write the sessions-related CVS- and graph-files;
         behaviorModelWriter.writeOutputFiles(
-                behaviorModelsRelative,
+                behaviorMixEntries,  // behaviorModelsRelative,
                 outputFile,
                 outputDotFile);
     }
@@ -291,6 +315,10 @@ public class BehaviorModelExtractor {
             final int lineBreakType =
                     CommandLineArgumentsHandler.getLineBreakType();
 
+            // clustering method is optional;
+            final String clusteringMethod =
+                    CommandLineArgumentsHandler.getClusteringMethod();
+
 
             // ----  initialize and start the Behavior Model Extractor  ----
 
@@ -307,7 +335,8 @@ public class BehaviorModelExtractor {
             behaviorModelExtractor.extract(
                     inputFile,
                     outputCsvFile,
-                    outputDotFile);
+                    outputDotFile,
+                    clusteringMethod);
 
         } catch (final Exception ex) {
 

@@ -24,15 +24,14 @@ import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.markov4jmeter.behavior.BehaviorFactory;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
+import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
+import net.sf.markov4jmeter.behavior.Transition;
+import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.util.Util;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-
-import dynamod.behavior.BehaviorFactory;
-import dynamod.behavior.BehaviorModelAbsolute;
-import dynamod.behavior.BehaviorModelRelative;
-import dynamod.behavior.Transition;
-import dynamod.behavior.Vertex;
 
 /**
  * This class provides methods for transforming "absolute" Behavior Models to

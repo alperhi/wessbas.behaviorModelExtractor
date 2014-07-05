@@ -52,4 +52,15 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BehaviorModelAbsolute" eSuperTypes="#//AbstractBehaviorModelGraph"/>
   <eClassifiers xsi:type="ecore:EClass" name="BehaviorModelRelative" eSuperTypes="#//AbstractBehaviorModelGraph"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviorMix">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" lowerBound="1"
+        upperBound="-1" eType="#//BehaviorMixEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviorMixEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="behaviorModelName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeFrequency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviorModel" lowerBound="1"
+        eType="#//BehaviorModelRelative"/>
+  </eClassifiers>
 </ecore:EPackage>

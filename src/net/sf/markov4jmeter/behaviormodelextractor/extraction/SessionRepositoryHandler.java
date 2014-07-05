@@ -21,17 +21,16 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction;
 
 import java.util.List;
 
+import net.sf.markov4jmeter.behavior.BehaviorFactory;
+import net.sf.markov4jmeter.behavior.ObservedUseCaseExecution;
+import net.sf.markov4jmeter.behavior.Session;
+import net.sf.markov4jmeter.behavior.SessionRepository;
+import net.sf.markov4jmeter.behavior.UseCase;
+import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.SessionData;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
 
 import org.eclipse.emf.common.util.EList;
-
-import dynamod.behavior.BehaviorFactory;
-import dynamod.behavior.ObservedUseCaseExecution;
-import dynamod.behavior.Session;
-import dynamod.behavior.SessionRepository;
-import dynamod.behavior.UseCase;
-import dynamod.behavior.UseCaseRepository;
 
 /**
  * This class provides methods for adding sessions and use cases, which build

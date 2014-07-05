@@ -28,7 +28,11 @@ import org.apache.commons.cli.ParseException;
  *   <tr><td><code> output </code></td>
  *       <td><code> o      </code></td>
  *       <td> Output CSV-file which includes the resulting Behavior Model, e.g.,
- *       "output/behaviormodel.csv".
+ *       "output/behaviormodel.csv"; if Behavior Models for each single session
+ *       trace shall be written to file, which is the default configuration if
+ *       no clustering is specified, the output filename will be indexed,
+ *       starting with zero. Example: "behaviormodel.csv" becomes to
+ *       "behaviormodel0.csv", "behaviormodel1.csv", "behaviormodel2.csv", ...
  *       </td>
  *
  *   <tr><td colspan="3" align="center">
@@ -57,6 +61,16 @@ import org.apache.commons.cli.ParseException;
  *       <td><code> g     </code></td>
  *       <td> (Optional) DOT output file which includes the graph, e.g.,
  *       "output/graph.dot".
+ *       </td>
+ *
+ *   <tr><td><code> clustering </code></td>
+ *       <td><code> c          </code></td>
+ *       <td> (Optional) Clustering method to be applied to the Behavior Models
+ *       which have been extracted from session traces; available values are
+ *       "simple" and "menasce". If no clustering is specified, the resulting
+ *       output files contain the trace-related matrices/graphs, as they are
+ *       computed before any clustering method is applied to the extracted
+ *       Behavior Models.
  *       </td>
  * </table>
  *
@@ -110,7 +124,7 @@ public class CommandLineArgumentsHandler {
             CmdlOptionFactory.createOption(
                     "o",                                    // opt;
                     "output",                               // longOpt;
-                    "Output CSV-file which includes the "  // description;
+                    "Output CSV-file which includes the "   // description;
                     + "resulting Behavior Model.",
                     true,                                   // isRequired;
                     "behaviormodel.csv",                    // argName;
@@ -126,7 +140,7 @@ public class CommandLineArgumentsHandler {
                     + "type for CSV output files (0 = Windows, 1 = Unix, "
                     + "2 = MacOS); the default value is 0 (Windows).",
                     false,                                  // !isRequired;
-                    "0",                                    // argName;
+                    "0|1|2",                                // argName;
                     false);                                 // !isRequired;
 
     /** (Optional) input CSV-file which includes a template matrix. */
@@ -158,7 +172,19 @@ public class CommandLineArgumentsHandler {
                     "(Optional) output DOT-file which "     // description;
                     + "includes the graph.",
                     false,                                  // !isRequired;
-                    "graph.dot",                                    // argName;
+                    "graph.dot",                            // argName;
+                    false);                                 // !isRequired;
+
+    /** (Optional) clustering method to be applied to the extracted Behavior
+     *  Models. */
+    private final static Option CLUSTERING_METHOD =
+            CmdlOptionFactory.createOption(
+                    "c",                                    // opt;
+                    "clustering",                           // longOpt;
+                    "(Optional) clustering method to be "   // description;
+                    + "applied to the extracted Behavior Models. ",
+                    false,                                  // !isRequired;
+                    "simple|menasce",                       // argName;
                     false);                                 // !isRequired;
 
     /** Formatter for printing the usage instructions. */
@@ -189,6 +215,9 @@ public class CommandLineArgumentsHandler {
     /** (Optional) DOT output file which has been read from command-line. */
     private static String outputDotFile;
 
+    /** (Optional) clustering method which has been read from command-line. */
+    private static String clusteringMethod;
+
     /** Command-line options to be parsed. */
     private static Options options;
 
@@ -218,6 +247,9 @@ public class CommandLineArgumentsHandler {
 
         CommandLineArgumentsHandler.options.addOption(
                 CommandLineArgumentsHandler.OUTPUT_DOT_FILE);
+
+        CommandLineArgumentsHandler.options.addOption(
+                CommandLineArgumentsHandler.CLUSTERING_METHOD);
     }
 
 
@@ -295,6 +327,17 @@ public class CommandLineArgumentsHandler {
     }
 
     /**
+     * Returns the (optional) clustering method which has been read from
+     * command-line.
+     *
+     * @return  a <code>String</code> which represents the clustering method.
+     */
+    public static String getClusteringMethod () {
+
+        return CommandLineArgumentsHandler.clusteringMethod;
+    }
+
+    /**
      * Prints the usage instructions to standard output.
      */
     public static void printUsage () {
@@ -360,6 +403,11 @@ public class CommandLineArgumentsHandler {
                 CommandLineArgumentsHandler.readOptionValueAsInt(
                         commandLine,
                         CommandLineArgumentsHandler.LINE_BREAK_TYPE);
+
+        CommandLineArgumentsHandler.clusteringMethod =
+                CommandLineArgumentsHandler.readOptionValueAsString(
+                        commandLine,
+                        CommandLineArgumentsHandler.CLUSTERING_METHOD);
     }
 
 

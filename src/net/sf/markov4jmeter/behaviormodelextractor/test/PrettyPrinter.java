@@ -1,11 +1,11 @@
 package net.sf.markov4jmeter.behaviormodelextractor.test;
 
-import org.eclipse.emf.common.util.EList;
+import net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph;
+import net.sf.markov4jmeter.behavior.Transition;
+import net.sf.markov4jmeter.behavior.UseCase;
+import net.sf.markov4jmeter.behavior.Vertex;
 
-import dynamod.behavior.AbstractBehaviorModelGraph;
-import dynamod.behavior.Transition;
-import dynamod.behavior.UseCase;
-import dynamod.behavior.Vertex;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * This class provides some "pretty printing" methods for testing purposes only.

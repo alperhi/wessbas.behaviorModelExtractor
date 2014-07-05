@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph;
+import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
+import net.sf.markov4jmeter.behavior.Transition;
+import net.sf.markov4jmeter.behavior.UseCase;
+import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.MarkovMatrixHandler;
-import dynamod.behavior.AbstractBehaviorModelGraph;
-import dynamod.behavior.BehaviorModelRelative;
-import dynamod.behavior.Transition;
-import dynamod.behavior.UseCase;
-import dynamod.behavior.Vertex;
 
 /**
  * This class provides methods for transforming "relative" Behavior Models to
@@ -78,6 +78,17 @@ public class RBMToMarkovMatrixTransformer {
                 createEmptyMarkovMatrixForStates(states);
 
         return this.storeModelInMatrix(behaviorModelRelative, matrix);
+    }
+
+    /**
+     * Returns the associated instance for creating and modifying Markov
+     * matrices.
+     *
+     * @return  the associated instance of {@link MarkovMatrixHandler}.
+     */
+    public MarkovMatrixHandler getMarkovMatrixHandler () {
+
+        return markovMatrixHandler;
     }
 
 

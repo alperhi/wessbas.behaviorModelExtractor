@@ -3,9 +3,10 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behaviormodelextractor.DotGraphGenerator;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
-import dynamod.behavior.BehaviorModelRelative;
 
 /**
  *
@@ -35,8 +36,9 @@ public class BehaviorModelWriter {
     /* *************************  global variables  ************************* */
 
 
-    /** Instance for creating and modifying Markov matrices. */
-    private final MarkovMatrixHandler markovMatrixHandler;
+    /** Instance for transforming Behavior Models to Markov matrices. */
+    private final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer;
+
 
     /** Instance for generating DOT graphs from Markov matrices. */
     private final DotGraphGenerator dotGraphGenerator;
@@ -49,21 +51,64 @@ public class BehaviorModelWriter {
      * Constructor for a Behavior Model Writer.
      *
      * @param markovMatrixHandler
-     *     instance for creating and modifying Markov matrices.
+     *     instance for transforming Behavior Models to Markov matrices.
      * @param dotGraphGenerator
      *     instance for generating DOT graphs from Markov matrices.
      */
     public BehaviorModelWriter (
-            final MarkovMatrixHandler markovMatrixHandler,
+            final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer,
             final DotGraphGenerator dotGraphGenerator) {
 
-        this.markovMatrixHandler = markovMatrixHandler;
-        this.dotGraphGenerator   = dotGraphGenerator;
+        this.rbmToMarkovMatrixTransformer = rbmToMarkovMatrixTransformer;
+        this.dotGraphGenerator            = dotGraphGenerator;
     }
 
 
     /* **************************  public methods  ************************** */
 
+
+    public void writeOutputFiles (
+            final BehaviorMixEntry[] behaviorMixEntries,
+            final String outputCsvFilename,
+            final String outputDotFilename)
+                    throws SecurityException,
+                           IOException,
+                           FileNotFoundException,
+                           NullPointerException,
+                           ExtractionException {
+
+        for (int i = 0, n = behaviorMixEntries.length; i < n; i++) {
+
+            final BehaviorMixEntry behaviorMixEntry = behaviorMixEntries[i];
+
+            final BehaviorModelRelative behaviorModelRelative =
+                    behaviorMixEntry.getBehaviorModel();
+
+            final String behaviorModelName =
+                    behaviorMixEntry.getBehaviorModelName();
+
+            final double relativeFrequency =
+                    behaviorMixEntry.getRelativeFrequency();
+
+            final String suffixedCsvFile = (n > 1) ?
+                    this.getIndexedCsvFilename(outputCsvFilename, i) :
+                    this.getCsvFilename(outputCsvFilename);
+
+            final String suffixedOutputDotFile = (n > 1) ?
+                    this.getIndexedDotFilename(outputDotFilename, i) :
+                    this.getDotFilename(outputDotFilename);
+
+            final String[][] matrix =
+                    this.rbmToMarkovMatrixTransformer.transform(
+                            behaviorModelRelative);
+
+            // TODO: store (behaviorModelName, relativeFrequency, suffixedCsvFile) in Behavior Mix;
+            this.writeMarkovMatrixToFile(suffixedCsvFile, matrix);
+            this.writeDotGraphToFile(suffixedOutputDotFile, matrix);
+        }
+
+        System.out.println(BehaviorModelWriter.INFO_FINISHED);
+    }
 
     /**
      * Writes the CSV- and DOT-files for a given set of Behavior Models.
@@ -96,9 +141,6 @@ public class BehaviorModelWriter {
                            NullPointerException,
                            ExtractionException {
 
-        final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer =
-                new RBMToMarkovMatrixTransformer(this.markovMatrixHandler);
-
         for (int i = 0, n = behaviorModelsRelative.length; i < n; i++) {
 
             final BehaviorModelRelative behaviorModelRelative =
@@ -112,8 +154,9 @@ public class BehaviorModelWriter {
                     this.getIndexedDotFilename(outputDotFilename, i) :
                     this.getDotFilename(outputDotFilename);
 
-            final String[][] matrix = rbmToMarkovMatrixTransformer.transform(
-                    behaviorModelRelative);
+            final String[][] matrix =
+                    this.rbmToMarkovMatrixTransformer.transform(
+                            behaviorModelRelative);
 
             this.writeMarkovMatrixToFile(suffixedCsvFile, matrix);
             this.writeDotGraphToFile(suffixedOutputDotFile, matrix);
@@ -171,8 +214,8 @@ public class BehaviorModelWriter {
             final String filename,
             final String[][] matrix) throws FileNotFoundException, SecurityException, NullPointerException, IOException {
 
-//this.markovMatrixHandler.print(matrix);  // TODO: remove this;
-        this.markovMatrixHandler.writeMarkovMatrixToCSVFile(filename, matrix);
+        this.rbmToMarkovMatrixTransformer.getMarkovMatrixHandler().
+        writeMarkovMatrixToCSVFile(filename, matrix);
 
         final String messageWritten = String.format(
                 BehaviorModelWriter.INFO_FILE_WRITTEN,

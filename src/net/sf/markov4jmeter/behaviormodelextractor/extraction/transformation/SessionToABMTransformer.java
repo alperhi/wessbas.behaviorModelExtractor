@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
+import net.sf.markov4jmeter.behavior.BehaviorFactory;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
+import net.sf.markov4jmeter.behavior.ObservedUseCaseExecution;
+import net.sf.markov4jmeter.behavior.Session;
+import net.sf.markov4jmeter.behavior.Transition;
+import net.sf.markov4jmeter.behavior.UseCase;
+import net.sf.markov4jmeter.behavior.Vertex;
 
-import dynamod.behavior.BehaviorFactory;
-import dynamod.behavior.BehaviorModelAbsolute;
-import dynamod.behavior.ObservedUseCaseExecution;
-import dynamod.behavior.Session;
-import dynamod.behavior.Transition;
-import dynamod.behavior.UseCase;
-import dynamod.behavior.Vertex;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * This class provides methods for transforming user session traces to
@@ -38,8 +38,8 @@ public class SessionToABMTransformer {
     /** Warning message for the case that a negative time range has been
      *  detected. */
     private final static String WARNING_NEGATIVE_TIME_RANGE =
-            "Warning: negative time range detected in transition from state "
-            + "\"%s\" to state \"%s\" in session \"%s\"; range will be ignored";
+            "negative time range detected in transition from state \"%s\" to "
+            + "state \"%s\" in session \"%s\"; range will be ignored";
 
 
     /* **************************  public methods  ************************** */
