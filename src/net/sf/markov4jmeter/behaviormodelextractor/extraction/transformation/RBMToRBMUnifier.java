@@ -41,7 +41,7 @@ public class RBMToRBMUnifier {
         final AbstractClusteringStrategy clusteringStrategy =
                 this.getClusteringStrategy(clusteringMethod);
 
-        return clusteringStrategy.transform(
+        return clusteringStrategy.apply(
                 behaviorModelsRelative,
                 useCaseRepository);
     }

@@ -11,14 +11,78 @@ import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 
+/**
+ * Abstract base class for all clustering strategies.
+ *
+ * <p> This class defines the abstract
+ * {@link #apply(BehaviorModelRelative[], UseCaseRepository)} method, which has
+ * to be implemented by each subclass, according to the associated clustering
+ * strategy. Furthermore, helping methods for searching and creating Behavior
+ * Model elements are provided.
+ *
+ * @author   Eike Schulz (esc@informatik.uni-kiel.de)
+ * @version  1.0
+ */
 public abstract class AbstractClusteringStrategy {
 
-    public abstract BehaviorMixEntry[] transform (
+
+    /* *****************************  constants  **************************** */
+
+
+    protected final static String GENERIC_BEHAVIOR_MODEL_NAME =
+            "gen_behavior_model";
+
+
+    /* **************************  public methods  ************************** */
+
+    /**
+     * Applies the associated clustering strategy to a given set of Behavior
+     * Models.
+     *
+     * @param behaviorModelsRelative
+     *     set of input Behavior Models on which the clustering strategy shall
+     *     be applied.
+     * @param useCaseRepository
+     *     use case repository which provides all available use cases; the use
+     *     cases generally indicate the states ("vertices") of each Behavior
+     *     Model, with a dedicated final state in addition. Final states are not
+     *     associated with any use case, indicated by their regarding attribute
+     *     being set to <code>null</code>.
+     *
+     * @return
+     *     a set of Behavior Mix entries; each Behavior Mix entry includes a
+     *     (generated) name of its related Behavior Model, a computed relative
+     *     frequency and a reference to the Behavior Model itself.
+     *
+     * @throws ExtractionException
+     *     if any clustering error occurs.
+     */
+    public abstract BehaviorMixEntry[] apply (
             final BehaviorModelRelative[] behaviorModelsRelative,
             final UseCaseRepository useCaseRepository)
                     throws ExtractionException;
 
 
+    /* *************************  protected methods  ************************ */
+
+
+    /**
+     * Searches for a Behavior Model transition between two use cases,
+     * respectively their associated vertices.
+     *
+     * @param behaviorModelRelative
+     *     Behavior Model to be searched through.
+     * @param srcUseCaseId
+     *     identifier of the use case which is associated with the source
+     *     vertex.
+     * @param dstUseCaseId
+     *     identifier of the use case which is associated with the target
+     *     vertex.
+     *
+     * @return
+     *     a matching transition, or <code>null</code> if such a transition
+     *     does not exist.
+     */
     protected Transition findTransitionByUseCaseIDs (
             final BehaviorModelRelative behaviorModelRelative,
             final String srcUseCaseId,
@@ -48,51 +112,15 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Searches for a transition between two given vertices.
+     * Searches for a Behavior Model vertex which is associated with a specified
+     * use case or with the final state.
      *
-     * @param srcVertex
-     *     source vertex of the searched transition.
-     * @param dstVertex
-     *     destination vertex of the searched transition.
-     *
-     * @return
-     *     a transition between the given vertices, if one exists;
-     *     otherwise <code>null</code> will be returned.
-     */
-/*
-    protected Transition findTransitionByUseCaseNames (
-            final BehaviorModelRelative behaviorModelRelative,
-            final String srcUseCaseName,
-            final String dstUseCaseName) {
-
-        final Vertex srcVertex = this.findVertexByUseCaseName(
-                behaviorModelRelative, srcUseCaseName);
-
-        if (srcVertex != null) {
-
-            final List<Transition> transitions =
-                    srcVertex.getOutgoingTransitions();
-
-            for (final Transition transition : transitions) {
-
-                if (dstUseCaseName ==
-                        transition.getTargetVertex().getUseCase().getName()) {
-
-                    return transition;
-                }
-            }
-        }
-
-        return null;  // no matching transition found;
-    }
-*/
-    /**
-     * Searches for a vertex which is associated with a use case of certain ID.
-     *
+     * @param behaviorModelRelative
+     *     Behavior Model whose vertices shall be searched through.
      * @param useCaseId
-     *     ID of the use case.
-     * @param vertices
-     *     list of vertices to be searched through.
+     *     an identifier of the use case which is associated with the searched
+     *     vertex, or <code>null</code> for searching the vertex that represents
+     *     the final state.
      *
      * @return
      *     a matching vertex, or <code>null</code> if such a vertex does not
@@ -108,7 +136,7 @@ public abstract class AbstractClusteringStrategy {
 
             final UseCase vertexUseCase = vertex.getUseCase();
 
-            if (vertexUseCase != null) {  // final vertex has no use case;
+            if (vertexUseCase != null) {
 
                 final String vertexUseCaseId  = vertexUseCase.getId();
 
@@ -117,9 +145,9 @@ public abstract class AbstractClusteringStrategy {
                     return vertex;
                 }
 
-            } else {
+            } else {  // vertexUseCase == null  -->  final state found;
 
-                if (useCaseId == null) {
+                if (useCaseId == null) {  // searching for final state?
 
                     return vertex;
                 }
@@ -130,41 +158,16 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Searches for a vertex which is associated with a use case of certain ID.
+     * Creates a Behavior Model which includes vertices indicated by a set of
+     * given use cases.
      *
-     * @param useCaseId
-     *     ID of the use case.
-     * @param vertices
-     *     list of vertices to be searched through.
+     * @param useCases
+     *     set of use cases which indicate the vertices to be included to the
+     *     Behavior Model; a vertex that represents the final state will be
+     *     added explicitly.
      *
      * @return
-     *     a matching vertex, or <code>null</code> if such a vertex does not
-     *     exist.
-     */
-    /*
-    protected Vertex findVertexByUseCaseName (
-            final BehaviorModelRelative behaviorModelRelative,
-            final String useCaseName) {
-
-        final List<Vertex> vertices = behaviorModelRelative.getVertices();
-
-        for (final Vertex vertex : vertices) {
-
-            final UseCase vertexUseCase = vertex.getUseCase();
-
-            if (vertexUseCase != null) {  // final vertex has no use case;
-
-                final String vertexUseCaseName  = vertexUseCase.getName();
-
-                if (useCaseName.equals(vertexUseCaseName)) {
-
-                    return vertex;
-                }
-            }
-        }
-
-        return null;  // no matching vertex found;
-    }
+     *     the newly created Behavior Model.
      */
     protected BehaviorModelRelative createBehaviorModelWithoutTransitions (
             final List<UseCase> useCases) {
@@ -172,7 +175,7 @@ public abstract class AbstractClusteringStrategy {
         final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
 
         final BehaviorModelRelative behaviorModel =
-                factory.createBehaviorModelRelative();
+                factory.createBehaviorModelRelative();  // to be returned;
 
         final List<Vertex> vertices = behaviorModel.getVertices();
 
@@ -186,16 +189,30 @@ public abstract class AbstractClusteringStrategy {
             vertices.add(vertex);
         }
 
-        // add the final vertex;
+        // add vertex for the final state at last;
 
         vertex = factory.createVertex();
 
-        vertex.setUseCase(null);  // no use case indicates the exit state;
+        vertex.setUseCase(null);  // no use case associated with final state;
         vertices.add(vertex);
 
         return behaviorModel;
     }
 
+    /**
+     * Creates a Behavior Mix entry for a given Behavior Model, its (generated)
+     * name and frequency.
+     *
+     * @param behaviorModelName
+     *     the (generated) name of the Behavior Model.
+     * @param frequency
+     *     a relative frequency.
+     * @param behaviorModel
+     *     the Behavior Model itself.
+     *
+     * @return
+     *     the newly created instance.
+     */
     protected BehaviorMixEntry createBehaviorMixEntry (
             final String behaviorModelName,
             final double frequency,
@@ -236,4 +253,5 @@ public abstract class AbstractClusteringStrategy {
         sourceVertex.getOutgoingTransitions().add(transition);
 
         return transition;
-    }}
+    }
+}
