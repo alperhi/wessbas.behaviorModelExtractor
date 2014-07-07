@@ -1,6 +1,6 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
-import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 
@@ -22,9 +22,12 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
      * <p> This method is specialized for <b>Menascé-based</b> clustering.
      */
     @Override
-    public BehaviorMixEntry[] apply (
+    public BehaviorMix apply (
             final BehaviorModelRelative[] behaviorModelsRelative,
             final UseCaseRepository useCaseRepository) {
+
+        // Behavior Mix to be returned;
+        final BehaviorMix behaviorMix = this.createBehaviorMix();
 
         // TODO: implementation of the Menascé-based clustering;
 
@@ -32,10 +35,9 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
         // indicating the error that occurred;
 
         // the classes "NoClusteringStrategy" and "SimpleClusteringStrategy"
-        // should give an idea of how to handle the Behavior Models and how to
+        // should give an idea for handling the Behavior Models and how to
         // use the helping methods of the abstract base class.
 
-        return null;  // will currently throw a NullPointerException, if
-                      // option "-c menasce" is passed via command-line;
+        return behaviorMix;
     }
 }

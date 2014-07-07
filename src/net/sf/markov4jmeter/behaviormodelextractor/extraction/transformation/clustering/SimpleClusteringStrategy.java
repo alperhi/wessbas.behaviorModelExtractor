@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
@@ -33,9 +34,12 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
      * summarized for each transition, resulting in a single Behavior Model.
      */
     @Override
-    public BehaviorMixEntry[] apply (
+    public BehaviorMix apply (
             final BehaviorModelRelative[] behaviorModelsRelative,
             final UseCaseRepository useCaseRepository) {
+
+        // Behavior Mix to be returned;
+        final BehaviorMix behaviorMix = this.createBehaviorMix();
 
         // create an "empty" Behavior Model, which includes all vertices only;
         final BehaviorModelRelative behaviorModel =
@@ -51,8 +55,9 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
                 1.0d,  // relative frequency;
                 behaviorModel);
 
-        // return the single entry for the resulting Behavior Model;
-        return new BehaviorMixEntry[]{ behaviorMixEntry };
+        behaviorMix.getEntries().add(behaviorMixEntry);
+
+        return behaviorMix;
     }
 
 

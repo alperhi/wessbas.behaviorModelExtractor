@@ -3,6 +3,7 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.cl
 import java.util.List;
 
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
+import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
@@ -50,14 +51,14 @@ public abstract class AbstractClusteringStrategy {
      *     being set to <code>null</code>.
      *
      * @return
-     *     a set of Behavior Mix entries; each Behavior Mix entry includes a
+     *     the resulting Behavior Mix; each Behavior Mix entry includes a
      *     (generated) name of its related Behavior Model, a computed relative
      *     frequency and a reference to the Behavior Model itself.
      *
      * @throws ExtractionException
      *     if any clustering error occurs.
      */
-    public abstract BehaviorMixEntry[] apply (
+    public abstract BehaviorMix apply (
             final BehaviorModelRelative[] behaviorModelsRelative,
             final UseCaseRepository useCaseRepository)
                     throws ExtractionException;
@@ -197,6 +198,18 @@ public abstract class AbstractClusteringStrategy {
         vertices.add(vertex);
 
         return behaviorModel;
+    }
+
+    /**
+     * Creates an "empty" <code>BehaviorMix</code> instance.
+     *
+     * @return  the newly created instance without any Behavior Mix entries.
+     */
+    protected BehaviorMix createBehaviorMix () {
+
+        final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
+
+        return factory.createBehaviorMix();
     }
 
     /**

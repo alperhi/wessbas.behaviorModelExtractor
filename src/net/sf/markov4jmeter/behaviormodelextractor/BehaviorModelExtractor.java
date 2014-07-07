@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
-import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.SessionRepository;
@@ -255,7 +255,7 @@ public class BehaviorModelExtractor {
         final BehaviorModelRelative[] behaviorModelsRelative =
                 abmToRbmTransformer.transform(behaviorModelsAbsolute);
 
-        final BehaviorMixEntry[] behaviorMixEntries =
+        final BehaviorMix behaviorMix =
                 rbmToRBMUnifier.transform(
                         behaviorModelsRelative,
                         clusteringMethod,
@@ -274,7 +274,7 @@ public class BehaviorModelExtractor {
 
         // write the sessions-related CVS- and graph-files;
         behaviorModelWriter.writeOutputFiles(
-                behaviorMixEntries,  // behaviorModelsRelative,
+                behaviorMix,
                 outputFile,
                 outputDotFile);
     }

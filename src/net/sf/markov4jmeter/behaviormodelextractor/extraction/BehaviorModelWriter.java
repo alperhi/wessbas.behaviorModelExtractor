@@ -2,7 +2,9 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
+import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behaviormodelextractor.DotGraphGenerator;
@@ -68,7 +70,7 @@ public class BehaviorModelWriter {
 
 
     public void writeOutputFiles (
-            final BehaviorMixEntry[] behaviorMixEntries,
+            final BehaviorMix behaviorMix,
             final String outputCsvFilename,
             final String outputDotFilename)
                     throws SecurityException,
@@ -77,9 +79,11 @@ public class BehaviorModelWriter {
                            NullPointerException,
                            ExtractionException {
 
-        for (int i = 0, n = behaviorMixEntries.length; i < n; i++) {
+        final List<BehaviorMixEntry> behaviorMixEntries = behaviorMix.getEntries();
 
-            final BehaviorMixEntry behaviorMixEntry = behaviorMixEntries[i];
+        for (int i = 0, n = behaviorMixEntries.size(); i < n; i++) {
+
+            final BehaviorMixEntry behaviorMixEntry = behaviorMixEntries.get(i);
 
             final BehaviorModelRelative behaviorModelRelative =
                     behaviorMixEntry.getBehaviorModel();
