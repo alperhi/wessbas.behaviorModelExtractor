@@ -31,7 +31,8 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getTargetVertex <em>Target Vertex</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getValue <em>Value</em>}</li>
- *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getTimes <em>Times</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getTimeDiffs <em>Time Diffs</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getThinkTimeParams <em>Think Time Params</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,14 +70,24 @@ public class TransitionImpl extends EObjectImpl implements Transition {
     protected double value = VALUE_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getTimes() <em>Times</em>}' attribute list.
+     * The cached value of the '{@link #getTimeDiffs() <em>Time Diffs</em>}' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getTimes()
+     * @see #getTimeDiffs()
      * @generated
      * @ordered
      */
-    protected EList<BigDecimal> times;
+    protected EList<BigDecimal> timeDiffs;
+
+    /**
+     * The cached value of the '{@link #getThinkTimeParams() <em>Think Time Params</em>}' attribute list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getThinkTimeParams()
+     * @generated
+     * @ordered
+     */
+    protected EList<BigDecimal> thinkTimeParams;
 
     /**
      * <!-- begin-user-doc -->
@@ -161,11 +172,23 @@ public class TransitionImpl extends EObjectImpl implements Transition {
      * <!-- end-user-doc -->
      * @generated
      */
-    public EList<BigDecimal> getTimes() {
-        if (times == null) {
-            times = new EDataTypeUniqueEList<BigDecimal>(BigDecimal.class, this, BehaviorPackage.TRANSITION__TIMES);
+    public EList<BigDecimal> getTimeDiffs() {
+        if (timeDiffs == null) {
+            timeDiffs = new EDataTypeUniqueEList<BigDecimal>(BigDecimal.class, this, BehaviorPackage.TRANSITION__TIME_DIFFS);
         }
-        return times;
+        return timeDiffs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EList<BigDecimal> getThinkTimeParams() {
+        if (thinkTimeParams == null) {
+            thinkTimeParams = new EDataTypeUniqueEList<BigDecimal>(BigDecimal.class, this, BehaviorPackage.TRANSITION__THINK_TIME_PARAMS);
+        }
+        return thinkTimeParams;
     }
 
     /**
@@ -181,8 +204,10 @@ public class TransitionImpl extends EObjectImpl implements Transition {
                 return basicGetTargetVertex();
             case BehaviorPackage.TRANSITION__VALUE:
                 return getValue();
-            case BehaviorPackage.TRANSITION__TIMES:
-                return getTimes();
+            case BehaviorPackage.TRANSITION__TIME_DIFFS:
+                return getTimeDiffs();
+            case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
+                return getThinkTimeParams();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -202,9 +227,13 @@ public class TransitionImpl extends EObjectImpl implements Transition {
             case BehaviorPackage.TRANSITION__VALUE:
                 setValue((Double)newValue);
                 return;
-            case BehaviorPackage.TRANSITION__TIMES:
-                getTimes().clear();
-                getTimes().addAll((Collection<? extends BigDecimal>)newValue);
+            case BehaviorPackage.TRANSITION__TIME_DIFFS:
+                getTimeDiffs().clear();
+                getTimeDiffs().addAll((Collection<? extends BigDecimal>)newValue);
+                return;
+            case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
+                getThinkTimeParams().clear();
+                getThinkTimeParams().addAll((Collection<? extends BigDecimal>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -224,8 +253,11 @@ public class TransitionImpl extends EObjectImpl implements Transition {
             case BehaviorPackage.TRANSITION__VALUE:
                 setValue(VALUE_EDEFAULT);
                 return;
-            case BehaviorPackage.TRANSITION__TIMES:
-                getTimes().clear();
+            case BehaviorPackage.TRANSITION__TIME_DIFFS:
+                getTimeDiffs().clear();
+                return;
+            case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
+                getThinkTimeParams().clear();
                 return;
         }
         super.eUnset(featureID);
@@ -243,8 +275,10 @@ public class TransitionImpl extends EObjectImpl implements Transition {
                 return targetVertex != null;
             case BehaviorPackage.TRANSITION__VALUE:
                 return value != VALUE_EDEFAULT;
-            case BehaviorPackage.TRANSITION__TIMES:
-                return times != null && !times.isEmpty();
+            case BehaviorPackage.TRANSITION__TIME_DIFFS:
+                return timeDiffs != null && !timeDiffs.isEmpty();
+            case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
+                return thinkTimeParams != null && !thinkTimeParams.isEmpty();
         }
         return super.eIsSet(featureID);
     }
@@ -261,8 +295,10 @@ public class TransitionImpl extends EObjectImpl implements Transition {
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (value: ");
         result.append(value);
-        result.append(", times: ");
-        result.append(times);
+        result.append(", timeDiffs: ");
+        result.append(timeDiffs);
+        result.append(", thinkTimeParams: ");
+        result.append(thinkTimeParams);
         result.append(')');
         return result.toString();
     }

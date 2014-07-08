@@ -220,7 +220,7 @@ public class SessionToABMTransformer {
 
                 } else {
 
-                    transition.getTimes().add( new BigDecimal(timeDistance) );
+                    transition.getTimeDiffs().add(new BigDecimal(timeDistance));
                 }
             }
 

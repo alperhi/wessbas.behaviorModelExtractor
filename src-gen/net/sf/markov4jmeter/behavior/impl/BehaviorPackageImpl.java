@@ -405,8 +405,17 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getTransition_Times() {
+    public EAttribute getTransition_TimeDiffs() {
         return (EAttribute)transitionEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getTransition_ThinkTimeParams() {
+        return (EAttribute)transitionEClass.getEStructuralFeatures().get(3);
     }
 
     /**
@@ -541,7 +550,8 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
         transitionEClass = createEClass(TRANSITION);
         createEReference(transitionEClass, TRANSITION__TARGET_VERTEX);
         createEAttribute(transitionEClass, TRANSITION__VALUE);
-        createEAttribute(transitionEClass, TRANSITION__TIMES);
+        createEAttribute(transitionEClass, TRANSITION__TIME_DIFFS);
+        createEAttribute(transitionEClass, TRANSITION__THINK_TIME_PARAMS);
 
         behaviorModelAbsoluteEClass = createEClass(BEHAVIOR_MODEL_ABSOLUTE);
 
@@ -622,7 +632,8 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
         initEClass(transitionEClass, Transition.class, "Transition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getTransition_TargetVertex(), this.getVertex(), null, "targetVertex", null, 1, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getTransition_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getTransition_Times(), ecorePackage.getEBigDecimal(), "times", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getTransition_TimeDiffs(), ecorePackage.getEBigDecimal(), "timeDiffs", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getTransition_ThinkTimeParams(), ecorePackage.getEBigDecimal(), "thinkTimeParams", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(behaviorModelAbsoluteEClass, BehaviorModelAbsolute.class, "BehaviorModelAbsolute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

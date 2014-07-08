@@ -138,15 +138,16 @@ public class RBMToMarkovMatrixTransformer {
                         valueSum += probability;
                     }
 
-                    final List<BigDecimal> times = transition.getTimes();
+                    final List<BigDecimal> thinkTimeParams =
+                            transition.getThinkTimeParams();
 
                     final double mean;
                     final double deviation;
 
-                    if (times.size() == 2) {
+                    if (thinkTimeParams.size() == 2) {
 
-                        mean      = times.get(0).doubleValue();
-                        deviation = times.get(1).doubleValue();
+                        mean      = thinkTimeParams.get(0).doubleValue();
+                        deviation = thinkTimeParams.get(1).doubleValue();
 
                     } else {
 

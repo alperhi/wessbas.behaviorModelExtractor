@@ -18,7 +18,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getTargetVertex <em>Target Vertex</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getValue <em>Value</em>}</li>
- *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getTimes <em>Times</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getTimeDiffs <em>Time Diffs</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getThinkTimeParams <em>Think Time Params</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,19 +81,35 @@ public interface Transition extends EObject {
     void setValue(double value);
 
     /**
-     * Returns the value of the '<em><b>Times</b></em>' attribute list.
+     * Returns the value of the '<em><b>Time Diffs</b></em>' attribute list.
      * The list contents are of type {@link java.math.BigDecimal}.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Times</em>' attribute list isn't clear,
+     * If the meaning of the '<em>Time Diffs</em>' attribute list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Times</em>' attribute list.
-     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getTransition_Times()
+     * @return the value of the '<em>Time Diffs</em>' attribute list.
+     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getTransition_TimeDiffs()
      * @model
      * @generated
      */
-    EList<BigDecimal> getTimes();
+    EList<BigDecimal> getTimeDiffs();
+
+    /**
+     * Returns the value of the '<em><b>Think Time Params</b></em>' attribute list.
+     * The list contents are of type {@link java.math.BigDecimal}.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Think Time Params</em>' attribute list isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Think Time Params</em>' attribute list.
+     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getTransition_ThinkTimeParams()
+     * @model
+     * @generated
+     */
+    EList<BigDecimal> getThinkTimeParams();
 
 } // Transition

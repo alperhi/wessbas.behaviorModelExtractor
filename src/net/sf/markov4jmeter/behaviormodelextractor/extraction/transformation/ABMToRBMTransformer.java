@@ -20,8 +20,6 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
@@ -29,7 +27,7 @@ import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.Vertex;
-import net.sf.markov4jmeter.behaviormodelextractor.util.Util;
+import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -153,95 +151,30 @@ public class ABMToRBMTransformer {
 
             // conversion: times -> think times;
 
-            final double mean;
-            final double deviation;
+            final BigDecimal mean;
+            final BigDecimal deviation;
 
-            final List<BigDecimal> times = outgoingTransition.getTimes();
+            final List<BigDecimal> timeDiffs =
+                    outgoingTransition.getTimeDiffs();
 
-            if (times.size() > 0) {
+            if (timeDiffs.size() > 0) {
 
-                // compute mean;
-
-                mean = this.computeMean(times);
-                deviation = this.computeDeviation(times, mean);
-
-                // remove all time distances before storing the think time;
-                times.clear();
+                mean      = MathUtil.computeMean(timeDiffs);
+                deviation = MathUtil.computeDeviation(timeDiffs);
 
             } else {  // times.size() == 0;
 
-                mean = 0.0d;
-                deviation = 0.0d;
+                mean      = BigDecimal.ZERO;
+                deviation = BigDecimal.ZERO;
             }
 
-            times.add( new BigDecimal(mean) );
-            times.add( new BigDecimal(deviation) );
+            // store mean and deviation values as think time parameters;
+
+            final List<BigDecimal> thinkTimeParams =
+                    outgoingTransition.getThinkTimeParams();
+
+            thinkTimeParams.add(mean);
+            thinkTimeParams.add(deviation);
         }
-    }
-
-    /**
-     * Calculates the mean value for a given set of time ranges.
-     *
-     * @param times  set of time ranges whose mean value shall be calculated.
-     *
-     * @return a non-negative mean value.
-     */
-    private double computeMean (final List<BigDecimal> times) {
-
-        BigDecimal sum = new BigDecimal(0L);
-
-        for (final BigDecimal time : times) {
-
-            sum = sum.add(time);
-        }
-
-        return sum.divide(
-                new BigDecimal( times.size() ),
-                0,  // precision 0  -->  no digits behind the comma;
-                RoundingMode.HALF_UP).doubleValue();
-    }
-
-    /**
-     * Calculates the deviation value for a given set of time ranges and their
-     * mean value.
-     *
-     * @param times
-     *     set of time ranges whose deviation value shall be calculated.
-     * @param mean
-     *     mean value of the given time ranges.
-     *
-     * @return  a non-negative deviation value.
-     */
-    private double computeDeviation (
-            final List<BigDecimal> times,
-            final double mean) {
-
-        // sqrt( sum( (d_{ij} - mean)^2 ) / n );
-
-        final LinkedList<BigDecimal> dTimes = new LinkedList<BigDecimal>();
-
-        final BigDecimal subtrahend = new BigDecimal(mean);
-
-        for (final BigDecimal time : times) {
-
-            final BigDecimal diff = time.subtract(subtrahend);
-
-            dTimes.add( diff.multiply(diff) );
-        }
-
-        BigDecimal variance = new BigDecimal(0L);
-
-        for (final BigDecimal dTime : dTimes) {
-
-            variance = variance.add(dTime);
-        }
-
-        variance = variance.divide(
-                new BigDecimal( dTimes.size() ),
-                0,  // precision 0  -->  no digits behind the comma;
-                RoundingMode.HALF_UP);
-
-        // use RoundingMode.DOWN, to avoid 1 being returned if variance is 0;
-        return Util.sqrt(variance, RoundingMode.DOWN).doubleValue();
     }
 }

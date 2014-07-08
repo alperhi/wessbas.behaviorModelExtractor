@@ -163,8 +163,12 @@
         <element xmi:type="ecore:EAttribute" href="behavior.ecore#//Transition/value"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Vj5yMTD1EeKvFcIDSSdgbA"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_gtTMAAbHEeSC4N51YqmZFw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="behavior.ecore#//Transition/timeDiffs"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gtTMAQbHEeSC4N51YqmZFw"/>
+      </children>
       <children xmi:type="notation:Node" xmi:id="_r569QP73EeOcde9Vz76TUw" type="2001">
-        <element xmi:type="ecore:EAttribute" href="behavior.ecore#//Transition/times"/>
+        <element xmi:type="ecore:EAttribute" href="behavior.ecore#//Transition/thinkTimeParams"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_r569Qf73EeOcde9Vz76TUw"/>
       </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_L4YklTD0EeKvFcIDSSdgbA"/>
@@ -178,7 +182,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_L4YkkTD0EeKvFcIDSSdgbA" fontColor="4210752" fontName="Segoe UI" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="behavior.ecore#//Transition"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_L4YkkjD0EeKvFcIDSSdgbA" x="-85" y="620"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_L4YkkjD0EeKvFcIDSSdgbA" x="-135" y="620"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_t-fRwDD1EeKvFcIDSSdgbA" type="1001">
     <children xmi:type="notation:Node" xmi:id="_t-fRwzD1EeKvFcIDSSdgbA" type="4001"/>
@@ -396,7 +400,7 @@
     <element xmi:type="ecore:EReference" href="behavior.ecore#//Vertex/outgoingTransitions"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_mn4JkzOzEeKY8qRmfpy7Iw" points="[-1, 13, 1, -103]$[-1, 96, 1, -20]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_moIoQDOzEeKY8qRmfpy7Iw" id="(0.22549019607843138,0.6976744186046512)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_moIoQTOzEeKY8qRmfpy7Iw" id="(0.18181818181818182,0.4117647058823529)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_moIoQTOzEeKY8qRmfpy7Iw" id="(0.33490566037735847,0.03529411764705882)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_JDr3MAQmEeSNEZXa1xqmDg" type="3002" source="_B3O3kAQmEeSNEZXa1xqmDg" target="_Eab0IAQmEeSNEZXa1xqmDg">
     <children xmi:type="notation:Node" xmi:id="_JEIjIAQmEeSNEZXa1xqmDg" type="4011">

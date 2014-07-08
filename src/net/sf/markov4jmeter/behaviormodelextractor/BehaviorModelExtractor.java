@@ -343,7 +343,6 @@ public class BehaviorModelExtractor {
 
         } catch (final Exception ex) {
 
-ex.printStackTrace(); // TODO: remove this
             System.err.println( ex.getMessage() );
             CommandLineArgumentsHandler.printUsage();
         }

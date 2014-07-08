@@ -1,7 +1,7 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
@@ -11,6 +11,7 @@ import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
+import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
  * This class represents a <i>"simple"</i> strategy, that is average values of
@@ -131,69 +132,52 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         final UseCase srcUseCase = srcVertex.getUseCase();
         final UseCase dstUseCase = dstVertex.getUseCase();
 
-        final String srcUseCaseId = srcUseCase.getId();
+        final String srcUseCaseId = srcUseCase.getId();  // always defined here;
 
-        final BigDecimal n = new BigDecimal(behaviorModelsRelative.length);
+        final int n = behaviorModelsRelative.length;
 
-        // calculate the sums for probability, mean and deviation
-        // of the current transition;
-        BigDecimal probabilitySum = new BigDecimal(0.0d);
-        BigDecimal meanSum        = new BigDecimal(0.0d);
-        BigDecimal deviationSum   = new BigDecimal(0.0d);
-
-        // temporary variables, just to be used in for-loops;
-        Transition transition;
-        BigDecimal value;
+        final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
+        double probabilitySum = 0.0d;
 
         // if dstUseCase is null, its vertex denotes the final state (no ID);
         final String dstUseCaseId =
                 (dstUseCase != null) ? dstUseCase.getId() : null;
 
-        for (BehaviorModelRelative behaviorModelRelative :
+        for (final BehaviorModelRelative behaviorModelRelative :
              behaviorModelsRelative) {
 
-            transition = this.findTransitionByUseCaseIDs(
+            final Transition transition = this.findTransitionByUseCaseIDs(
                     behaviorModelRelative,
                     srcUseCaseId,
                     dstUseCaseId);  // dstUseCaseId might be null (final state);
 
             if (transition != null) {
 
-                value = new BigDecimal(transition.getValue());
+                probabilitySum += transition.getValue();
 
-                // use a scale of 64 to ensure that all digits of a double value
-                // appear behind the comma;
-                probabilitySum = probabilitySum.add(
-                        value.divide(n, 64, RoundingMode.HALF_UP));
-
-                final List<BigDecimal> times = transition.getTimes();
-
-                if (times.size() == 2) {
-
-                    // first component of times list is mean;
-                    value = times.get(0);
-
-                    meanSum = meanSum.add(
-                            value.divide(n, RoundingMode.HALF_UP));
-
-                    // second component of times list is deviation;
-                    value = times.get(1);
-
-                    deviationSum = deviationSum.add(
-                            value.divide(n, RoundingMode.HALF_UP));
-                }
+                // collect all time ranges for the think time being computed;
+                timeDiffs.addAll( transition.getTimeDiffs() );
             }
         }
 
-        if (probabilitySum.doubleValue() > 0) {
+        probabilitySum /= n;
+
+        if (probabilitySum > 0) {
 
             // create new transitions by invoking a method of parent class;
             final Transition newTransition =
                     this.installTransition(srcVertex, dstVertex);
 
-            newTransition.setValue(probabilitySum.doubleValue());
-            newTransition.getTimes().add(meanSum);
-            newTransition.getTimes().add(deviationSum);
+            newTransition.setValue(probabilitySum);
+
+            if (timeDiffs.size() > 0) {
+
+                newTransition.getThinkTimeParams().add(
+                        MathUtil.computeMean(timeDiffs));
+
+                newTransition.getThinkTimeParams().add(
+                        MathUtil.computeDeviation(timeDiffs));
+            }
         }
     }
 }

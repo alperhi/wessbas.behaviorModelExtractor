@@ -89,8 +89,8 @@ public abstract class AbstractClusteringStrategy {
             final String srcUseCaseId,
             final String dstUseCaseId) {
 
-        final Vertex srcVertex = this.findVertexByUseCaseId(
-                behaviorModelRelative, srcUseCaseId);
+        final Vertex srcVertex =
+                this.findVertexByUseCaseId(behaviorModelRelative, srcUseCaseId);
 
         if (srcVertex != null) {
 

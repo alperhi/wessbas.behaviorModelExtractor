@@ -371,13 +371,22 @@ public interface BehaviorPackage extends EPackage {
     int TRANSITION__VALUE = 1;
 
     /**
-     * The feature id for the '<em><b>Times</b></em>' attribute list.
+     * The feature id for the '<em><b>Time Diffs</b></em>' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TRANSITION__TIMES = 2;
+    int TRANSITION__TIME_DIFFS = 2;
+
+    /**
+     * The feature id for the '<em><b>Think Time Params</b></em>' attribute list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TRANSITION__THINK_TIME_PARAMS = 3;
 
     /**
      * The number of structural features of the '<em>Transition</em>' class.
@@ -386,7 +395,7 @@ public interface BehaviorPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TRANSITION_FEATURE_COUNT = 3;
+    int TRANSITION_FEATURE_COUNT = 4;
 
     /**
      * The meta object id for the '{@link net.sf.markov4jmeter.behavior.impl.BehaviorModelAbsoluteImpl <em>Model Absolute</em>}' class.
@@ -775,15 +784,26 @@ public interface BehaviorPackage extends EPackage {
     EAttribute getTransition_Value();
 
     /**
-     * Returns the meta object for the attribute list '{@link net.sf.markov4jmeter.behavior.Transition#getTimes <em>Times</em>}'.
+     * Returns the meta object for the attribute list '{@link net.sf.markov4jmeter.behavior.Transition#getTimeDiffs <em>Time Diffs</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute list '<em>Times</em>'.
-     * @see net.sf.markov4jmeter.behavior.Transition#getTimes()
+     * @return the meta object for the attribute list '<em>Time Diffs</em>'.
+     * @see net.sf.markov4jmeter.behavior.Transition#getTimeDiffs()
      * @see #getTransition()
      * @generated
      */
-    EAttribute getTransition_Times();
+    EAttribute getTransition_TimeDiffs();
+
+    /**
+     * Returns the meta object for the attribute list '{@link net.sf.markov4jmeter.behavior.Transition#getThinkTimeParams <em>Think Time Params</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute list '<em>Think Time Params</em>'.
+     * @see net.sf.markov4jmeter.behavior.Transition#getThinkTimeParams()
+     * @see #getTransition()
+     * @generated
+     */
+    EAttribute getTransition_ThinkTimeParams();
 
     /**
      * Returns the meta object for class '{@link net.sf.markov4jmeter.behavior.BehaviorModelAbsolute <em>Model Absolute</em>}'.
@@ -1102,12 +1122,20 @@ public interface BehaviorPackage extends EPackage {
         EAttribute TRANSITION__VALUE = eINSTANCE.getTransition_Value();
 
         /**
-         * The meta object literal for the '<em><b>Times</b></em>' attribute list feature.
+         * The meta object literal for the '<em><b>Time Diffs</b></em>' attribute list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute TRANSITION__TIMES = eINSTANCE.getTransition_Times();
+        EAttribute TRANSITION__TIME_DIFFS = eINSTANCE.getTransition_TimeDiffs();
+
+        /**
+         * The meta object literal for the '<em><b>Think Time Params</b></em>' attribute list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TRANSITION__THINK_TIME_PARAMS = eINSTANCE.getTransition_ThinkTimeParams();
 
         /**
          * The meta object literal for the '{@link net.sf.markov4jmeter.behavior.impl.BehaviorModelAbsoluteImpl <em>Model Absolute</em>}' class.
