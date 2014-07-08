@@ -31,6 +31,7 @@ import net.sf.markov4jmeter.behavior.SessionRepository;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.impl.BehaviorPackageImpl;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.BehaviorModelWriter;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.DotGraphGenerator;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.MarkovMatrixHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.SessionRepositoryHandler;
@@ -342,6 +343,7 @@ public class BehaviorModelExtractor {
 
         } catch (final Exception ex) {
 
+ex.printStackTrace(); // TODO: remove this
             System.err.println( ex.getMessage() );
             CommandLineArgumentsHandler.printUsage();
         }

@@ -17,7 +17,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package net.sf.markov4jmeter.behaviormodelextractor;
+package net.sf.markov4jmeter.behaviormodelextractor.extraction;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -212,7 +212,8 @@ public class DotGraphGenerator {
                     final String dstNode = matrix[0][j];
 
                     final String label =
-                            DotGraphGenerator.NUMBER_FORMAT.format(probabilty);
+                            DotGraphGenerator.NUMBER_FORMAT.format(probabilty)
+                            + ((value.thinkTime != null) ? ("; " + value.thinkTime) : "");
 
                     final Transition transition =
                             new Transition(srcNode, label, dstNode);
@@ -253,7 +254,7 @@ public class DotGraphGenerator {
             // might throw a NullPointer- or NumberFormatException
             // (NullPointerException should never happen here);
             final double probability = Double.parseDouble( tokens[0] );
-            final String thinkTime = tokens[1];
+            final String thinkTime = !tokens[1].equals("n(0 0)") ? tokens[1] : null;
 
             value = new Value(probability, thinkTime);
 

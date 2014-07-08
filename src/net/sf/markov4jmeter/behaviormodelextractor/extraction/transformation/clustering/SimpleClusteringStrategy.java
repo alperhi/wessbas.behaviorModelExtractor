@@ -142,7 +142,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         BigDecimal deviationSum   = new BigDecimal(0.0d);
 
         // temporary variables, just to be used in for-loops;
-        Transition transition, newTransition;
+        Transition transition;
         BigDecimal value;
 
         // if dstUseCase is null, its vertex denotes the final state (no ID);
@@ -161,28 +161,39 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
                 value = new BigDecimal(transition.getValue());
 
+                // use a scale of 64 to ensure that all digits of a double value
+                // appear behind the comma;
                 probabilitySum = probabilitySum.add(
-                        value.divide(n, RoundingMode.HALF_UP));
+                        value.divide(n, 64, RoundingMode.HALF_UP));
 
-                // first component of times list is mean;
-                value = transition.getTimes().get(0);
+                final List<BigDecimal> times = transition.getTimes();
 
-                meanSum = meanSum.add(
-                        value.divide(n, RoundingMode.HALF_UP));
+                if (times.size() == 2) {
 
-                // second component of times list is deviation;
-                value = transition.getTimes().get(1);
+                    // first component of times list is mean;
+                    value = times.get(0);
 
-                deviationSum = meanSum.add(
-                        value.divide(n, RoundingMode.HALF_UP));
+                    meanSum = meanSum.add(
+                            value.divide(n, RoundingMode.HALF_UP));
+
+                    // second component of times list is deviation;
+                    value = times.get(1);
+
+                    deviationSum = deviationSum.add(
+                            value.divide(n, RoundingMode.HALF_UP));
+                }
             }
         }
 
-        // invoke method of parent class;
-        newTransition = this.installTransition(srcVertex, dstVertex);
+        if (probabilitySum.doubleValue() > 0) {
 
-        newTransition.setValue(probabilitySum.doubleValue());
-        newTransition.getTimes().add(meanSum);
-        newTransition.getTimes().add(deviationSum);
+            // create new transitions by invoking a method of parent class;
+            final Transition newTransition =
+                    this.installTransition(srcVertex, dstVertex);
+
+            newTransition.setValue(probabilitySum.doubleValue());
+            newTransition.getTimes().add(meanSum);
+            newTransition.getTimes().add(deviationSum);
+        }
     }
 }

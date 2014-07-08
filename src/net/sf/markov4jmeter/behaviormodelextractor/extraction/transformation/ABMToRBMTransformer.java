@@ -165,7 +165,7 @@ public class ABMToRBMTransformer {
                 mean = this.computeMean(times);
                 deviation = this.computeDeviation(times, mean);
 
-                // remove all time values before storing the think time;
+                // remove all time distances before storing the think time;
                 times.clear();
 
             } else {  // times.size() == 0;

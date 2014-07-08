@@ -126,10 +126,8 @@ public class RBMToMarkovMatrixTransformer {
 
             if ( !finalStateName.equals(srcVertexName) ) {
 
-                final List<Transition> transitions =
-                        srcVertex.getOutgoingTransitions();
-
-                for (final Transition transition : transitions) {
+                for (final Transition transition :
+                     srcVertex.getOutgoingTransitions()) {
 
                     final double probability   = transition.getValue();
                     final Vertex dstVertex     = transition.getTargetVertex();

@@ -7,7 +7,6 @@ import java.util.List;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
-import net.sf.markov4jmeter.behaviormodelextractor.DotGraphGenerator;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 
 /**
