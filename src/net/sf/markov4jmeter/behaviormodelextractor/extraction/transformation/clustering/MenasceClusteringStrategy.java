@@ -36,7 +36,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 
         // the classes "NoClusteringStrategy" and "SimpleClusteringStrategy"
         // should give an idea for handling the Behavior Models and how to
-        // use the helping methods of the abstract base class.
+        // use the helping methods of the (abstract) parent class.
 
         return behaviorMix;
     }

@@ -14,9 +14,10 @@ import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
- * This class represents a <i>"simple"</i> strategy, that is average values of
- * probabilities and think times will be calculated and summarized for each
- * transition, resulting in a single Behavior Model.
+ * This class represents a <i>"simple"</i> clustering strategy, which calculates
+ * the mean value of probabilities for each transition, as well as the
+ * mean/deviation values for cumulative time distances of a transition; the
+ * resulting values will be stored in a single output Behavior Model.
  *
  * @author   Eike Schulz (esc@informatik.uni-kiel.de)
  * @version  1.0
@@ -30,9 +31,11 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
     /**
      * {@inheritDoc}
      *
-     * <p> This method is specialized for <b>"simple"</b> clustering, that is
-     * average values of probabilities and think times will be calculated and
-     * summarized for each transition, resulting in a single Behavior Model.
+     * <p> This method is specialized for <b>"simple"</b> clustering, which
+     * calculates the mean value of probabilities for each transition, as well
+     * as the mean/deviation values for cumulative time distances of a
+     * transition; the resulting values will be stored in a single output
+     * Behavior Model.
      */
     @Override
     public BehaviorMix apply (
@@ -42,7 +45,9 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         // Behavior Mix to be returned;
         final BehaviorMix behaviorMix = this.createBehaviorMix();
 
-        // create an "empty" Behavior Model, which includes all vertices only;
+        // create a Behavior Model, which includes all vertices only; the
+        // vertices are associated with the use cases, and a dedicated vertex
+        // that represents the final state will be added;
         final BehaviorModelRelative behaviorModel =
                 this.createBehaviorModelWithoutTransitions(
                         useCaseRepository.getUseCases());
@@ -68,11 +73,6 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
     /**
      * Installs the transitions of a given Behavior Model, according to the
      * "simple" clustering strategy.
-     *
-     * <p> For all transitions of a set of input Behavior Models, the
-     * probabilities, mean and deviation values will be divided by the number
-     * of input models. Each transition between two vertices of the resulting
-     * Behavior Model will be initialized with the sums of its average values.
      *
      * @param behaviorModel
      *     Behavior Model whose transitions shall be installed.
@@ -115,8 +115,8 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
      * Installs a transition between two given vertices.
      *
      * @param srcVertex
-     *     source vertex of the transition; the transition will be added to
-     *     the outgoing transitions of that vertex.
+     *     source vertex of the transition; the new transition will be added to
+     *     the outgoing transitions of this vertex.
      * @param dstVertex
      *     destination vertex, which might be even <code>null</code> (final
      *     state, "$").
@@ -134,8 +134,6 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
         final String srcUseCaseId = srcUseCase.getId();  // always defined here;
 
-        final int n = behaviorModelsRelative.length;
-
         final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
         double probabilitySum = 0.0d;
 
@@ -143,6 +141,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         final String dstUseCaseId =
                 (dstUseCase != null) ? dstUseCase.getId() : null;
 
+        // add up all probabilities, and collect all time ranges;
         for (final BehaviorModelRelative behaviorModelRelative :
              behaviorModelsRelative) {
 
@@ -160,17 +159,19 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
             }
         }
 
-        probabilitySum /= n;
+        probabilitySum /= behaviorModelsRelative.length;
 
         if (probabilitySum > 0) {
 
-            // create new transitions by invoking a method of parent class;
+            // create new transitions by invoking helper method of parent class;
             final Transition newTransition =
                     this.installTransition(srcVertex, dstVertex);
 
             newTransition.setValue(probabilitySum);
 
             if (timeDiffs.size() > 0) {
+
+                // calculate new mean/deviation values, based on time ranges;
 
                 newTransition.getThinkTimeParams().add(
                         MathUtil.computeMean(timeDiffs));

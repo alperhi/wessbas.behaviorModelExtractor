@@ -30,6 +30,8 @@ public abstract class AbstractClusteringStrategy {
     /* *****************************  constants  **************************** */
 
 
+    /** Generic name for generated Behavior Models; if multiple models are
+     *  generated, an index will be appended to this name. */
     protected final static String GENERIC_BEHAVIOR_MODEL_NAME =
             "gen_behavior_model";
 
@@ -78,7 +80,7 @@ public abstract class AbstractClusteringStrategy {
      *     vertex.
      * @param dstUseCaseId
      *     identifier of the use case which is associated with the target
-     *     vertex.
+     *     vertex; <code>null</code> might be passed for the final state.
      *
      * @return
      *     a matching transition, or <code>null</code> if such a transition
@@ -102,7 +104,8 @@ public abstract class AbstractClusteringStrategy {
                 final UseCase useCase =
                         transition.getTargetVertex().getUseCase();
 
-                if (useCase != null && useCase.getId().equals(dstUseCaseId) ) {
+                if ((useCase != null && useCase.getId().equals(dstUseCaseId)) ||
+                    (useCase == null && dstUseCaseId == null)) {
 
                     return transition;
                 }
@@ -113,15 +116,15 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Searches for a Behavior Model vertex which is associated with a specified
+     * Searches for a Behavior Model vertex which is associated with a specific
      * use case or with the final state.
      *
      * @param behaviorModelRelative
      *     Behavior Model whose vertices shall be searched through.
      * @param useCaseId
-     *     an identifier of the use case which is associated with the searched
-     *     vertex, or <code>null</code> for searching the vertex that represents
-     *     the final state.
+     *     an identifier of the use case which is associated with the vertex to
+     *     be searched, or <code>null</code> for searching the vertex that
+     *     represents the final state.
      *
      * @return
      *     a matching vertex, or <code>null</code> if such a vertex does not
@@ -159,8 +162,8 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Creates a Behavior Model which includes vertices indicated by a set of
-     * given use cases.
+     * Creates a Behavior Model which includes the vertices for set of given
+     * use cases.
      *
      * @param useCases
      *     set of use cases which indicate the vertices to be included to the
@@ -190,7 +193,7 @@ public abstract class AbstractClusteringStrategy {
             vertices.add(vertex);
         }
 
-        // add vertex for the final state at last;
+        // add a vertex for the final state at last;
 
         vertex = factory.createVertex();
 
@@ -201,7 +204,7 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Creates an "empty" <code>BehaviorMix</code> instance.
+     * Creates an empty <code>BehaviorMix</code> instance.
      *
      * @return  the newly created instance without any Behavior Mix entries.
      */
@@ -213,8 +216,9 @@ public abstract class AbstractClusteringStrategy {
     }
 
     /**
-     * Creates a Behavior Mix entry for a given Behavior Model, its (generated)
-     * name and frequency.
+     * Creates a Behavior Mix entry for a given Behavior Model; the entry will
+     * include the model's (generated) name, a relative frequency and the model
+     * itself.
      *
      * @param behaviorModelName
      *     the (generated) name of the Behavior Model.
@@ -261,8 +265,6 @@ public abstract class AbstractClusteringStrategy {
         final Transition transition = factory.createTransition();
 
         transition.setTargetVertex(targetVertex);
-        transition.setValue(0);  // TODO: set default values;
-
         sourceVertex.getOutgoingTransitions().add(transition);
 
         return transition;

@@ -147,7 +147,7 @@ public class DotGraphGenerator {
      *     If a security manager exists and its <code>checkWrite</code> method
      *     denies write access to the file.
      * @throws IOException
-     *     If an I/O error occurs.
+     *     If any I/O error occurs.
      */
     public void generateDotGraphForMarkovMatrix (
             final String[][] matrix,

@@ -4,6 +4,7 @@ import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
+import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
  * This class represents a <i>no-clustering</i> strategy, that is each single
@@ -31,26 +32,26 @@ public class NoClusteringStrategy extends AbstractClusteringStrategy {
             final BehaviorModelRelative[] behaviorModelsRelative,
             final UseCaseRepository useCaseRepository) {
 
-        final int n = behaviorModelsRelative.length;
-
         // Behavior Mix to be returned;
         final BehaviorMix behaviorMix = this.createBehaviorMix();
 
         final String behaviorModelName =
                 AbstractClusteringStrategy.GENERIC_BEHAVIOR_MODEL_NAME;
 
-        final double frequency = 1.0 / n;
-
-        double frequencySum = 0;
+        final int n = behaviorModelsRelative.length;
+        final double frequency = MathUtil.round(1.0d / n);
+        double frequencySum = 0.0d;
 
         for (int i = 0; i < n; i++, frequencySum += frequency) {
 
             // ensure that the frequencies sum is always 1.0, by setting the
             // last frequency as 1.0 minus the sum of all other frequencies;
+            double freq = (i < n - 1) ? frequency : (1.0d - frequencySum);
+
             final BehaviorMixEntry behaviorMixEntry =
                     this.createBehaviorMixEntry(
                             behaviorModelName + i,
-                            (i < n - 1) ? frequency : (1.0d - frequencySum),
+                            MathUtil.round(freq),
                             behaviorModelsRelative[i]);
 
             behaviorMix.getEntries().add(behaviorMixEntry);

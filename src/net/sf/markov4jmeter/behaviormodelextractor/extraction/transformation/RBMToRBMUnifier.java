@@ -9,16 +9,32 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clu
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.NoClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.SimpleClusteringStrategy;
 
+/**
+ * This class provides methods for transforming Behavior Models to a Behavior
+ * Mix, which includes Behavior Models that result from a specific clustering
+ * strategy being applied to the input models.
+ *
+ * @author Eike Schulz (esc@informatik.uni-kiel.de)
+ *
+ * @version 1.0
+ */
 public class RBMToRBMUnifier {
 
 
     /* *****************************  constants  **************************** */
 
 
-    public final static String CLUSTERING_METHOD_NONE = "none";
-    public final static String CLUSTERING_METHOD_SIMPLE = "simple";
-    public final static String CLUSTERING_METHOD_MENASCE = "menasce";
+    /** Clustering type constant for "no-clustering". */
+    public final static String CLUSTERING_TYPE_NONE = "none";
 
+    /** Clustering type constant for "simple" clustering. */
+    public final static String CLUSTERING_TYPE_SIMPLE = "simple";
+
+    /** Clustering type constant for menascé-based clustering. */
+    public final static String CLUSTERING_TYPE_MENASCE = "menasce";
+
+    /** Warning message for the case that an unknown clustering type has been
+     *  specified. */
     private final static String WARNING_UNKNOWN_CLUSTERING_METHOD =
             "unknown clustering method \"%s\"; no clustering will be applied";
 
@@ -27,19 +43,36 @@ public class RBMToRBMUnifier {
 
 
     /**
+     * Transforms a set of input Behavior Models to a corresponding Behavior
+     * Mix, which includes Behavior Models that result from a specific
+     * clustering strategy being applied to the input models.
      *
-     * @param behaviorModelRelative
+     * @param behaviorModelsRelative
+     *     the set of input Behavior Models to be transformed.
+     * @param clusteringType
+     *     one of the <code>CLUSTERING_TYPE</code> constants in class
+     *     {@link RBMToRBMUnifier}; if <code>null</code> or any invalid type
+     *     value is passed, the default clustering type "no-clustering" will
+     *     be used, and a warning will be given.
+     * @param useCaseRepository
+     *     repository which contains all use cases of the input Behavior Models.
+     * @param finalVertexName
+     *     name of the final vertex, "$" in general.
+     *
      * @return
+     *     the Behavior Mix which results from the transformation.
+     *
      * @throws ExtractionException
+     *     if any error during the transformation process occurs.
      */
     public BehaviorMix transform (
             final BehaviorModelRelative[] behaviorModelsRelative,
-            final String clusteringMethod,
+            final String clusteringType,
             final UseCaseRepository useCaseRepository,
             final String finalVertexName) throws ExtractionException {
 
         final AbstractClusteringStrategy clusteringStrategy =
-                this.getClusteringStrategy(clusteringMethod);
+                this.getClusteringStrategy(clusteringType);
 
         return clusteringStrategy.apply(
                 behaviorModelsRelative,
@@ -47,31 +80,48 @@ public class RBMToRBMUnifier {
     }
 
 
+    /* **************************  private methods  ************************* */
+
+
+    /**
+     * Returns a clustering strategy instance, which corresponds the given
+     * clustering type.
+     *
+     * @param clusteringType
+     *     one of the <code>CLUSTERING_TYPE</code> constants in class
+     *     {@link RBMToRBMUnifier}; if <code>null</code> or any invalid type
+     *     value is passed, the default clustering type "no-clustering" will
+     *     be used, and a warning will be given.
+     *
+     * @return
+     *     a clustering strategy instance, which corresponds to the given
+     *     clustering type.
+     */
     private AbstractClusteringStrategy getClusteringStrategy (
-            String clusteringMethod) {
+            String clusteringType) {
 
         // to be returned;
         final AbstractClusteringStrategy clusteringStrategy;
 
-        if (clusteringMethod == null) {
+        if (clusteringType == null) {
 
             // use no clustering by default;
-            clusteringMethod = RBMToRBMUnifier.CLUSTERING_METHOD_NONE;
+            clusteringType = RBMToRBMUnifier.CLUSTERING_TYPE_NONE;
         }
 
-        switch ( clusteringMethod.trim().toLowerCase() ) {
+        switch ( clusteringType.trim().toLowerCase() ) {
 
-            case RBMToRBMUnifier.CLUSTERING_METHOD_NONE:
+            case RBMToRBMUnifier.CLUSTERING_TYPE_NONE:
 
                 clusteringStrategy = new NoClusteringStrategy();
                 break;
 
-            case RBMToRBMUnifier.CLUSTERING_METHOD_SIMPLE:
+            case RBMToRBMUnifier.CLUSTERING_TYPE_SIMPLE:
 
                 clusteringStrategy = new SimpleClusteringStrategy();
                 break;
 
-            case RBMToRBMUnifier.CLUSTERING_METHOD_MENASCE:
+            case RBMToRBMUnifier.CLUSTERING_TYPE_MENASCE:
 
                 clusteringStrategy = new MenasceClusteringStrategy();
                 break;
@@ -80,7 +130,7 @@ public class RBMToRBMUnifier {
 
                 final String message = String.format(
                         RBMToRBMUnifier.WARNING_UNKNOWN_CLUSTERING_METHOD,
-                        clusteringMethod);
+                        clusteringType);
 
                 System.out.println(message);
 

@@ -55,8 +55,10 @@ public class SessionToABMTransformer {
      * <code>null</code> is passed, the transformation starts with an empty set
      * of vertices.
      *
-     * @param sessionRepository
-     *     the session repository, which provides the sessions.
+     * @param sessions
+     *     sessions to be transformed to Behavior Models.
+     * @param defaultUseCases
+     *     list of use cases, which indicate vertices to be created by default.
      *
      * @return
      *     the resulting Behavior Models.
@@ -200,8 +202,9 @@ public class SessionToABMTransformer {
                 // note that start times are considered only, since the duration
                 // of a use case is included to the think time; for a separation
                 // of use case duration and transition think time, the Protocol
-                // Layer needs to provide a dedicated "use case think time" for
-                // each state otherwise;
+                // Layer of the Markov4JMeter workload generation model needs to
+                // provide a dedicated "use case think time" for each state
+                // otherwise;
 
                 final long timeDistance =
                         dstUCExecution.getStartTime() -
@@ -235,7 +238,7 @@ public class SessionToABMTransformer {
             // create a special vertex for the final state;
             final Vertex finalVertex = BehaviorFactory.eINSTANCE.createVertex();
 
-            // register final-state vertex, whose use case is irrelevant;
+            // register the final-state vertex, whose use case is undefined;
             finalVertex.setUseCase(null);
             vertices.add(finalVertex);
 
@@ -265,7 +268,7 @@ public class SessionToABMTransformer {
     }
 
     /**
-     * Installs a new transition between two vertices; the (newly created)
+     * Installs a new transition between two vertices; the newly created
      * transition will be added to the outgoing transitions of the source
      * vertex.
      *
@@ -313,10 +316,11 @@ public class SessionToABMTransformer {
 
 
     /**
-     * Searches for a vertex which is associated with a use case of certain ID.
+     * Searches for a vertex which is associated with a use case of specific
+     * identifier.
      *
      * @param useCaseId
-     *     ID of the use case.
+     *     identifier of the use case.
      * @param vertices
      *     list of vertices to be searched through.
      *

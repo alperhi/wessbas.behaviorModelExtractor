@@ -1,0 +1,1 @@
+digraph G {"Login" [label="Login",shape=none];"Aktenbearbeitung" [label="Aktenbearbeitung",shape=none];"Login"->"Aktenbearbeitung" [style=solid,label="1; n(2806106692 0)"];"Aktenbearbeitung"->"Aktenbearbeitung" [style=solid,label="1; n(2869806385171 5527321437153)"];}

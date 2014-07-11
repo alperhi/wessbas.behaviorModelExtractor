@@ -10,6 +10,7 @@ import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.MarkovMatrixHandler;
+import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
  * This class provides methods for transforming "relative" Behavior Models to
@@ -129,7 +130,12 @@ public class RBMToMarkovMatrixTransformer {
                 for (final Transition transition :
                      srcVertex.getOutgoingTransitions()) {
 
-                    final double probability   = transition.getValue();
+                    // round the probability to 4 digits behind the comma, to
+                    // avoid rounding errors when the sum of the outgoing
+                    // transition probabilities of a state is validated;
+                    final double probability =
+                            MathUtil.round(transition.getValue());
+
                     final Vertex dstVertex     = transition.getTargetVertex();
                     final String dstVertexName = this.getVertexName(dstVertex);
 
@@ -176,20 +182,21 @@ public class RBMToMarkovMatrixTransformer {
     }
 
     /**
-     * Returns the name of the use case which is assigned to a given vertex.
+     * Returns the name of the use case which is associated with a given vertex.
      *
      * @param vertex
-     *     the vertex whose use case's name shall be returned.
+     *     the vertex whose associated use case's name shall be returned.
      *
      * @return
-     *     the name of the vertex use case; if no use case is associated with
-     *     the vertex, the name of the final state will be returned.
+     *     the name of the use case which is associated with the given vertex;
+     *     if no use case is associated with the vertex, the name of the final
+     *     state will be returned.
      */
     private String getVertexName (final Vertex vertex) {
 
         final UseCase useCase = vertex.getUseCase();
 
-        if (useCase == null) {  // final vertex has no use case;
+        if (useCase == null) {  // vertex for final state has no use case;
 
             return this.markovMatrixHandler.getFinalStateName();
         }

@@ -139,7 +139,7 @@ public class MarkovMatrixHandler {
      * @throws FileNotFoundException
      *     in case the denoted file does not exist.
      * @throws NullPointerException
-     *     if <code>null</code> is being passed as file path.
+     *     if <code>null</code> is passed as file path.
      * @throws IOException
      *     if any reading error occurs.
      * @throws ExtractionException
@@ -323,7 +323,7 @@ public class MarkovMatrixHandler {
      * @throws IOException
      *     if any reading error occurs.
      * @throws NullPointerException
-     *     if <code>null</code> is being passed as file path.
+     *     if <code>null</code> is passed as file path.
      * @throws ExtractionException
      *     if the number of matrix columns is inconsistent.
      */
@@ -372,10 +372,10 @@ public class MarkovMatrixHandler {
      * @throws IOException
      *     if an I/O error occurs.
      * @throws SecurityException
-     *      if a security manager exists and its checkWrite method denies write
-     *      access to the file.
+     *     if a security manager exists and its checkWrite method denies write
+     *     access to the file.
      * @throws NullPointerException
-     *     if <code>null</code> is being passed as file path.
+     *     if <code>null</code> is passed as file path.
      */
     public void writeMarkovMatrixToCSVFile (
             final String filePath,

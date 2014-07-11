@@ -8,8 +8,10 @@ import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
+import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 
 /**
+ * Class for writing Behavior Models to files.
  *
  * @author   Eike Schulz (esc@informatik.uni-kiel.de)
  * @version  1.0
@@ -68,6 +70,30 @@ public class BehaviorModelWriter {
     /* **************************  public methods  ************************** */
 
 
+    /**
+     * Writes the CSV- and DOT-files for a given set of Behavior Models.
+     *
+     * @param behaviorModelsRelative
+     *     Behavior Models whose files shall be written.
+     * @param outputCsvFilename
+     *     base filename of CSV-files to be written; if more than one Behavior
+     *     Models are passed, the filename will be indexed with inserted
+     *     numbers, starting with 0; for example, <code>output.csv</code> will
+     *     be indexed to <code>output0.csv</code>, <code>output1.csv</code>, ...
+     * @param outputDotFilename
+     *     base filename of DOT-files to be written; if more than one Behavior
+     *     Models are passed, the filename will be indexed, analogous to the
+     *     <code>outputCsvFilename</code>.
+     *
+     * @param behaviorMix
+     * @param outputCsvFilename
+     * @param outputDotFilename
+     * @throws SecurityException
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws NullPointerException
+     * @throws ExtractionException
+     */
     public void writeOutputFiles (
             final BehaviorMix behaviorMix,
             final String outputCsvFilename,
@@ -78,9 +104,14 @@ public class BehaviorModelWriter {
                            NullPointerException,
                            ExtractionException {
 
-        final List<BehaviorMixEntry> behaviorMixEntries = behaviorMix.getEntries();
+        final List<BehaviorMixEntry> behaviorMixEntries =
+                behaviorMix.getEntries();
 
-        for (int i = 0, n = behaviorMixEntries.size(); i < n; i++) {
+        final int n = behaviorMixEntries.size();
+
+        final String[][] behaviorMixRows = new String[n][];
+
+        for (int i = 0; i < n; i++) {
 
             final BehaviorMixEntry behaviorMixEntry = behaviorMixEntries.get(i);
 
@@ -108,96 +139,20 @@ public class BehaviorModelWriter {
             // TODO: store (behaviorModelName, relativeFrequency, suffixedCsvFile) in Behavior Mix;
             this.writeMarkovMatrixToFile(suffixedCsvFile, matrix);
             this.writeDotGraphToFile(suffixedOutputDotFile, matrix);
+
+            behaviorMixRows[i] = new String[]{
+                    behaviorModelName,
+                    " " + relativeFrequency,
+                    " " + suffixedCsvFile
+            };
         }
 
-        System.out.println(BehaviorModelWriter.INFO_FINISHED);
-    }
+        final String filename = "examples/aida-gear/output/behaviorMix_entries.txt";
 
-    /**
-     * Writes the CSV- and DOT-files for a given set of Behavior Models.
-     *
-     * @param behaviorModelsRelative
-     *     Behavior Models whose files shall be written.
-     * @param outputCsvFilename
-     *     base filename of CSV-files to be written; if more than one Behavior
-     *     Models are passed, the filename will be indexed with inserted
-     *     numbers, starting with 0; for example, <code>output.csv</code> will
-     *     be indexed to <code>output0.csv</code>, <code>output1.csv</code>, ...
-     * @param outputDotFilename
-     *     base filename of DOT-files to be written; if more than one Behavior
-     *     Models are passed, the filename will be indexed, analogous to the
-     *     <code>outputCsvFilename</code>.
-     *
-     * @throws SecurityException
-     * @throws IOException
-     * @throws FileNotFoundException
-     * @throws NullPointerException
-     * @throws ExtractionException
-     */
-    public void writeOutputFiles (
-            final BehaviorModelRelative[] behaviorModelsRelative,
-            final String outputCsvFilename,
-            final String outputDotFilename)
-                    throws SecurityException,
-                           IOException,
-                           FileNotFoundException,
-                           NullPointerException,
-                           ExtractionException {
-
-        for (int i = 0, n = behaviorModelsRelative.length; i < n; i++) {
-
-            final BehaviorModelRelative behaviorModelRelative =
-                behaviorModelsRelative[i];
-
-            final String suffixedCsvFile = (n > 1) ?
-                    this.getIndexedCsvFilename(outputCsvFilename, i) :
-                    this.getCsvFilename(outputCsvFilename);
-
-            final String suffixedOutputDotFile = (n > 1) ?
-                    this.getIndexedDotFilename(outputDotFilename, i) :
-                    this.getDotFilename(outputDotFilename);
-
-            final String[][] matrix =
-                    this.rbmToMarkovMatrixTransformer.transform(
-                            behaviorModelRelative);
-
-            this.writeMarkovMatrixToFile(suffixedCsvFile, matrix);
-            this.writeDotGraphToFile(suffixedOutputDotFile, matrix);
-        }
+        final CSVHandler csvHandler = new CSVHandler(";");
+        csvHandler.writeValues(filename, behaviorMixRows);  // FIXME: filename!
 
         System.out.println(BehaviorModelWriter.INFO_FINISHED);
-    }
-
-    /**
-     * Writes the CSV- and DOT-files for a given Behavior Model.
-     *
-     * @param behaviorModelRelative
-     *     Behavior Model whose files shall be written.
-     * @param outputCsvFilename
-     *     filename of the CSV-file to be written.
-     * @param outputDotFilename
-     *     filename of the DOT-file to be written.
-     *
-     * @throws SecurityException
-     * @throws IOException
-     * @throws FileNotFoundException
-     * @throws NullPointerException
-     * @throws ExtractionException
-     */
-    public void writeOutputFiles (
-            final BehaviorModelRelative behaviorModelRelative,
-            final String outputCsvFilename,
-            final String outputDotFilename)
-                    throws SecurityException,
-                           IOException,
-                           FileNotFoundException,
-                           NullPointerException,
-                           ExtractionException {
-
-        this.writeOutputFiles(
-                new BehaviorModelRelative[]{ behaviorModelRelative },
-                outputCsvFilename,
-                outputDotFilename);
     }
 
 
@@ -205,21 +160,37 @@ public class BehaviorModelWriter {
 
 
     /**
+     * Writes a given matrix to CSV-file.
      *
-     * @param filename
-     * @param matrix
+     * @param filename  name of the file to be written.
+     * @param matrix    matrix whose content shall be written to file.
+     *
      * @throws FileNotFoundException
-     * @throws SecurityException
-     * @throws NullPointerException
+     *     if the file exists but is a directory rather than a regular file,
+     *     does not exist but cannot be created, or cannot be opened for any
+     *     other reason.
      * @throws IOException
+     *     if an I/O error occurs.
+     * @throws SecurityException
+     *     if a security manager exists and its checkWrite method denies write
+     *     access to the file.
+     * @throws NullPointerException
+     *     if <code>null</code> is passed as file path.
      */
     private void writeMarkovMatrixToFile (
             final String filename,
-            final String[][] matrix) throws FileNotFoundException, SecurityException, NullPointerException, IOException {
+            final String[][] matrix)
+                    throws FileNotFoundException,
+                           SecurityException,
+                           NullPointerException,
+                           IOException {
 
+        // might throw a FileNotFound-, Security-, NullPointer- or IOException;
         this.rbmToMarkovMatrixTransformer.getMarkovMatrixHandler().
         writeMarkovMatrixToCSVFile(filename, matrix);
 
+        // might throw an IllegalFormat- or NullPointerException (both should
+        // never happen here, since template and arguments are valid);
         final String messageWritten = String.format(
                 BehaviorModelWriter.INFO_FILE_WRITTEN,
                 filename);
@@ -228,22 +199,27 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Writes the DOT graph of a given matrix to file.
      *
-     * @param filename
-     * @param matrix
-     * @throws FileNotFoundException
+     * @param filename  name of the file to be written.
+     * @param matrix    matrix whose DOT graph shall be written to file.
+     *
      * @throws SecurityException
-     * @throws NullPointerException
+     *     if writing access to the specified file is denied.
      * @throws IOException
+     *     if any I/O error occurs.
      */
     private void writeDotGraphToFile (
             final String filename,
-            final String[][] matrix) throws FileNotFoundException, SecurityException, NullPointerException, IOException {
+            final String[][] matrix) throws SecurityException, IOException {
 
+        // might throw a Security- or IOException;
         this.dotGraphGenerator.generateDotGraphForMarkovMatrix(
-                matrix,  // TODO: matrix for model 5 is invalid! (model is correct)
+                matrix,
                 filename);
 
+        // might throw an IllegalFormat- or NullPointerException (both should
+        // never happen here, since template and arguments are valid);
         final String messageWritten = String.format(
                 BehaviorModelWriter.INFO_FILE_WRITTEN,
                 filename);
@@ -252,9 +228,13 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Appends a ".csv"-suffix to a given base-filename. If the base-filename
+     * already ends with ".csv", no new suffix will be appended; for example,
+     * base-filename "somefile.csv" will be left unchanged.
      *
-     * @param filename
-     * @return
+     * @param filename  base-name of a file.
+     *
+     * @return  the filename with suffix ".csv".
      */
     private String getCsvFilename (final String filename) {
 
@@ -263,9 +243,13 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Appends a ".dot"-suffix to a given base-filename. If the base-filename
+     * already ends with ".dot", no new suffix will be appended; for example,
+     * base-filename "somefile.dot" will be left unchanged.
      *
-     * @param filename
-     * @return
+     * @param filename  base-name of a file.
+     *
+     * @return  the filename with suffix ".dot".
      */
     private String getDotFilename (final String filename) {
 
@@ -274,10 +258,16 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Inserts a numeric index between a given base-filename and a
+     * ".csv"-suffix; for example, base-filename "somefile" and index 5 will
+     * result in "somefile5.csv". If the base-filename already ends with ".csv",
+     * no new suffix will be appended; for example, base-filename "somefile.csv"
+     * will even result in "somefile5.csv" for index 5.
      *
-     * @param filename
-     * @param index
-     * @return
+     * @param filename  base-name of a file.
+     * @param index     index to be inserted.
+     *
+     * @return  the indexed filename.
      */
     private String getIndexedCsvFilename (
             final String filename,
@@ -288,10 +278,16 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Inserts a numeric index between a given base-filename and a
+     * ".dot"-suffix; for example, base-filename "somefile" and index 5 will
+     * result in "somefile5.dot". If the base-filename already ends with ".dot",
+     * no new suffix will be appended; for example, base-filename "somefile.dot"
+     * will even result in "somefile5.dot" for index 5.
      *
-     * @param filename
-     * @param index
-     * @return
+     * @param filename  base-name of a file.
+     * @param index     index to be inserted.
+     *
+     * @return  the indexed filename.
      */
     private String getIndexedDotFilename (
             final String filename,
@@ -302,10 +298,13 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Extends a given filename with a specified file-suffix. If the filename
+     * already ends with the specified suffix, no new suffix will be appended.
      *
-     * @param filename
-     * @param suffix
-     * @return
+     * @param filename  filename to be extended.
+     * @param suffix    file-suffix to be appended.
+     *
+     * @return  the extended filename.
      */
     private String getFilenameWithSuffix (
             final String filename,
@@ -316,11 +315,18 @@ public class BehaviorModelWriter {
     }
 
     /**
+     * Inserts a numeric index between a given base-filename and a file-suffix;
+     * for example, base-filename "somefile", suffix ".csv" and index 5 will
+     * result in "somefile5.csv". If the base-filename already ends with the
+     * specified suffix, no new suffix will be appended; for example,
+     * base-filename "somefile.csv" will even result in "somefile5.csv" for
+     * index 5 and suffix ".csv".
      *
-     * @param filename
-     * @param index
-     * @param suffix
-     * @return
+     * @param filename  base-name of a file.
+     * @param index     index to be inserted.
+     * @param suffix    file-suffix to be appended.
+     *
+     * @return  the indexed filename.
      */
     private String getIndexedFilenameWithSuffix (
             final String filename,

@@ -120,10 +120,11 @@ public class ABMToRBMTransformer {
     }
 
     /**
-     * Converts the values (labels) of the outgoing transitions of a given
-     * vertex from absolute to relative values.
+     * Converts the label values of all outgoing transitions of a given vertex
+     * from absolute to relative values.
      *
-     * @param vertex the vertex whose outgoing transitions will be converted.
+     * @param vertex
+     *     the vertex whose outgoing transitions' labels will be converted.
      */
     private void convertOutgoingTransitionValues (final Vertex vertex) {
 

@@ -1,0 +1,1 @@
+gen_behavior_model; 1.0; ./examples/specj/output/behaviormodel.csv
