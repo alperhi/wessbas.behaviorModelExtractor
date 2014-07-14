@@ -251,7 +251,8 @@ public class BehaviorModelExtractor {
         final BehaviorModelAbsolute[] behaviorModelsAbsolute =
                 sessionToAbmTransformer.transformSessionsToBehaviorModels(
                         this.sessionRepository.getSessions(),
-                        this.useCaseRepository.getUseCases());
+                        this.useCaseRepository.getUseCases(),
+                        this.useCaseIdGenerator);
 
         final BehaviorModelRelative[] behaviorModelsRelative =
                 abmToRbmTransformer.transform(behaviorModelsAbsolute);
@@ -260,8 +261,7 @@ public class BehaviorModelExtractor {
                 rbmToRBMUnifier.transform(
                         behaviorModelsRelative,
                         clusteringMethod,
-                        this.useCaseRepository,
-                        BehaviorModelExtractor.FINAL_VERTEX_NAME);
+                        this.useCaseRepository);
 
         // (RBM-to-matrix transformation is nested into file writer below);
 

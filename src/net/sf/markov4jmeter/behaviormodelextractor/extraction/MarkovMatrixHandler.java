@@ -51,6 +51,9 @@ public class MarkovMatrixHandler {
     private final static String ERROR_INCONSISTENT_NUMBER_OF_MATRIX_COLUMNS =
             "matrix in file \"%s\" has an inconsistent number of columns";
 
+    /** Prefix which marks an initial state. */
+    private final static String INITIAL_STATE_PREFIX = "*";
+
 
     /* *************************  global variables  ************************* */
 
@@ -223,23 +226,22 @@ public class MarkovMatrixHandler {
                 matrix[i][0] = states.get(i - 1);
             }
 
-            // ----  fill remaining entries with default values  ----;
+            // ----  fill remaining entries with 0-values  ----;
 
-            this.resetMatrix(matrix);
+            this.clearMatrix(matrix);
         }
 
         return matrix;
     }
 
     /**
-     * Resets a given matrix; all transition probabilities will be set to 0.0,
-     * except the values of the final-state column, which will be set to 1.0;
+     * Clears a given matrix; all transition probabilities will be set to 0.0;
      * the think times will be initialized with the default value that has been
      * passed to the constructor.
      *
-     * @param matrix  matrix to be reset.
+     * @param matrix  matrix to be cleared.
      */
-    public void resetMatrix (final String[][] matrix) {
+    public void clearMatrix (final String[][] matrix) {
 
         for (int i = 1, m = matrix.length; i < m; i++) {
 
@@ -247,14 +249,6 @@ public class MarkovMatrixHandler {
 
                 matrix[i][j] = "0.0; " + this.thinkTimeDefaultValue;
             }
-
-            final String columnHeaderValue = matrix[i][0];
-
-            this.setValueAtCell(
-                    "1.0; " + this.thinkTimeDefaultValue,
-                    columnHeaderValue,
-                    this.finalStateName,
-                    matrix);
         }
     }
 
@@ -303,6 +297,32 @@ public class MarkovMatrixHandler {
                 columnHeaderValue);
 
         throw new IllegalArgumentException(message);
+    }
+
+    /**
+     * Marks a state of a given matrix as initial state.
+     *
+     * @param stateName  name of the state to be marked.
+     * @param matrix     matrix to be modified.
+     *
+     * @return  <code>true</code> if and only if the state could be marked.
+     */
+    public boolean setInitialState (
+            final String stateName,
+            final String matrix[][]) {
+
+        for (int i = 1, m = matrix.length; i < m; i++) {
+
+            if ( stateName.equals(matrix[i][0]) ) {
+
+                matrix[i][0] =
+                        stateName + MarkovMatrixHandler.INITIAL_STATE_PREFIX;
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

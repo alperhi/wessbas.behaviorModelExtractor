@@ -75,10 +75,17 @@ public class RBMToMarkovMatrixTransformer {
             states.add(this.getVertexName(vertex));
         }
 
+        final String initialStateName = states.getFirst();
+
         final String[][] matrix = this.markovMatrixHandler.
                 createEmptyMarkovMatrixForStates(states);
 
-        return this.storeModelInMatrix(behaviorModelRelative, matrix);
+        // ignore returned matrix, since it is the same as passed;
+        this.storeModelInMatrix(behaviorModelRelative, matrix);
+
+        this.markovMatrixHandler.setInitialState(initialStateName, matrix);
+
+        return matrix;
     }
 
     /**
@@ -117,7 +124,7 @@ public class RBMToMarkovMatrixTransformer {
         final String finalStateName =
                 this.markovMatrixHandler.getFinalStateName();
 
-        this.markovMatrixHandler.resetMatrix(matrix);
+        this.markovMatrixHandler.clearMatrix(matrix);
 
         for (final Vertex srcVertex : vertices) {
 
@@ -133,8 +140,7 @@ public class RBMToMarkovMatrixTransformer {
                     // round the probability to 4 digits behind the comma, to
                     // avoid rounding errors when the sum of the outgoing
                     // transition probabilities of a state is validated;
-                    final double probability =
-                            MathUtil.round(transition.getValue());
+                    final double probability = transition.getValue();
 
                     final Vertex dstVertex     = transition.getTargetVertex();
                     final String dstVertexName = this.getVertexName(dstVertex);
@@ -162,15 +168,15 @@ public class RBMToMarkovMatrixTransformer {
                     }
 
                     this.markovMatrixHandler.setValueAtCell(
-                            probability + "; n(" + (long)mean + " " +
-                                                   (long)deviation + ")",
+                            MathUtil.round(probability) +
+                            "; n(" + (long)mean + " " + (long)deviation + ")",
                             srcVertexName,
                             dstVertexName,
                             matrix);
                 }
 
                 this.markovMatrixHandler.setValueAtCell(
-                        (1.0 - valueSum) + "; " +
+                        MathUtil.round(1.0 - valueSum) + "; " +
                             this.markovMatrixHandler.getDefaultThinkTimeValue(),
                         srcVertexName,
                         finalStateName,

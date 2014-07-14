@@ -96,6 +96,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
                 for (final Vertex dstVertex : vertices) {
 
+                    // ignore returned transition;
                     this.installTransition(
                             srcVertex,
                             dstVertex,
@@ -123,11 +124,17 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
      * @param behaviorModelsRelative
      *     set of input Behavior Models on which the clustering strategy shall
      *     be applied.
+     *
+     * @return
+     *     the newly installed transition, or <code>null</code> if no transition
+     *     has been installed.
      */
-    private void installTransition (
+    private Transition installTransition (
             final Vertex srcVertex,
             final Vertex dstVertex,
             final BehaviorModelRelative[] behaviorModelsRelative) {
+
+        Transition newTransition = null;  // transition to be returned;
 
         final UseCase srcUseCase = srcVertex.getUseCase();
         final UseCase dstUseCase = dstVertex.getUseCase();
@@ -135,13 +142,14 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         final String srcUseCaseId = srcUseCase.getId();  // always defined here;
 
         final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
-        double probabilitySum = 0.0d;
 
         // if dstUseCase is null, its vertex denotes the final state (no ID);
         final String dstUseCaseId =
                 (dstUseCase != null) ? dstUseCase.getId() : null;
 
-        // add up all probabilities, and collect all time ranges;
+        double probabilitySum = 0.0d;
+
+        // collect all probabilities and time ranges;
         for (final BehaviorModelRelative behaviorModelRelative :
              behaviorModelsRelative) {
 
@@ -154,7 +162,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
                 probabilitySum += transition.getValue();
 
-                // collect all time ranges for the think time being computed;
+                // collect all time ranges for computing the think time;
                 timeDiffs.addAll( transition.getTimeDiffs() );
             }
         }
@@ -164,8 +172,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         if (probabilitySum > 0) {
 
             // create new transitions by invoking helper method of parent class;
-            final Transition newTransition =
-                    this.installTransition(srcVertex, dstVertex);
+            newTransition = this.installTransition(srcVertex, dstVertex);
 
             newTransition.setValue(probabilitySum);
 
@@ -180,5 +187,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
                         MathUtil.computeDeviation(timeDiffs));
             }
         }
+
+        return newTransition;
     }
 }

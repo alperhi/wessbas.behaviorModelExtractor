@@ -38,6 +38,7 @@ public abstract class AbstractClusteringStrategy {
 
     /* **************************  public methods  ************************** */
 
+
     /**
      * Applies the associated clustering strategy to a given set of Behavior
      * Models.
@@ -96,10 +97,8 @@ public abstract class AbstractClusteringStrategy {
 
         if (srcVertex != null) {
 
-            final List<Transition> transitions =
-                    srcVertex.getOutgoingTransitions();
-
-            for (final Transition transition : transitions) {
+            for (final Transition transition :
+                 srcVertex.getOutgoingTransitions()) {
 
                 final UseCase useCase =
                         transition.getTargetVertex().getUseCase();

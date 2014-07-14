@@ -56,8 +56,6 @@ public class RBMToRBMUnifier {
      *     be used, and a warning will be given.
      * @param useCaseRepository
      *     repository which contains all use cases of the input Behavior Models.
-     * @param finalVertexName
-     *     name of the final vertex, "$" in general.
      *
      * @return
      *     the Behavior Mix which results from the transformation.
@@ -68,8 +66,8 @@ public class RBMToRBMUnifier {
     public BehaviorMix transform (
             final BehaviorModelRelative[] behaviorModelsRelative,
             final String clusteringType,
-            final UseCaseRepository useCaseRepository,
-            final String finalVertexName) throws ExtractionException {
+            final UseCaseRepository useCaseRepository)
+                    throws ExtractionException {
 
         final AbstractClusteringStrategy clusteringStrategy =
                 this.getClusteringStrategy(clusteringType);
