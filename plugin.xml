@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://behavior/1.0"
+            class="behavior.BehaviorPackage"
+            genModel="model/behavior.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            type="behavior"
+            class="behavior.util.BehaviorResourceFactoryImpl"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated behavior -->
+      <package
+            uri="http://behavior/1.0"
+            class="net.sf.markov4jmeter.behavior.BehaviorPackage"
+            genModel="model/behavior.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated behavior -->
+      <parser
+            type="behavior"
+            class="net.sf.markov4jmeter.behavior.util.BehaviorResourceFactoryImpl"/>
+   </extension>
+</plugin>

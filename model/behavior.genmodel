@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/net.sf.markov4jmeter.behaviormodelextractor/src-gen"
+    editDirectory="/net.sf.markov4jmeter.behaviormodelextractor.edit/src-gen" editorDirectory="/net.sf.markov4jmeter.behaviormodelextractor.editor/src-gen"
+    modelPluginID="userbehavior.model" modelName="Behavior" testsDirectory="/net.sf.markov4jmeter.behaviormodelextractor/src-gen"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    interfaceNamePattern="">
+  <foreignModel>behavior.ecore</foreignModel>
+  <genPackages prefix="Behavior" basePackage="net.sf.markov4jmeter" resource="XML"
+      disposableProviderFactory="true" ecorePackage="behavior.ecore#/">
+    <genClasses ecoreClass="behavior.ecore#//UseCase">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//UseCase/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//UseCase/name"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//UseCaseRepository">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference behavior.ecore#//UseCaseRepository/useCases"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//SessionRepository">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference behavior.ecore#//SessionRepository/sessions"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//Session">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/startTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/endTime"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference behavior.ecore#//Session/observedUseCaseExecutions"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//ObservedUseCaseExecution">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//ObservedUseCaseExecution/startTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//ObservedUseCaseExecution/endTime"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="behavior.ecore#//AbstractUseCaseExecution">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//AbstractUseCaseExecution/useCase"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="behavior.ecore#//AbstractBehaviorModelGraph">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//AbstractBehaviorModelGraph/vertices"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//Vertex">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//Vertex/outgoingTransitions"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//Transition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//Transition/targetVertex"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/times"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//BehaviorModelAbsolute"/>
+    <genClasses ecoreClass="behavior.ecore#//BehaviorModelRelative"/>
+    <genClasses ecoreClass="behavior.ecore#//BehaviorMix">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference behavior.ecore#//BehaviorMix/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="behavior.ecore#//BehaviorMixEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/behaviorModelName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/relativeFrequency"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//BehaviorMixEntry/behaviorModel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/filename"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
