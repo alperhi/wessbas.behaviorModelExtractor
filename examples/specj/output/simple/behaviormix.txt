@@ -1,0 +1,1 @@
+gen_behavior_model; 1.0; D:\Eclipse_x64_Kepler\workspace_diplomarbeit\net.sf.markov4jmeter.behaviormodelextractor\.\examples\specj\output\simple\behaviormodel.csv

@@ -27,12 +27,7 @@ import org.apache.commons.cli.ParseException;
  *
  *   <tr><td><code> output </code></td>
  *       <td><code> o      </code></td>
- *       <td> Output CSV-file which includes the resulting Behavior Model, e.g.,
- *       "output/behaviormodel.csv"; if Behavior Models for each single session
- *       trace shall be written to file, which is the default configuration if
- *       no clustering is specified, the output filename will be indexed,
- *       starting with zero. Example: "behaviormodel.csv" becomes to
- *       "behaviormodel0.csv", "behaviormodel1.csv", "behaviormodel2.csv", ...
+ *       <td> Output directory for the resulting files, e.g., "output/".
  *       </td>
  *
  *   <tr><td colspan="3" align="center">
@@ -57,12 +52,6 @@ import org.apache.commons.cli.ParseException;
  *       "examples/mapping.csv".
  *       </td>
  *
- *   <tr><td><code> graph </code></td>
- *       <td><code> g     </code></td>
- *       <td> (Optional) DOT output file which includes the graph, e.g.,
- *       "output/graph.dot".
- *       </td>
- *
  *   <tr><td><code> clustering </code></td>
  *       <td><code> c          </code></td>
  *       <td> (Optional) Clustering method to be applied to the Behavior Models
@@ -78,28 +67,27 @@ import org.apache.commons.cli.ParseException;
  * <ul>
  *   <li>The options sequence
  *   <blockquote>
- *     <code>-i "./examples/sessions.dat" -o "./output/behaviormodel.csv"</code>
+ *     <code>-i "./examples/sessions.dat" -o "./output/"</code>
  *   </blockquote>
  *   denotes a minimum start configuration for the Behavior Model Extractor,
- *   defining the files "examples/sessions.dat" and "output/behaviormodel.csv"
- *   to be used as input file and output file respectively.
+ *   which uses "./examples/sessions.dat" as input file and "./output/"
+ *   as output directory.
  *   </li>
  *
  *   <li>The options sequence
  *   <blockquote>
- *     <code>-i "./examples/sessions.dat" -o "./output/behaviormodel.csv"
- *     -l 2</code>
+ *     <code>-i "./examples/sessions.dat" -o "./output/" -l 2</code>
  *   </blockquote>
  *   has the same effect as the first one, but it additionally defines a
  *   MacOS-specific line-break type to be used for the output content.
  *
  *   <li>The options sequence
  *   <blockquote>
- *     <code>-i "./examples/sessions.dat" -o "./output/behaviormodel.csv"
- *     -l 2 -t "./examples/template.csv" -g "./output/graph.dot"</code>
+ *     <code>-i "./examples/sessions.dat" -o "./output/" -l 2
+ *     -t "./examples/template.csv"</code>
  *   </blockquote>
  *   has the same effect as the second one, but it additionally passes a
- *   template file for being filled with values, as well as a graph output file.
+ *   template file for being filled with values.
  *   </li>
  * </ul>
  *
@@ -119,15 +107,15 @@ public class CommandLineArgumentsHandler {
                     "sessions.dat",                        // argName;
                     false);                                // !hasOptionalArg;
 
-    /** Output CSV-file which includes the resulting Behavior Model. */
-    private final static Option OUTPUT_FILE =
+    /** Output directory where the output files will be written into. */
+    private final static Option OUTPUT_DIRECTORY =
             CmdlOptionFactory.createOption(
                     "o",                                    // opt;
                     "output",                               // longOpt;
-                    "Output CSV-file which includes the "   // description;
-                    + "resulting Behavior Model.",
+                    "Output directory where the output "    // description;
+                    + "files will be written into.",
                     true,                                   // isRequired;
-                    "behaviormodel.csv",                    // argName;
+                    "./output",                             // argName;
                     false);                                 // !hasOptionalArg;
 
     /** (Optional) OS-specific line-break type for CSV output files
@@ -164,17 +152,6 @@ public class CommandLineArgumentsHandler {
                     "mapping.csv",                         // argName;
                     false);                                // !hasOptionalArg;
 
-    /** (Optional) DOT output file which includes the graph. */
-    private final static Option OUTPUT_DOT_FILE =
-            CmdlOptionFactory.createOption(
-                    "g",                                    // opt;
-                    "graph",                                // longOpt;
-                    "(Optional) output DOT-file which "     // description;
-                    + "includes the graph.",
-                    false,                                  // !isRequired;
-                    "graph.dot",                            // argName;
-                    false);                                 // !isRequired;
-
     /** (Optional) clustering method to be applied to the extracted Behavior
      *  Models. */
     private final static Option CLUSTERING_METHOD =
@@ -200,8 +177,8 @@ public class CommandLineArgumentsHandler {
     /** Input file which has been read from command-line. */
     private static String inputFile;
 
-    /** Output CSV-file which has been read from command-line. */
-    private static String outputFile;
+    /** Output directory which has been read from command-line. */
+    private static String outputDirectory;
 
     /** (Optional) line-break type which has been read from command-line. */
     private static int lineBreakType;
@@ -211,9 +188,6 @@ public class CommandLineArgumentsHandler {
 
     /** (Optional) use case mapping file. */
     private static String useCaseMappingFile;
-
-    /** (Optional) DOT output file which has been read from command-line. */
-    private static String outputDotFile;
 
     /** (Optional) clustering method which has been read from command-line. */
     private static String clusteringMethod;
@@ -234,7 +208,7 @@ public class CommandLineArgumentsHandler {
                 CommandLineArgumentsHandler.INPUT_FILE);
 
         CommandLineArgumentsHandler.options.addOption(
-                CommandLineArgumentsHandler.OUTPUT_FILE);
+                CommandLineArgumentsHandler.OUTPUT_DIRECTORY);
 
         CommandLineArgumentsHandler.options.addOption(
                 CommandLineArgumentsHandler.LINE_BREAK_TYPE);
@@ -244,9 +218,6 @@ public class CommandLineArgumentsHandler {
 
         CommandLineArgumentsHandler.options.addOption(
                 CommandLineArgumentsHandler.USE_CASE_MAPPING_FILE);
-
-        CommandLineArgumentsHandler.options.addOption(
-                CommandLineArgumentsHandler.OUTPUT_DOT_FILE);
 
         CommandLineArgumentsHandler.options.addOption(
                 CommandLineArgumentsHandler.CLUSTERING_METHOD);
@@ -267,13 +238,13 @@ public class CommandLineArgumentsHandler {
     }
 
     /**
-     * Returns the output file which has been read from command-line.
+     * Returns the output directory which has been read from command-line.
      *
-     * @return  a valid <code>String</code> which represents a file path.
+     * @return  a valid <code>String</code> which represents a directory path.
      */
-    public static String getOutputCsvFile () {
+    public static String getOutputDirectory () {
 
-        return CommandLineArgumentsHandler.outputFile;
+        return CommandLineArgumentsHandler.outputDirectory;
     }
 
     /**
@@ -311,19 +282,6 @@ public class CommandLineArgumentsHandler {
     public static String getUseCaseMappingFile () {
 
         return CommandLineArgumentsHandler.useCaseMappingFile;
-    }
-
-    /**
-     * Returns the (optional) DOT output file which has been read from
-     * command-line.
-     *
-     * @return
-     *     a valid <code>String</code> which represents a file path, or
-     *     <code>null</code> if no file path has been read.
-     */
-    public static String getOutputDotFile () {
-
-        return CommandLineArgumentsHandler.outputDotFile;
     }
 
     /**
@@ -379,10 +337,10 @@ public class CommandLineArgumentsHandler {
                         commandLine,
                         CommandLineArgumentsHandler.INPUT_FILE);
 
-        CommandLineArgumentsHandler.outputFile =
+        CommandLineArgumentsHandler.outputDirectory =
                 CommandLineArgumentsHandler.readOptionValueAsString(
                         commandLine,
-                        CommandLineArgumentsHandler.OUTPUT_FILE);
+                        CommandLineArgumentsHandler.OUTPUT_DIRECTORY);
 
         CommandLineArgumentsHandler.templateFile =
                 CommandLineArgumentsHandler.readOptionValueAsString(
@@ -393,11 +351,6 @@ public class CommandLineArgumentsHandler {
                 CommandLineArgumentsHandler.readOptionValueAsString(
                         commandLine,
                         CommandLineArgumentsHandler.USE_CASE_MAPPING_FILE);
-
-        CommandLineArgumentsHandler.outputDotFile =
-                CommandLineArgumentsHandler.readOptionValueAsString(
-                        commandLine,
-                        CommandLineArgumentsHandler.OUTPUT_DOT_FILE);
 
         CommandLineArgumentsHandler.lineBreakType =
                 CommandLineArgumentsHandler.readOptionValueAsInt(

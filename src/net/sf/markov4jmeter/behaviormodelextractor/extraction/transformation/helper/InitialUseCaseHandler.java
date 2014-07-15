@@ -7,9 +7,20 @@ import net.sf.markov4jmeter.behavior.BehaviorFactory;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
 
+/**
+ * Helper class for handling initial use cases; this handler provides a generic
+ * use case for unifying multiple use cases.
+ *
+ * @author   Eike Schulz (esc@informatik.uni-kiel.de)
+ * @version  1.0
+ */
 public class InitialUseCaseHandler {
 
 
+    /* *****************************  constants  **************************** */
+
+
+    /** Name of the generic use case. */
     public final static String GENERIC_INITIAL_USE_CASE_NAME = "_init";
 
 
@@ -20,12 +31,18 @@ public class InitialUseCaseHandler {
     private final HashMap<UseCase, Integer> initialUseCaseObservations =
             new HashMap<UseCase, Integer>();
 
+    /** Instance for generating use case IDs. */
     private final IdGenerator idGenerator;
 
 
     /* ***************************  constructors  *************************** */
 
 
+    /**
+     * Constructor for a Use Case Handler.
+     *
+     * @param idGenerator  instance for generating use case IDs.
+     */
     public InitialUseCaseHandler (final IdGenerator idGenerator) {
 
         this.idGenerator = idGenerator;
@@ -62,8 +79,12 @@ public class InitialUseCaseHandler {
     }
 
     /**
+     * Returns a unique initial use case.
      *
      * @return
+     *     a registered use case, if exactly one initial use case has been
+     *     registered; in case multiple or no initial use cases have been
+     *     registered, a newly created (generic) use case will be returned.
      */
     public UseCase getUniqueInitialUseCase () {
 
@@ -90,9 +111,8 @@ public class InitialUseCaseHandler {
         return uniqueInitialUseCase;
     }
 
-
     /**
-     * Returns the set of initial use cases.
+     * Returns the set of registered initial use cases.
      *
      * @return  the use cases which have been registered as initial use cases.
      */
@@ -101,10 +121,25 @@ public class InitialUseCaseHandler {
         return this.initialUseCaseObservations.keySet();
     }
 
-
+    /**
+     * Returns the number of occurrences for a given use case.
+     *
+     * @param useCase
+     *     the use case whose number of occurrences shall be returned.
+     *
+     * @return  a non-negative value.
+     */
     public int getInitialUseCaseOccurrences (final UseCase useCase) {
 
         return this.initialUseCaseObservations.get(useCase);
+    }
+
+    /**
+     * Clears the registered initial use cases.
+     */
+    public void clearRegisteredInitialUseCases () {
+
+        this.initialUseCaseObservations.clear();
     }
 
 
@@ -112,8 +147,9 @@ public class InitialUseCaseHandler {
 
 
     /**
+     * Creates a generic use case.
      *
-     * @return
+     * @return  the newly created use case.
      */
     private UseCase createGenericInitialUseCase () {
 

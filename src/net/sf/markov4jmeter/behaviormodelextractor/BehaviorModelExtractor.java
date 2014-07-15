@@ -208,8 +208,7 @@ public class BehaviorModelExtractor {
      */
     public void extract (
             final String inputFile,
-            final String outputFile,
-            final String outputDotFile,
+            final String outputDirectory,
             final String clusteringMethod)
                     throws IOException, ParseException, ExtractionException {
 
@@ -252,7 +251,8 @@ public class BehaviorModelExtractor {
                 sessionToAbmTransformer.transformSessionsToBehaviorModels(
                         this.sessionRepository.getSessions(),
                         this.useCaseRepository.getUseCases(),
-                        this.useCaseIdGenerator);
+                        this.useCaseIdGenerator,
+                        clusteringMethod.equals(RBMToRBMUnifier.CLUSTERING_TYPE_NONE));
 
         final BehaviorModelRelative[] behaviorModelsRelative =
                 abmToRbmTransformer.transform(behaviorModelsAbsolute);
@@ -274,10 +274,7 @@ public class BehaviorModelExtractor {
                         this.dotGraphGenerator);
 
         // write the sessions-related CVS- and graph-files;
-        behaviorModelWriter.writeOutputFiles(
-                behaviorMix,
-                outputFile,
-                outputDotFile);
+        behaviorModelWriter.writeOutputFiles(behaviorMix, outputDirectory);
     }
 
     /**
@@ -299,16 +296,12 @@ public class BehaviorModelExtractor {
             final String inputFile =
                     CommandLineArgumentsHandler.getInputFile();
 
-            final String outputCsvFile =
-                    CommandLineArgumentsHandler.getOutputCsvFile();
+            final String outputDirectory =
+                    CommandLineArgumentsHandler.getOutputDirectory();
 
             // template file is optional;
             final String templateFile =
                     CommandLineArgumentsHandler.getTemplateFile();
-
-            // output DOT file is optional;
-            final String outputDotFile =
-                    CommandLineArgumentsHandler.getOutputDotFile();
 
             // use case mapping file is optional;
             final String useCaseMappingFile =
@@ -337,8 +330,7 @@ public class BehaviorModelExtractor {
             // might throw an IO-, Parse- or ExtractionException;
             behaviorModelExtractor.extract(
                     inputFile,
-                    outputCsvFile,
-                    outputDotFile,
+                    outputDirectory,
                     clusteringMethod);
 
         } catch (final Exception ex) {

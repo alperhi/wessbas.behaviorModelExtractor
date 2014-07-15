@@ -67,12 +67,11 @@ public class RBMToMarkovMatrixTransformer {
             final BehaviorModelRelative behaviorModelRelative) {
 
         final List<Vertex> vertices = behaviorModelRelative.getVertices();
-
         final LinkedList<String> states = new LinkedList<String>();
 
         for (final Vertex vertex : vertices) {
 
-            states.add(this.getVertexName(vertex));
+            states.add( this.getVertexName(vertex) );
         }
 
         final String initialStateName = states.getFirst();
@@ -158,8 +157,9 @@ public class RBMToMarkovMatrixTransformer {
 
                     if (thinkTimeParams.size() == 2) {
 
-                        mean      = thinkTimeParams.get(0).doubleValue();
-                        deviation = thinkTimeParams.get(1).doubleValue();
+                        // use milli- instead of nanoseconds -> divide by 1000;
+                        mean      = thinkTimeParams.get(0).doubleValue() / 1000;
+                        deviation = thinkTimeParams.get(1).doubleValue() / 1000;
 
                     } else {
 

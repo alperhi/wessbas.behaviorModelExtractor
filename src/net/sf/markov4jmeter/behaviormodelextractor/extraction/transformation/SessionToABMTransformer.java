@@ -65,6 +65,9 @@ public class SessionToABMTransformer {
      *     instance for creating use case IDs; required for the case that
      *     generic use cases, such as (unique) initial use cases must be
      *     created additionally.
+     * @param clearRegisteredInitialUseCasesInEachIteration
+     *     <code>true</code> if and only if registered initial use cases shall
+     *     collected individually for each model.
      *
      * @return
      *     the resulting Behavior Models.
@@ -72,7 +75,8 @@ public class SessionToABMTransformer {
     public BehaviorModelAbsolute[] transformSessionsToBehaviorModels (
             final List<Session> sessions,
             final List<UseCase> defaultUseCases,
-            final IdGenerator useCaseIdGenerator) {
+            final IdGenerator useCaseIdGenerator,
+            final boolean clearRegisteredInitialUseCasesInEachIteration) {
 
         final ArrayList<BehaviorModelAbsolute> behaviorModelsAbsolute =
                 new ArrayList<BehaviorModelAbsolute>();
@@ -81,6 +85,15 @@ public class SessionToABMTransformer {
                 new InitialUseCaseHandler(useCaseIdGenerator);
 
         for (final Session session : sessions) {
+
+            // if desired, the registered initial use cases must to be cleared
+            // at the beginning of iteration; the determineUniqueInitialState()
+            // call below will always insert a generic state otherwise, as no
+            // registered use case will be available;
+            if (clearRegisteredInitialUseCasesInEachIteration) {
+
+                initialUseCaseHandler.clearRegisteredInitialUseCases();
+            }
 
             final BehaviorModelAbsolute behaviorModelAbsolute =
                     this.transformSessionToBehaviorModel(
@@ -208,6 +221,11 @@ public class SessionToABMTransformer {
                 // register use case as initial state;
                 initialUseCaseHandler.registerInitialState(
                         dstVertex.getUseCase());
+
+                // shift (initial) vertex to first position, since default
+                // use cases (vertices) might include it at arbitrary position;
+                vertices.remove(dstVertex);
+                vertices.add(0, dstVertex);
 
             } else {  // srcUCExecution != null;
 
