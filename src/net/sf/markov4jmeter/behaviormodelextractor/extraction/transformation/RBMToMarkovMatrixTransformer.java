@@ -3,6 +3,7 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
@@ -157,9 +158,12 @@ public class RBMToMarkovMatrixTransformer {
 
                     if (thinkTimeParams.size() == 2) {
 
-                        // use milli- instead of nanoseconds -> divide by 1000;
-                        mean      = thinkTimeParams.get(0).doubleValue() / 1000;
-                        deviation = thinkTimeParams.get(1).doubleValue() / 1000;
+                        // use milli- instead of nanoseconds for Thread.sleep();
+                        mean = this.convertNsToMs(
+                                thinkTimeParams.get(0).longValue() );
+
+                        deviation = this.convertNsToMs(
+                                thinkTimeParams.get(1).longValue() );
 
                     } else {
 
@@ -185,6 +189,18 @@ public class RBMToMarkovMatrixTransformer {
         }
 
         return matrix;
+    }
+
+    /**
+     * Converts a given time range from nanoseconds to milliseconds.
+     *
+     * @param durationNs  time range in nanoseconds to be converted.
+     *
+     * @return  the time range in milliseconds.
+     */
+    private long convertNsToMs (long durationNs) {
+
+        return TimeUnit.MILLISECONDS.convert(durationNs, TimeUnit.NANOSECONDS);
     }
 
     /**

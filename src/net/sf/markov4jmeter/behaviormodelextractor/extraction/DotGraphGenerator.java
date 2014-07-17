@@ -57,7 +57,7 @@ import java.util.Locale;
  *
  * @author Eike Schulz (esc@informatik.uni-kiel.de)
  *
- * @version 1.0 (2012-12-15)
+ * @version 1.0
  */
 public class DotGraphGenerator {
 
@@ -178,7 +178,28 @@ public class DotGraphGenerator {
 
             nodes[i - 1] = matrix[i][0];
         }
+
         return nodes;
+    }
+
+    /**
+     * Searches for the initial node in a given matrix.
+     *
+     * @param matrix  matrix to be searched through.
+     *
+     * @return  the initial node, or <code>null</code> if none exists.
+     */
+    private String findInitialNode (final String[][] matrix) {
+
+        for (int i = 1, m = matrix.length; i < m; i++) {
+
+            if ( matrix[i][0].endsWith("*") ) {
+
+                return matrix[i][0];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -198,22 +219,30 @@ public class DotGraphGenerator {
         final int m = matrix.length;
         final int n = matrix[0].length;
 
+        final String initialNode = this.findInitialNode(matrix);
+
         for (int i = 1; i < m; i++) {  // first row is header (use case names);
 
             for (int j = 1; j < n; j++) {  // first column is header (UC names);
 
                 final Value value = this.parseValue(matrix, i, j);
 
-                final double probabilty = value.probability;
+                final double probability = value.probability;
 
-                if (probabilty != 0) {
+                if (probability != 0) {
 
                     final String srcNode = matrix[i][0];
-                    final String dstNode = matrix[0][j];
+                    String dstNode = matrix[0][j];
+
+                    if ( (dstNode + "*").equals(initialNode) ) {
+
+                        dstNode += "*";
+                    }
 
                     final String label =
-                            DotGraphGenerator.NUMBER_FORMAT.format(probabilty)
-                            + ((value.thinkTime != null) ? ("; " + value.thinkTime) : "");
+                            DotGraphGenerator.NUMBER_FORMAT.format(probability)
+                            + ((value.thinkTime != null) ?
+                                    ("; " + value.thinkTime) : "");
 
                     final Transition transition =
                             new Transition(srcNode, label, dstNode);
@@ -222,6 +251,7 @@ public class DotGraphGenerator {
                 }
             }
         }
+
         return transitions.toArray( new Transition[]{} );
     }
 
@@ -276,6 +306,14 @@ public class DotGraphGenerator {
         return value;
     }
 
+    /**
+     * This class represents a matrix entry, including probability and think
+     * time.
+     *
+     * @author Eike Schulz (esc@informatik.uni-kiel.de)
+     *
+     * @version 1.0
+     */
     private class Value {
 
         final double probability;

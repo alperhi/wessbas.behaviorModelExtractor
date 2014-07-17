@@ -46,6 +46,8 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.Ses
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
 
+import org.apache.commons.cli.MissingOptionException;
+
 /**
  * This is the main class of the Behavior Model Extractor.
  *
@@ -332,6 +334,11 @@ public class BehaviorModelExtractor {
                     inputFile,
                     outputDirectory,
                     clusteringMethod);
+
+        } catch (final MissingOptionException ex) {
+
+        	// this exception type indicates that no argument has been passed;
+            CommandLineArgumentsHandler.printUsage();
 
         } catch (final Exception ex) {
 
