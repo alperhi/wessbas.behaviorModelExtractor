@@ -9,6 +9,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
+import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
@@ -19,7 +20,7 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionExceptio
 /**
  * This class represents a <i>Menascé-based</i> clustering strategy.
  *
- * @author   Eike Schulz (esc@informatik.uni-kiel.de)
+ * @author   Christian Voegele (voegele@fortiss.org)
  * @version  1.0
  */
 public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
@@ -49,7 +50,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
         	// KMeans --> Weka
         	SimpleKMeans kmeans = new SimpleKMeans();
         	
-        	// set option -init, 0 = default kmeans, 1 = kmeans++,, apparently this makes no difference in the results
+        	// set option -init, 0 = default kmeans, 1 = kmeans++, apparently this makes no difference in the results
         	String[] options = new String[2];
         	options[0] = "-init";
         	options[1] = "0";
@@ -67,20 +68,39 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
         	
         	// intra cluster similarity --> must be implemented
         	
+       	    int[] clustersize = kmeans.getClusterSizes();
+        	
         	// prints resulting centroids
         	// these results are not yet tested regarding validity
       	    Instances resultingCentroids = kmeans.getClusterCentroids();
-      	    int[] clustersize = kmeans.getClusterSizes();
-      	    for (int i = 0; i < clustersize.length; i++) {
-      	    	System.out.println("Cluster " + i+1 + " size " + clustersize[i]);
-      	    }
-      	 
-      	    for (int i = 0; i < resultingCentroids.numInstances(); i++) {
-      	    	Instance centroid = resultingCentroids.instance(i);      	    	      	    	
-      	    	for (int s = 0; s < centroid.numAttributes(); s++) {      	    	
-      	    		System.out.println("Attribute nr: " + s + " " +  centroid.value(s));
-      	    	}      	    	      	    	
-      	    }
+      	   
+      	    for (int i = 0; i < resultingCentroids.numInstances(); i++) {     
+      	    	
+      	    	Instance centroid = resultingCentroids.instance(i);          	    	
+      	        // create a Behavior Model, which includes all vertices only; the
+      	        // vertices are associated with the use cases, and a dedicated vertex
+      	        // that represents the final state will be added;
+      	        final BehaviorModelRelative behaviorModel =
+      	                this.createBehaviorModelWithoutTransitions(
+      	                        useCaseRepository.getUseCases());     
+      	        
+      	        // install the transitions in between vertices;
+      	        this.installTransitions(behaviorModel, centroid);    
+      	        
+      	        // relative Frequency of cluster i
+      	        double relativeFrequency = (double) clustersize[i] / (double) instances.numInstances();
+      	        
+      	        // create the (unique) Behavior Mix entry to be returned;
+                final BehaviorMixEntry behaviorMixEntry = this.createBehaviorMixEntry(
+                        AbstractClusteringStrategy.GENERIC_BEHAVIOR_MODEL_NAME,
+                        relativeFrequency,  // relative frequency;
+                        behaviorModel);
+
+                behaviorMix.getEntries().add(behaviorMixEntry);
+                
+      	    }             
+
+            return behaviorMix;
 			
 		} catch (ExtractionException e) {
 			// TODO Auto-generated catch block
@@ -105,30 +125,48 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
     }
     
     /**
+     * @param behaviorModel
+     * @param centroid
+     * @return
+     */
+    private BehaviorModelRelative installTransitions (
+            final BehaviorModelRelative behaviorModel,
+            final Instance centroid) {
+        final List<Vertex> vertices = behaviorModel.getVertices();        
+        int counter = 0;
+        for (final Vertex srcVertex : vertices) {
+            if (srcVertex.getUseCase() != null) {  // no final state?
+                for (final Vertex dstVertex : vertices) {                  	 
+                	Transition newTransition = installTransition(srcVertex, dstVertex); // transition to be returned;                     
+                    newTransition.setValue(centroid.value(counter));                  
+                	counter++;                     
+                }
+            } else {
+                continue;  // skip final state ("$");
+            }
+        }
+        return behaviorModel;
+    }
+    
+    /**
      * This method creates a new instance set based on the available BehaviorModelRelative.
      * 
      * @param behaviorModelsRelative
      * @return
      * 			instance set
      */
-    private Instances getInstances(BehaviorModelRelative[] behaviorModelsRelative) throws Exception{   	   	
-    	
+    private Instances getInstances(BehaviorModelRelative[] behaviorModelsRelative) throws Exception{      	    	
     	// init the fastVector with attributesNames
-    	FastVector fastVector = getFastVector(behaviorModelsRelative[0]);
-    	
+    	FastVector fastVector = getFastVector(behaviorModelsRelative[0]);    	
     	// create empty instance set with the number of behaviorModelsRelative. 
-    	Instances instances = new Instances("BehaviorModelReleativeInstanceSet", fastVector, behaviorModelsRelative.length);
-    	    	
+    	Instances instances = new Instances("BehaviorModelReleativeInstanceSet", fastVector, behaviorModelsRelative.length);    	    	
     	// each behaviorModelsRelative will be transformed to an instance. To do that, that transition matrix will be
     	// transformed in a vector. Set number of attributes of instance: n x n Matrix.         
-    	for (BehaviorModelRelative behaviorModelRelative:behaviorModelsRelative) {
-    		
+    	for (BehaviorModelRelative behaviorModelRelative:behaviorModelsRelative) {    		
     		// retieve instance from behaviorModelRelative
-    		Instance instance = getInstance(behaviorModelRelative);		
-    		
+    		Instance instance = getInstance(behaviorModelRelative);		    		
     		// not sure if we have to set that reference?
-    		instance.setDataset(instances); 
-    		
+    		instance.setDataset(instances);     		
     		// add instance to instanceset
     		instances.add(instance);    		
     	}    	  	
@@ -153,30 +191,21 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
      * @return 
      * 	a instance, transitions of behaviorModelRelativ as input vector 
      */
-    private Instance getInstance(BehaviorModelRelative behaviorModelRelative) {
-    	
+    private Instance getInstance(BehaviorModelRelative behaviorModelRelative) {    	
     	// create new instance with size n x n 
-    	Instance instance = new Instance(behaviorModelRelative.getVertices().size() * (behaviorModelRelative.getVertices().size()));
-    	
-    	final List<Vertex> vertices = behaviorModelRelative.getVertices();    	
-    	
-    	int counter = 0;
-    	
-    	for (final Vertex srcVertex : vertices) {
-    		
-    		if (srcVertex.getUseCase() != null) {  // no final state?
-    		
+    	Instance instance = new Instance(behaviorModelRelative.getVertices().size() * (behaviorModelRelative.getVertices().size()));    	
+    	final List<Vertex> vertices = behaviorModelRelative.getVertices();    	    	
+    	int counter = 0;    	
+    	for (final Vertex srcVertex : vertices) {    		
+    		if (srcVertex.getUseCase() != null) {  // no final state?    		
     			// for each transition set the value of the instance vector
-	    		for (final Vertex dstVertex : vertices) {
-	    			 
+	    		for (final Vertex dstVertex : vertices) {	    			 
 	    			 final UseCase srcUseCase = srcVertex.getUseCase();
-	    		     final UseCase dstUseCase = dstVertex.getUseCase();
-	    		     
+	    		     final UseCase dstUseCase = dstVertex.getUseCase();	    		     
 	    		     final String srcUseCaseId = srcUseCase.getId();	    		     
 	    		        // if dstUseCase is null, its vertex denotes the final state (no ID);
 	    		     final String dstUseCaseId =
-	    		                (dstUseCase != null) ? dstUseCase.getId() : null;
-	    			 
+	    		                (dstUseCase != null) ? dstUseCase.getId() : null;	    			 
 	    			 final Transition transition = this.findTransitionByUseCaseIDs(
 	    	                    behaviorModelRelative,
 	    	                    srcUseCaseId,
@@ -186,12 +215,9 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 	    				 instance.setValue(counter, 0.0); 
 	    			 } else {
 	    				 instance.setValue(counter, transition.getValue()); 
-	    			 }
-	    			 
-	    			 counter++;
-	    		 
-	    		 }   		
-	    		
+	    			 }	    			 
+	    			 counter++;	    		 
+	    		 }   			    		
     		} else {
 	               continue;  // skip final state ("$");
 	        }	    		
@@ -207,32 +233,21 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
      *     FastVector defines the attributes of the Instance set
      */
     private FastVector getFastVector(BehaviorModelRelative behaviorModelRelative) {
-    	FastVector fastVector = new FastVector();    
-    	
-    	final List<Vertex> vertices = behaviorModelRelative.getVertices();   
-    	
-    	for (final Vertex srcVertex : vertices) {
-    		
-    		if (srcVertex.getUseCase() != null) {  // no final state?
-    		
+    	FastVector fastVector = new FastVector();        	
+    	final List<Vertex> vertices = behaviorModelRelative.getVertices();       	
+    	for (final Vertex srcVertex : vertices) {    		
+    		if (srcVertex.getUseCase() != null) {  // no final state?    		
 	    		for (final Vertex dstVertex : vertices) {	    			 
-	    			 
 	    			 final UseCase srcUseCase = srcVertex.getUseCase();
-	    		     final UseCase dstUseCase = dstVertex.getUseCase();
-	    		     
+	    		     final UseCase dstUseCase = dstVertex.getUseCase();	    		     
 	    		     final String srcUseCaseId = srcUseCase.getId();	    		     
 	    		        // if dstUseCase is null, its vertex denotes the final state (no ID);
 	    		     final String dstUseCaseId =
-	    		                (dstUseCase != null) ? dstUseCase.getId() : "noID";
-	    			
-	    		     fastVector.addElement(new Attribute(srcUseCaseId+dstUseCaseId, fastVector.size()));
-	    		    
-	    		 }   		
-	    		
+	    		                (dstUseCase != null) ? dstUseCase.getId() : "noID";	    			
+	    		     fastVector.addElement(new Attribute(srcUseCaseId+dstUseCaseId, fastVector.size()));	    		    
+	    		 }   			    		
     		} else {
-
-	               continue;  // skip final state ("$");
-	                
+	               continue;  // skip final state ("$");	                
 	        }	    		
     	}    	
     	
