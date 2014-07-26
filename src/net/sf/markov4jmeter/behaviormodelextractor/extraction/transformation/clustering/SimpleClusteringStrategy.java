@@ -92,7 +92,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
         for (final Vertex srcVertex : vertices) {
 
-            if (srcVertex.getUseCase() != null) {  // no final state?
+            if (srcVertex.getUseCase() != null) {  // no final state
 
                 for (final Vertex dstVertex : vertices) {
 
