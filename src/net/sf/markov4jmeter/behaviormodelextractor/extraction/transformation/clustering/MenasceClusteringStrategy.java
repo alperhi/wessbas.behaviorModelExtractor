@@ -12,13 +12,14 @@ import weka.core.Instances;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
-import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
 
 /**
  * This class represents a <i>Menascé-based</i> clustering strategy.
@@ -36,19 +37,22 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 	 * <p>
 	 * This method is specialized for <b>Menascé-based</b> clustering.
 	 */
-	@Override
-	public BehaviorMix apply(
-			final BehaviorModelRelative[] behaviorModelsRelative,
-			final UseCaseRepository useCaseRepository) {
+    @Override
+    public BehaviorMix apply (
+            final BehaviorModelAbsolute[] behaviorModelsAbsolute,
+            final UseCaseRepository useCaseRepository) {
 
+        final ABMToRBMTransformer abmToRbmTransformer =
+                new ABMToRBMTransformer();
+        
 		// Behavior Mix to be returned;
 		final BehaviorMix behaviorMix = this.createBehaviorMix();
 
 		try {
 
-			// Returns a valid instances set, generated based on the relative
+			// Returns a valid instances set, generated based on the absolut
 			// behavior models
-			Instances instances = getInstances(behaviorModelsRelative);
+			Instances instances = getInstances(behaviorModelsAbsolute); 
 
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
@@ -57,25 +61,24 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			// this makes no difference in the results
 			String[] options = new String[2];
 			options[0] = "-init";
-			options[1] = "0";
+			options[1] = "1";
 
 			kmeans.setOptions(options);
 			kmeans.setPreserveInstancesOrder(true);
 
 			// must be specified in a fix way
-			kmeans.setNumClusters(3);
+			kmeans.setNumClusters(2);
 
 			// build cluster
 			kmeans.buildClusterer(instances);
 
-			// inter-cluster similarity
+			// intra-cluster similarity
 			kmeans.getSquaredError();
 
 			// TODO: intra cluster similarity must be implemented
+			this.calculateInterClusteringSimilarity();
 
 			int[] clustersize = kmeans.getClusterSizes();
-
-			// returns array where each
 			int[] assignments = kmeans.getAssignments();
 
 			// prints resulting centroids
@@ -86,18 +89,23 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			for (int i = 0; i < resultingCentroids.numInstances(); i++) {
 
 				Instance centroid = resultingCentroids.instance(i);
+				
 				// create a Behavior Model, which includes all vertices only;
 				// the
 				// vertices are associated with the use cases, and a dedicated
 				// vertex
 				// that represents the final state will be added;
-				final BehaviorModelRelative behaviorModel = this
-						.createBehaviorModelWithoutTransitions(useCaseRepository
+				final BehaviorModelAbsolute behaviorModelAbsoluteCentroid = this
+						.createBehaviorModelAbsoluteWithoutTransitions(useCaseRepository
 								.getUseCases());
 
 				// install the transitions in between vertices;
-				this.installTransitions(behaviorModelsRelative, behaviorModel,
+				this.installTransitions(behaviorModelsAbsolute, behaviorModelAbsoluteCentroid,
 						centroid, assignments, i);
+				
+				// convert absolute to relative behaviorModel
+		        final BehaviorModelRelative behaviorModelRelative =
+		                abmToRbmTransformer.transform(behaviorModelAbsoluteCentroid); 
 
 				// relative Frequency of cluster i
 				double relativeFrequency = (double) clustersize[i]
@@ -108,7 +116,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 						.createBehaviorMixEntry(
 								AbstractClusteringStrategy.GENERIC_BEHAVIOR_MODEL_NAME,
 								relativeFrequency, // relative frequency;
-								behaviorModel);
+								behaviorModelRelative);
 
 				// add to resulting behaviorMix
 				behaviorMix.getEntries().add(behaviorMixEntry);
@@ -118,15 +126,10 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			return behaviorMix;
 
 		} catch (ExtractionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// TODO: Check the calculation of the centriods, Kmeans calculates the
-		// mean <---> Formula Menascé
 
 		// if any error occurs, an ExtractionExeption should be thrown,
 		// indicating the error that occurred;
@@ -147,15 +150,18 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 	 * @param centroidIndex
 	 */
 	private void installTransitions(
-			final BehaviorModelRelative[] behaviorModelsRelative,
-			final BehaviorModelRelative behaviorModel, final Instance centroid,
-			final int[] assignments, final int centroidIndex) {
+			final BehaviorModelAbsolute[] behaviorModelsAbsolute,
+			final BehaviorModelAbsolute behaviorModel,
+			final Instance centroid,
+			final int[] assignments, 
+			final int centroidIndex) {
 
 		final List<Vertex> vertices = behaviorModel.getVertices();
 		int indexOfAttribute = 0;
 		for (final Vertex srcVertex : vertices) {
 			if (srcVertex.getUseCase() != null) { // no final state?
 				for (final Vertex dstVertex : vertices) {
+					
 					Transition newTransition = installTransition(srcVertex,
 							dstVertex);
 					
@@ -175,6 +181,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					// (no ID);
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
 							.getId() : null;
+							
 					final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
 
 					// iterate assignments
@@ -187,14 +194,12 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 							// the cluster.
 							Transition transition = this
 									.findTransitionByUseCaseIDs(
-											behaviorModelsRelative[i],
+											behaviorModelsAbsolute[i],
 											srcUseCaseId, dstUseCaseId);
 
 							if (transition != null) {
-
 								// store tinkTimeDiffs
 								timeDiffs.addAll(transition.getTimeDiffs());
-
 							}
 						}
 					}
@@ -202,10 +207,11 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					if (timeDiffs.size() > 0) {
 						// calculate new mean/deviation values, based on time
 						// ranges;
-						newTransition.getThinkTimeParams().add(
-								MathUtil.computeMean(timeDiffs));
-						newTransition.getThinkTimeParams().add(
-								MathUtil.computeDeviation(timeDiffs));
+						
+						for (BigDecimal timeDiff : timeDiffs) {
+							newTransition.getTimeDiffs().add(timeDiff);
+						}						
+						
 					}
 					indexOfAttribute++;
 				}
@@ -217,26 +223,29 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 
 	/**
 	 * This method creates a new instance set based on the available
-	 * BehaviorModelRelative.
+	 * behaviorModelsAbsolute.
 	 * 
-	 * @param behaviorModelsRelative
+	 * @param behaviorModelsAbsolute
 	 * @return instance set
 	 */
 	private Instances getInstances(
-			BehaviorModelRelative[] behaviorModelsRelative) throws Exception {
-		// init the fastVector with attributesNames
-		FastVector fastVector = getFastVector(behaviorModelsRelative[0]);
+			BehaviorModelAbsolute[] behaviorModelsAbsolute) throws Exception {
+		
+		// init the fastVector with attributesNames from the first behaviorModel. 
+		FastVector fastVector = getFastVector(behaviorModelsAbsolute[0]);
+		
 		// create empty instance set with the number of behaviorModelsRelative.
 		Instances instances = new Instances(
-				"BehaviorModelReleativeInstanceSet", fastVector,
-				behaviorModelsRelative.length);
-		// each behaviorModelsRelative will be transformed to an instance. To do
+				"BehaviorModelAbsoluteInstanceSet", fastVector,
+				behaviorModelsAbsolute.length);
+		
+		// Each behaviorModelsRelative will be transformed to an instance. To do
 		// that, that transition matrix will be
 		// transformed in a vector. Set number of attributes of instance: n x (n +1) exit state
 		// Matrix.
-		for (BehaviorModelRelative behaviorModelRelative : behaviorModelsRelative) {
+		for (BehaviorModelAbsolute behaviorModelAbsolute : behaviorModelsAbsolute) {
 			// retieve instance from behaviorModelRelative
-			Instance instance = getInstance(behaviorModelRelative);
+			Instance instance = getInstance(behaviorModelAbsolute);
 			// not sure if we have to set that reference?
 			instance.setDataset(instances);
 			// add instance to instanceset, at the end of the set
@@ -256,20 +265,20 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 	}
 
 	/**
-	 * Returns a instance as vector based on a single BehaviorModelRelative.
+	 * Returns a instance as vector based on a single BehaviorModelAbsolute.
 	 * 
-	 * @param behaviorModelsRelative
-	 * @return a instance, transitions of behaviorModelRelativ as input vector
+	 * @param behaviorModelsAbsolute
+	 * @return a instance, transitions of behaviorModelAbsolute as input vector
 	 */
-	private Instance getInstance(BehaviorModelRelative behaviorModelRelative) {
+	private Instance getInstance(BehaviorModelAbsolute behaviorModelAbsolute) {
 		
 		// create new instance with size n x (n + 1)
-		int nrVertices = behaviorModelRelative.getVertices()
+		int nrVertices = behaviorModelAbsolute.getVertices()
 				.size() - 1; // -1 as srcVertex has one usecase with which is null (exit state)
 		
 		Instance instance = new Instance( (nrVertices * ( nrVertices + 1)) + 1 ); // +1 as dummyAttribute for classification
 		
-		final List<Vertex> vertices = behaviorModelRelative.getVertices();
+		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
 		int indexOfAttribute = 0;
 		for (final Vertex srcVertex : vertices) {					
 			if (srcVertex.getUseCase() != null) { // no final state?
@@ -283,10 +292,10 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
 							.getId() : null;
 					final Transition transition = this
-							.findTransitionByUseCaseIDs(behaviorModelRelative,
+							.findTransitionByUseCaseIDs(behaviorModelAbsolute,
 									srcUseCaseId, dstUseCaseId);
 					if (transition == null) {
-						instance.setValue(indexOfAttribute, 0.0);
+						instance.setValue(indexOfAttribute, 0);
 					} else {
 						instance.setValue(indexOfAttribute, transition.getValue());
 					}
@@ -308,9 +317,9 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 	 * @param behaviorModelRelative
 	 * @return FastVector defines the attributes of the Instance set
 	 */
-	private FastVector getFastVector(BehaviorModelRelative behaviorModelRelative) {
+	private FastVector getFastVector(BehaviorModelAbsolute behaviorModelAbsolute) {
 		FastVector fastVector = new FastVector();
-		final List<Vertex> vertices = behaviorModelRelative.getVertices();
+		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
 		for (final Vertex srcVertex : vertices) {
 			if (srcVertex.getUseCase() != null) { // no final state?
 				for (final Vertex dstVertex : vertices) {
@@ -321,6 +330,8 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					// (no ID);
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
 							.getId() : "noID";
+							
+					// set AttributeName
 					fastVector.addElement(new Attribute(srcUseCaseId
 							+ dstUseCaseId, fastVector.size()));
      			}
@@ -330,7 +341,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		}
 
 
-		// add dummyClassification. A valid instance set always seams to need a
+		// Add dummyClassification. A valid instance set always seams to need a
 		// classification attribute. Otherwise the clustering is not working. 
 		FastVector dummyClassification = new FastVector(2);
 		dummyClassification.addElement("a");
@@ -340,6 +351,10 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		fastVector.addElement(classAttribute);
 
 		return fastVector;
+	}
+	
+	private double calculateInterClusteringSimilarity() {
+		return 0;
 	}
 
 }

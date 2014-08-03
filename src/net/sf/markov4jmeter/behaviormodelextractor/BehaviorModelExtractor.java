@@ -237,9 +237,6 @@ public class BehaviorModelExtractor {
         final SessionToABMTransformer sessionToAbmTransformer =
                 new SessionToABMTransformer();
 
-        final ABMToRBMTransformer abmToRbmTransformer =
-                new ABMToRBMTransformer();
-
         final RBMToRBMUnifier rbmToRBMUnifier =
                 new RBMToRBMUnifier();
 
@@ -256,12 +253,9 @@ public class BehaviorModelExtractor {
                         this.useCaseIdGenerator,
                         clusteringMethod.equals(RBMToRBMUnifier.CLUSTERING_TYPE_NONE));
 
-        final BehaviorModelRelative[] behaviorModelsRelative =
-                abmToRbmTransformer.transform(behaviorModelsAbsolute);
-
         final BehaviorMix behaviorMix =
                 rbmToRBMUnifier.transform(
-                        behaviorModelsRelative,
+                		behaviorModelsAbsolute,
                         clusteringMethod,
                         this.useCaseRepository);
 

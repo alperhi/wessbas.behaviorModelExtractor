@@ -6,11 +6,13 @@ import java.util.List;
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
@@ -39,9 +41,18 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
      */
     @Override
     public BehaviorMix apply (
-            final BehaviorModelRelative[] behaviorModelsRelative,
+            final BehaviorModelAbsolute[] behaviorModelsAbsolute,
             final UseCaseRepository useCaseRepository) {
 
+        final ABMToRBMTransformer abmToRbmTransformer =
+                new ABMToRBMTransformer();       
+        
+        final BehaviorModelRelative[] behaviorModelsRelative =
+                abmToRbmTransformer.transform(behaviorModelsAbsolute);
+        
+        //TODO: First calculate BehaviorModelAbsolut form all BehaviorModelsAbsolut and then 
+        // BehaviorModelRelative. Otherwise the results of the simpleClustering is not correct.
+    	
         // Behavior Mix to be returned;
         final BehaviorMix behaviorMix = this.createBehaviorMix();
 
@@ -49,7 +60,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
         // vertices are associated with the use cases, and a dedicated vertex
         // that represents the final state will be added;
         final BehaviorModelRelative behaviorModel =
-                this.createBehaviorModelWithoutTransitions(
+                this.createBehaviorModelRelativeWithoutTransitions(
                         useCaseRepository.getUseCases());
 
         // install the transitions in between vertices;
@@ -94,7 +105,7 @@ public class SimpleClusteringStrategy extends AbstractClusteringStrategy {
 
             if (srcVertex.getUseCase() != null) {  // no final state
 
-                for (final Vertex dstVertex : vertices) {
+                for (final Vertex dstVertex : vertices) {           		
 
                     // ignore returned transition;
                     this.installTransition(

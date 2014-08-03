@@ -1,6 +1,7 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation;
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
@@ -64,7 +65,7 @@ public class RBMToRBMUnifier {
      *     if any error during the transformation process occurs.
      */
     public BehaviorMix transform (
-            final BehaviorModelRelative[] behaviorModelsRelative,
+            final BehaviorModelAbsolute[] behaviorModelsAbsolute,
             final String clusteringType,
             final UseCaseRepository useCaseRepository)
                     throws ExtractionException {
@@ -73,7 +74,7 @@ public class RBMToRBMUnifier {
                 this.getClusteringStrategy(clusteringType);
 
         return clusteringStrategy.apply(
-                behaviorModelsRelative,
+        		behaviorModelsAbsolute,
                 useCaseRepository);
     }
 
