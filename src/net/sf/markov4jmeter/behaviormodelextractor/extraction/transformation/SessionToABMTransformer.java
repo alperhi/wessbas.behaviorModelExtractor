@@ -257,7 +257,7 @@ public class SessionToABMTransformer {
 
                 final long timeDistance =
                         dstUCExecution.getStartTime() -
-                        srcUCExecution.getStartTime();
+                        srcUCExecution.getEndTime();
 
                 if (timeDistance < 0) {
 
