@@ -1,5 +1,6 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,8 @@ import weka.core.EuclideanDistance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.ManhattanDistance;
+import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
@@ -64,6 +67,13 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			// Returns a valid instances set, generated based on the absolut
 			// behavior models
 			Instances instances = getInstances(behaviorModelsAbsolute); 
+			
+			 ArffSaver saver = new ArffSaver();
+			 saver.setInstances(instances);
+			 saver.setFile(new File("C:/Users/voegele/Applications/eclipse-jee-kepler-SR2-win32-x86_64/eclipse/workspace/net.sf.markov4jmeter.behaviormodelextractor/examples/menasce/output/menasce/test.arff"));
+//			 saver.setDestination(new File("./data/test.arff")); 
+			 saver.writeBatch();	
+		
 
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
@@ -72,10 +82,11 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			// this makes no difference in the results
 			String[] options = new String[2];
 			options[0] = "-init";
-			options[1] = "1";
+			options[1] = "0";
 
 			kmeans.setOptions(options);
 			kmeans.setPreserveInstancesOrder(true);
+//			kmeans.setDistanceFunction(new ManhattanDistance());
 			
 			int[] clustersize = null;
 			int[] assignments = null;
@@ -94,7 +105,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// TODO : Metriken berechnen: AVG Session length, Histogramm TreeMap
 		
-			for (int cnt = 4; cnt <= 4; cnt++) {
+			for (int cnt = 6; cnt <= 6; cnt++) {
 				// must be specified in a fix way
 				kmeans.setNumClusters(cnt);
 
@@ -110,7 +121,6 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 				
 				this.calculateBetas();
 
-				// intra-cluster similarity
 				System.out.println(
 						cnt + ";" + 
 				        kmeans.getSquaredError() + ";" + 
@@ -127,21 +137,34 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 				
 				double sumAttributes = 0;
 				double sumInstances = 0;
+				double minSessionLength = 999999999;
+				double maxSessionLength = 0;
 				for (int i = 0; i < clustersize.length; i++) {
 					for (int j = 0; j < assignments.length; j++) {
 						if (assignments[j] == i) {
-							Instance instance = instances.instance(j);
-							for (int a = 0; a < instance.numAttributes(); a++) {
-								sumAttributes += instance.value(a);								
+							double sum = 0;							
+							for (int a = 0; a < instances.instance(j).numAttributes(); a++) {								
+									sum += instances.instance(j).value(a);					
 							}
+							if (sum > maxSessionLength) {
+								maxSessionLength = sum;
+							}								
+							if (sum < minSessionLength) {
+								minSessionLength = sum;
+							}								
+							sumAttributes += sum;
 							sumInstances++;
 						}
 					}
-					System.out.println("Clustersize " + ";" + (double)clustersize[i]/(double)instances.numInstances() + " avg sessionLength " + sumAttributes/sumInstances);
+					System.out.println("Clustersize " + ";" +  (double)clustersize[i]/(double)instances.numInstances() + 
+							          " avg sessionLength " + sumAttributes/sumInstances + 
+							          " min session length " + minSessionLength + 
+							          " max session length " + maxSessionLength);
 					sumInstances = 0;
 					sumAttributes = 0;
-				}
-			
+					minSessionLength = 999999999;
+					maxSessionLength = 0;					
+				}			
 			}			
 
 			// prints resulting centroids
@@ -315,7 +338,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			instances.add(instance);
 		}
 
-		// set  the last attribute as class index 
+		// set the last attribute as class index 
 		instances.setClassIndex(instances.numAttributes() -1);
 
 		// filter instances
@@ -358,7 +381,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 							.findTransitionByUseCaseIDs(behaviorModelAbsolute,
 									srcUseCaseId, dstUseCaseId);
 					if (transition == null) {
-						instance.setValue(indexOfAttribute, 0);
+						instance.setValue(indexOfAttribute, 0.0);
 					} else {
 						instance.setValue(indexOfAttribute, transition.getValue());
 					}
@@ -387,16 +410,14 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			if (srcVertex.getUseCase() != null) { // no final state?
 				for (final Vertex dstVertex : vertices) {
 					final UseCase srcUseCase = srcVertex.getUseCase();
+					final String srcUseCaseName = srcUseCase.getName();
 					final UseCase dstUseCase = dstVertex.getUseCase();
-					final String srcUseCaseId = srcUseCase.getId();
-					// if dstUseCase is null, its vertex denotes the final state
-					// (no ID);
-					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
-							.getId() : "noID";
-							
+					final String dstUseCaseName = (dstUseCase != null) ? dstUseCase.getName()
+							 : "noName";
+									
 					// set AttributeName
-					fastVector.addElement(new Attribute(srcUseCaseId
-							+ dstUseCaseId, fastVector.size()));
+					fastVector.addElement(new Attribute(srcUseCaseName
+							+ dstUseCaseName, fastVector.size()));
      			}
 			} else {
 				continue; // skip final state ("$");
