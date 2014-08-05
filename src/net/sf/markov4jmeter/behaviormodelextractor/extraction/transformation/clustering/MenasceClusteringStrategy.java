@@ -6,6 +6,8 @@ import java.util.List;
 
 import weka.clusterers.SimpleKMeans;
 import weka.core.Attribute;
+import weka.core.DistanceFunction;
+import weka.core.EuclideanDistance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -27,7 +29,16 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABM
  * @author Christian Voegele (voegele@fortiss.org)
  * @version 1.0
  */
-public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
+public class MenasceClusteringStrategy extends AbstractClusteringStrategy {	
+	
+	private double sampleMeanInterCluster = 0;
+	private double sampleVarianceInterCluster = 0;
+	private double sampleCoefficientOfVarianceInterCluster = 0;
+	private double sampleMeanIntraCluster = 0;
+	private double sampleVarianceIntraCluster = 0;
+	private double sampleCoefficientOfVarianceIntraCluster = 0;
+	private double betacv = 0;
+	private double betavar = 0;
 
 	/* ************************** public methods ************************** */
 
@@ -65,21 +76,73 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 
 			kmeans.setOptions(options);
 			kmeans.setPreserveInstancesOrder(true);
+			
+			int[] clustersize = null;
+			int[] assignments = null;
+			
+			System.out.println("Cluster" + ";" +
+					"SqrtError" + ";" +
+					"sampleMeanInterCluster" + ";" +
+					"sampleVarianceInterCluster" + ";" +
+					"sampleCoefficientOfVarianceInterCluster" + ";" +
+					"sampleMeanIntraCluster" + ";" +
+					"sampleVarianceIntraCluster" + ";" +
+					"sampleCoefficientOfVarianceIntraCluster" + ";" +
+					"betavar" + ";" +
+					"betacv"
+					); 
+			
+			// TODO : Metriken berechnen: AVG Session length, Histogramm TreeMap
+		
+			for (int cnt = 4; cnt <= 4; cnt++) {
+				// must be specified in a fix way
+				kmeans.setNumClusters(cnt);
 
-			// must be specified in a fix way
-			kmeans.setNumClusters(2);
+				// build cluster
+				kmeans.buildClusterer(instances);
 
-			// build cluster
-			kmeans.buildClusterer(instances);
+				clustersize = kmeans.getClusterSizes();
+				assignments = kmeans.getAssignments();		
+				
+				this.calculateInterClusteringSimilarity(kmeans.getClusterCentroids());
 
-			// intra-cluster similarity
-			kmeans.getSquaredError();
+				this.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);
+				
+				this.calculateBetas();
 
-			// TODO: intra cluster similarity must be implemented
-			this.calculateInterClusteringSimilarity();
-
-			int[] clustersize = kmeans.getClusterSizes();
-			int[] assignments = kmeans.getAssignments();
+				// intra-cluster similarity
+				System.out.println(
+						cnt + ";" + 
+				        kmeans.getSquaredError() + ";" + 
+				        this.sampleMeanInterCluster + ";" +
+				        this.sampleVarianceInterCluster + ";" +
+				        this.sampleCoefficientOfVarianceInterCluster + ";" + 
+				        this.sampleMeanIntraCluster  + ";" + 
+				        this.sampleVarianceIntraCluster + ";" +
+				        this.sampleCoefficientOfVarianceIntraCluster + ";" +
+				        this.betavar  + ";" + 
+				        this.betacv 				        
+				); 
+				
+				
+				double sumAttributes = 0;
+				double sumInstances = 0;
+				for (int i = 0; i < clustersize.length; i++) {
+					for (int j = 0; j < assignments.length; j++) {
+						if (assignments[j] == i) {
+							Instance instance = instances.instance(j);
+							for (int a = 0; a < instance.numAttributes(); a++) {
+								sumAttributes += instance.value(a);								
+							}
+							sumInstances++;
+						}
+					}
+					System.out.println("Clustersize " + ";" + (double)clustersize[i]/(double)instances.numInstances() + " avg sessionLength " + sumAttributes/sumInstances);
+					sumInstances = 0;
+					sumAttributes = 0;
+				}
+			
+			}			
 
 			// prints resulting centroids
 			// these results are not yet tested regarding validity
@@ -353,8 +416,91 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		return fastVector;
 	}
 	
-	private double calculateInterClusteringSimilarity() {
-		return 0;
+	/**
+	 * Calculates the distance between clusters. 
+	 * 
+	 * @param centroids
+	 * @return
+	 */
+	private void calculateInterClusteringSimilarity(Instances centroids) {		
+		DistanceFunction euclideanDistance = new EuclideanDistance();
+		euclideanDistance.setInstances(centroids);
+		
+		double k = (double) centroids.numInstances();		
+		double sumDistance = 0;		
+		double sumVariance = 0;
+		
+		for (int i = 0; i < k ; i++) {
+			for (int j = i + 1; j < k ; j++) {
+				sumDistance += euclideanDistance.distance(centroids.instance(i), centroids.instance(j));
+			}
+		}		
+
+		this.sampleMeanInterCluster =  (1 /  ( k * ( k - 1 ) / 2 ) )   * sumDistance;	
+
+		for (int i = 0; i < k ; i++) {
+			for (int j = i + 1; j < k ; j++) {
+				sumVariance += Math.pow( ( euclideanDistance.distance(centroids.instance(i), centroids.instance(j)) - this.sampleMeanInterCluster ) , 2);
+			}
+		}
+		
+		this.sampleVarianceInterCluster =  ( 1 /  ( ( k * ( k - 1 ) / 2 ) - 1 ) )  * sumVariance;	
+				
+		this.sampleCoefficientOfVarianceInterCluster = Math.sqrt(this.sampleVarianceInterCluster) / this.sampleMeanInterCluster;
+
+	}
+	
+	/**
+	 *  Calculates the distance within a cluster. 
+	 * 
+	 * @param centroids
+	 * @return
+	 */
+	private void calculateIntraClusteringSimilarity(Instances centroids, Instances instances, int[] assignments) {		
+		DistanceFunction euclideanDistance = new EuclideanDistance();
+		euclideanDistance.setInstances(instances);
+		
+		double[] avgIntraClusterSimilarity = new double[centroids.numInstances()];
+		double k = (double) centroids.numInstances() ;		
+		double sumDistance = 0;		
+		double counter = 0;
+		double sumDistanceAllClusters = 0;
+		double sumVariance = 0;
+		
+		for (int i = 0; i < k ; i++) {
+			for (int j = 0; j < instances.numInstances() ; j++) {
+				if (assignments[j] == i) {					
+					sumDistance += euclideanDistance.distance(instances.instance(j), centroids.instance(i));
+					counter += 1;
+				}				
+			}
+			avgIntraClusterSimilarity[i] = (1 / counter) * sumDistance;
+			sumDistance = 0;		
+			counter = 0;
+		}			
+
+		for (double clusterDistance : avgIntraClusterSimilarity) {
+			sumDistanceAllClusters += clusterDistance;
+		}
+
+		this.sampleMeanIntraCluster = ( 1 / k ) * sumDistanceAllClusters;	
+
+		for (int i = 0; i < k ; i++) {
+			sumVariance += Math.pow( (avgIntraClusterSimilarity[i] - this.sampleMeanIntraCluster) , 2);
+		}
+		
+		this.sampleVarianceIntraCluster = ( 1 / ( k - 1 ) ) * sumVariance;	
+				
+		this.sampleCoefficientOfVarianceIntraCluster = Math.sqrt(this.sampleVarianceIntraCluster ) / this.sampleMeanIntraCluster;
+
+	}
+	
+	/**
+	 *  calculateBetas beta values.
+	 */
+	private void calculateBetas () {		
+		this.betavar = this.sampleVarianceIntraCluster / this.sampleVarianceInterCluster;
+		this.betacv = this.sampleCoefficientOfVarianceIntraCluster / this.sampleCoefficientOfVarianceInterCluster;
 	}
 
 }
