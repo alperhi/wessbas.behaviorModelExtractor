@@ -94,10 +94,13 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			kmeans.setPreserveInstancesOrder(true);
 			
 			int[] clustersize = null;
-			int[] assignments = null;		
+			int[] assignments = null;	
+			
+			// get number of clusters to be generated.
+			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
 			
 			// clustering
-			for (int clusterSize = 6; clusterSize <= 6; clusterSize++) {
+			for (int clusterSize = numberOfClusters; clusterSize <= numberOfClusters; clusterSize++) {
 				// must be specified in a fix way
 				kmeans.setNumClusters(clusterSize);
 
