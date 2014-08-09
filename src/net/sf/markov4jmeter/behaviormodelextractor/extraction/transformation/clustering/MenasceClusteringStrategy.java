@@ -12,7 +12,6 @@ import weka.core.EuclideanDistance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.ManhattanDistance;
 import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
@@ -23,6 +22,7 @@ import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
+import net.sf.markov4jmeter.behaviormodelextractor.CommandLineArgumentsHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
 
@@ -68,25 +68,24 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			// behavior models
 			Instances instances = getInstances(behaviorModelsAbsolute); 
 			
-			 ArffSaver saver = new ArffSaver();
-			 saver.setInstances(instances);
-			 saver.setFile(new File("C:/Users/voegele/Applications/eclipse-jee-kepler-SR2-win32-x86_64/eclipse/workspace/net.sf.markov4jmeter.behaviormodelextractor/examples/menasce/output/menasce/test.arff"));
-//			 saver.setDestination(new File("./data/test.arff")); 
-			 saver.writeBatch();	
+			// save input data as arff file. This arff file can be opened with weka application.
+			ArffSaver saver = new ArffSaver();
+			saver.setInstances(instances);
+			saver.setFile(new File(CommandLineArgumentsHandler.getOutputDirectory() + "/data_clustering.arff"));
+			saver.writeBatch();	
 		
-
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
-
-			// set option -init, 0 = default kmeans, 1 = kmeans++, apparently
-			// this makes no difference in the results
-			String[] options = new String[2];
-			options[0] = "-init";
-			options[1] = "0";
-
-			kmeans.setOptions(options);
+		
+			kmeans.setDontReplaceMissingValues(false);
 			kmeans.setPreserveInstancesOrder(true);
-//			kmeans.setDistanceFunction(new ManhattanDistance());
+			
+			DistanceFunction euclideanDistance = new EuclideanDistance();		
+			String[] options = new String[1];
+			options[0] = "-D";
+			euclideanDistance.setInstances(instances);
+			euclideanDistance.setOptions(options);			
+			kmeans.setDistanceFunction(euclideanDistance);
 			
 			int[] clustersize = null;
 			int[] assignments = null;
@@ -105,7 +104,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// TODO : Metriken berechnen: AVG Session length, Histogramm TreeMap
 		
-			for (int cnt = 6; cnt <= 6; cnt++) {
+			for (int cnt = 3; cnt <= 16; cnt++) {
 				// must be specified in a fix way
 				kmeans.setNumClusters(cnt);
 
@@ -143,8 +142,10 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					for (int j = 0; j < assignments.length; j++) {
 						if (assignments[j] == i) {
 							double sum = 0;							
-							for (int a = 0; a < instances.instance(j).numAttributes(); a++) {								
-									sum += instances.instance(j).value(a);					
+							for (int a = 0; a < instances.instance(j).numAttributes(); a++) {	
+								    if (instances.instance(j).value(a) > 0) {
+								    	sum += instances.instance(j).value(a);		
+								    }													
 							}
 							if (sum > maxSessionLength) {
 								maxSessionLength = sum;
@@ -245,7 +246,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		final List<Vertex> vertices = behaviorModel.getVertices();
 		int indexOfAttribute = 0;
 		for (final Vertex srcVertex : vertices) {
-			if (srcVertex.getUseCase() != null) { // no final state?
+			if (srcVertex.getUseCase() != null) {  // no final state
 				for (final Vertex dstVertex : vertices) {
 					
 					Transition newTransition = installTransition(srcVertex,
@@ -262,7 +263,7 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					// first get srcUseCaseId and dstUseCaseID
 					final UseCase srcUseCase = srcVertex.getUseCase();
 					final UseCase dstUseCase = dstVertex.getUseCase();
-					final String srcUseCaseId = srcUseCase.getId(); // always defined here;
+					final String srcUseCaseId = srcUseCase.getId();
 					// if dstUseCase is null, its vertex denotes the final state
 					// (no ID);
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
@@ -278,10 +279,10 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 						if (assignments[i] == centroidIndex) {
 							// get transition of behaviorModel which belongs to
 							// the cluster.
-							Transition transition = this
-									.findTransitionByUseCaseIDs(
-											behaviorModelsAbsolute[i],
-											srcUseCaseId, dstUseCaseId);
+							
+							Transition transition =  this
+										.findTransitionByUseCaseIDs(behaviorModelsAbsolute[i],
+												srcUseCaseId, dstUseCaseId);							
 
 							if (transition != null) {
 								// store tinkTimeDiffs
@@ -302,8 +303,8 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 					indexOfAttribute++;
 				}
 			} else {
-				continue; // skip final state ("$");
-			}
+                continue;  // skip final state ("$");
+            }
 		}
 	}
 
@@ -340,14 +341,19 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 
 		// set the last attribute as class index 
 		instances.setClassIndex(instances.numAttributes() -1);
+		
+		// Remove UseLess
+//		weka.filters.unsupervised.attribute.RemoveUseless filterUseLess = new weka.filters.unsupervised.attribute.RemoveUseless();
+//		filterUseLess.setInputFormat(instances);
+//		Instances returnInstances = Filter.useFilter(instances, filterUseLess);
 
 		// filter instances
 		weka.filters.unsupervised.attribute.Remove filter = new weka.filters.unsupervised.attribute.Remove();
 		filter.setAttributeIndices("" + (instances.classIndex() + 1));
 		filter.setInputFormat(instances);
-		Instances returnInstances = Filter.useFilter(instances, filter);
-
-		return returnInstances;
+		Instances filteredInstances = Filter.useFilter(instances, filter);
+		
+		return filteredInstances;
 	}
 
 	/**
@@ -360,40 +366,43 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		
 		// create new instance with size n x (n + 1)
 		int nrVertices = behaviorModelAbsolute.getVertices()
-				.size() - 1; // -1 as srcVertex has one usecase with which is null (exit state)
+				.size() -1 ; // -1 as srcVertex has one usecase with which is null (exit state)
 		
-		Instance instance = new Instance( (nrVertices * ( nrVertices + 1)) + 1 ); // +1 as dummyAttribute for classification
+		Instance instance = new Instance( (nrVertices * (nrVertices +1)) + 1); // +1 as dummyAttribute for classification
 		
 		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
 		int indexOfAttribute = 0;
 		for (final Vertex srcVertex : vertices) {					
-			if (srcVertex.getUseCase() != null) { // no final state?
+			if (srcVertex.getUseCase() != null) {  // no final state
 				// for each transition set the value of the instance vector				
 				for (final Vertex dstVertex : vertices) {					
 					final UseCase srcUseCase = srcVertex.getUseCase();
 					final UseCase dstUseCase = dstVertex.getUseCase();
 					final String srcUseCaseId = srcUseCase.getId();
+					
 					// if dstUseCase is null, its vertex denotes the final state
 					// (no ID);
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
 							.getId() : null;
-					final Transition transition = this
-							.findTransitionByUseCaseIDs(behaviorModelAbsolute,
-									srcUseCaseId, dstUseCaseId);
-					if (transition == null) {
-						instance.setValue(indexOfAttribute, 0.0);
-					} else {
+					Transition transition = this
+								.findTransitionByUseCaseIDs(behaviorModelAbsolute,
+										srcUseCaseId, dstUseCaseId);									
+									
+					if (transition != null) {						
 						instance.setValue(indexOfAttribute, transition.getValue());
+					}
+					else {
+						instance.setValue(indexOfAttribute, 0);
 					}
 					indexOfAttribute++;
 				}
-			} else {
-				continue; // skip final state ("$");
-			}
+			 } else {
+	                continue;  // skip final state ("$");
+	         }
 		}
 		
 		// set dummy attribute for classification, will be removed by the instance filter
-		instance.setValue(indexOfAttribute, 0);		
+		instance.setValue(indexOfAttribute, 5);		
 		return instance;
 	}
 
@@ -407,21 +416,21 @@ public class MenasceClusteringStrategy extends AbstractClusteringStrategy {
 		FastVector fastVector = new FastVector();
 		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
 		for (final Vertex srcVertex : vertices) {
-			if (srcVertex.getUseCase() != null) { // no final state?
+			 if (srcVertex.getUseCase() != null) {  // no final state
 				for (final Vertex dstVertex : vertices) {
 					final UseCase srcUseCase = srcVertex.getUseCase();
 					final String srcUseCaseName = srcUseCase.getName();
 					final UseCase dstUseCase = dstVertex.getUseCase();
 					final String dstUseCaseName = (dstUseCase != null) ? dstUseCase.getName()
-							 : "noName";
+							 : "exit";
 									
 					// set AttributeName
 					fastVector.addElement(new Attribute(srcUseCaseName
 							+ dstUseCaseName, fastVector.size()));
      			}
-			} else {
-				continue; // skip final state ("$");
-			}
+            } else {
+                continue;  // skip final state ("$");
+            }
 		}
 
 
