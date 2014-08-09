@@ -104,7 +104,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// TODO : Metriken berechnen: AVG Session length, Histogramm TreeMap
 		
-			for (int cnt = 3; cnt <= 16; cnt++) {
+			for (int cnt = 6; cnt <= 6; cnt++) {
 				// must be specified in a fix way
 				kmeans.setNumClusters(cnt);
 
