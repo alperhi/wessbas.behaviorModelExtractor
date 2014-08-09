@@ -32,7 +32,7 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABM
  * @author Christian Voegele (voegele@fortiss.org)
  * @version 1.0
  */
-public class MenasceClusteringStrategy extends AbstractClusteringStrategy {	
+public class KMeansClusteringStrategy extends AbstractClusteringStrategy {	
 	
 	private double sampleMeanInterCluster = 0;
 	private double sampleVarianceInterCluster = 0;

@@ -6,7 +6,7 @@ import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.AbstractClusteringStrategy;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.MenasceClusteringStrategy;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.KMeansClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.NoClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.SimpleClusteringStrategy;
 
@@ -122,7 +122,7 @@ public class RBMToRBMUnifier {
 
             case RBMToRBMUnifier.CLUSTERING_TYPE_MENASCE:
 
-                clusteringStrategy = new MenasceClusteringStrategy();
+                clusteringStrategy = new KMeansClusteringStrategy();
                 break;
 
             default:
