@@ -31,8 +31,8 @@ public class RBMToRBMUnifier {
     /** Clustering type constant for "simple" clustering. */
     public final static String CLUSTERING_TYPE_SIMPLE = "simple";
 
-    /** Clustering type constant for menascé-based clustering. */
-    public final static String CLUSTERING_TYPE_MENASCE = "menasce";
+    /** Clustering type constant for kmeans-based clustering. */
+    public final static String CLUSTERING_TYPE_KMEANS = "kmeans";
 
     /** Warning message for the case that an unknown clustering type has been
      *  specified. */
@@ -120,7 +120,7 @@ public class RBMToRBMUnifier {
                 clusteringStrategy = new SimpleClusteringStrategy();
                 break;
 
-            case RBMToRBMUnifier.CLUSTERING_TYPE_MENASCE:
+            case RBMToRBMUnifier.CLUSTERING_TYPE_KMEANS:
 
                 clusteringStrategy = new KMeansClusteringStrategy();
                 break;

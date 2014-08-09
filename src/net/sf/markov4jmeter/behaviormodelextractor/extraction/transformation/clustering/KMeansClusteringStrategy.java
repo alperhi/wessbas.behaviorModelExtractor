@@ -1,7 +1,14 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,37 +83,23 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 		
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
-		
-			kmeans.setDontReplaceMissingValues(false);
-			kmeans.setPreserveInstancesOrder(true);
 			
+			// distance function with option don*t normalize
 			DistanceFunction euclideanDistance = new EuclideanDistance();		
 			String[] options = new String[1];
 			options[0] = "-D";
 			euclideanDistance.setInstances(instances);
 			euclideanDistance.setOptions(options);			
 			kmeans.setDistanceFunction(euclideanDistance);
+			kmeans.setPreserveInstancesOrder(true);
 			
 			int[] clustersize = null;
-			int[] assignments = null;
+			int[] assignments = null;		
 			
-			System.out.println("Cluster" + ";" +
-					"SqrtError" + ";" +
-					"sampleMeanInterCluster" + ";" +
-					"sampleVarianceInterCluster" + ";" +
-					"sampleCoefficientOfVarianceInterCluster" + ";" +
-					"sampleMeanIntraCluster" + ";" +
-					"sampleVarianceIntraCluster" + ";" +
-					"sampleCoefficientOfVarianceIntraCluster" + ";" +
-					"betavar" + ";" +
-					"betacv"
-					); 
-			
-			// TODO : Metriken berechnen: AVG Session length, Histogramm TreeMap
-		
-			for (int cnt = 6; cnt <= 6; cnt++) {
+			// clustering
+			for (int clusterSize = 6; clusterSize <= 6; clusterSize++) {
 				// must be specified in a fix way
-				kmeans.setNumClusters(cnt);
+				kmeans.setNumClusters(clusterSize);
 
 				// build cluster
 				kmeans.buildClusterer(instances);
@@ -115,61 +108,16 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 				assignments = kmeans.getAssignments();		
 				
 				this.calculateInterClusteringSimilarity(kmeans.getClusterCentroids());
-
-				this.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);
-				
+				this.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);				
 				this.calculateBetas();
-
-				System.out.println(
-						cnt + ";" + 
-				        kmeans.getSquaredError() + ";" + 
-				        this.sampleMeanInterCluster + ";" +
-				        this.sampleVarianceInterCluster + ";" +
-				        this.sampleCoefficientOfVarianceInterCluster + ";" + 
-				        this.sampleMeanIntraCluster  + ";" + 
-				        this.sampleVarianceIntraCluster + ";" +
-				        this.sampleCoefficientOfVarianceIntraCluster + ";" +
-				        this.betavar  + ";" + 
-				        this.betacv 				        
-				); 
 				
-				
-				double sumAttributes = 0;
-				double sumInstances = 0;
-				double minSessionLength = 999999999;
-				double maxSessionLength = 0;
-				for (int i = 0; i < clustersize.length; i++) {
-					for (int j = 0; j < assignments.length; j++) {
-						if (assignments[j] == i) {
-							double sum = 0;							
-							for (int a = 0; a < instances.instance(j).numAttributes(); a++) {	
-								    if (instances.instance(j).value(a) > 0) {
-								    	sum += instances.instance(j).value(a);		
-								    }													
-							}
-							if (sum > maxSessionLength) {
-								maxSessionLength = sum;
-							}								
-							if (sum < minSessionLength) {
-								minSessionLength = sum;
-							}								
-							sumAttributes += sum;
-							sumInstances++;
-						}
-					}
-					System.out.println("Clustersize " + ";" +  (double)clustersize[i]/(double)instances.numInstances() + 
-							          " avg sessionLength " + sumAttributes/sumInstances + 
-							          " min session length " + minSessionLength + 
-							          " max session length " + maxSessionLength);
-					sumInstances = 0;
-					sumAttributes = 0;
-					minSessionLength = 999999999;
-					maxSessionLength = 0;					
-				}			
+				this.printErrorMetricsHeader();
+				this.printErrorMetrics(clusterSize, kmeans);
+				this.printClusteringMetrics(clustersize, assignments, instances);
+				this.printClusterAssignmentsToSession(assignments, clusterSize);
+							
 			}			
 
-			// prints resulting centroids
-			// these results are not yet tested regarding validity
 			Instances resultingCentroids = kmeans.getClusterCentroids();
 
 			// for each centroid instance, create new behaviorModelRelative
@@ -178,10 +126,8 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 				Instance centroid = resultingCentroids.instance(i);
 				
 				// create a Behavior Model, which includes all vertices only;
-				// the
-				// vertices are associated with the use cases, and a dedicated
-				// vertex
-				// that represents the final state will be added;
+				// the vertices are associated with the use cases, and a dedicated
+				// vertex that represents the final state will be added;
 				final BehaviorModelAbsolute behaviorModelAbsoluteCentroid = this
 						.createBehaviorModelAbsoluteWithoutTransitions(useCaseRepository
 								.getUseCases());
@@ -227,7 +173,119 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 		return behaviorMix;
 	}
-
+    
+    /**
+     * Print Names of ErrorMetrics.
+     */
+    private void printErrorMetricsHeader() {
+		System.out.println("Cluster" + ";" +
+				"SqrtError" + ";" +
+				"sampleMeanInterCluster" + ";" +
+				"sampleVarianceInterCluster" + ";" +
+				"sampleCoefficientOfVarianceInterCluster" + ";" +
+				"sampleMeanIntraCluster" + ";" +
+				"sampleVarianceIntraCluster" + ";" +
+				"sampleCoefficientOfVarianceIntraCluster" + ";" +
+				"betavar" + ";" +
+				"betacv"
+				); 
+    }
+    
+    private void printErrorMetrics(final int cnt, final SimpleKMeans kmeans) {
+    	System.out.println(
+				cnt + ";" + 
+		        kmeans.getSquaredError() + ";" + 
+		        this.sampleMeanInterCluster + ";" +
+		        this.sampleVarianceInterCluster + ";" +
+		        this.sampleCoefficientOfVarianceInterCluster + ";" + 
+		        this.sampleMeanIntraCluster  + ";" + 
+		        this.sampleVarianceIntraCluster + ";" +
+		        this.sampleCoefficientOfVarianceIntraCluster + ";" +
+		        this.betavar  + ";" + 
+		        this.betacv 				        
+		); 
+    }
+    
+    /**
+     * Print other metrics.
+     * 
+     * @param clustersize
+     * @param assignments
+     * @param instances
+     */
+    private void printClusteringMetrics(final int[] clustersize, final int[] assignments, final Instances instances) {
+    	double sumAttributes = 0;
+		double sumInstances = 0;
+		double minSessionLength = 999999999;
+		double maxSessionLength = 0;
+		for (int i = 0; i < clustersize.length; i++) {
+			for (int j = 0; j < assignments.length; j++) {
+				if (assignments[j] == i) {
+					double sum = 0;							
+					for (int a = 0; a < instances.instance(j).numAttributes(); a++) {	
+						    if (instances.instance(j).value(a) > 0) {
+						    	sum += instances.instance(j).value(a);		
+						    }													
+					}
+					if (sum > maxSessionLength) {
+						maxSessionLength = sum;
+					}								
+					if (sum < minSessionLength) {
+						minSessionLength = sum;
+					}								
+					sumAttributes += sum;
+					sumInstances++;
+				}
+			}
+			System.out.println("Clustersize " + ";" +  (double)clustersize[i]/(double)instances.numInstances() + 
+					          " avg sessionLength " + sumAttributes/sumInstances + 
+					          " min session length " + minSessionLength + 
+					          " max session length " + maxSessionLength);
+			sumInstances = 0;
+			sumAttributes = 0;
+			minSessionLength = 999999999;
+			maxSessionLength = 0;					
+		}		
+    }
+    
+    /**
+     * Create sessionFile with clusterInformation.
+     * 
+     * @param assignments
+     */
+    private void printClusterAssignmentsToSession(final int[] assignments, final int clusterSize) {    	
+    	try {
+			FileReader fr = new FileReader(new File(CommandLineArgumentsHandler.getInputFile()));
+            BufferedReader br = new BufferedReader(fr);  
+	        String line = null;
+	        int counter = 0;
+	        List<String> tmpString = new ArrayList<String>();
+	        while ( (line = br.readLine()) != null) {
+	        	tmpString.add(assignments[counter] + ";" + line);
+	        	counter++;
+	        }	      
+	        
+	        FileWriter fw = new FileWriter(new File(CommandLineArgumentsHandler.getOutputDirectory() 
+	        		+ "/generated_session_logs_with_clusters" +  clusterSize + ".dat"));
+	        BufferedWriter bw = new BufferedWriter(fw);
+	        
+	        for (String stringInstance: tmpString) {
+	        	bw.append(stringInstance);	
+	        	bw.append("\n");
+	        }
+	        
+	        tmpString = null;	        
+	        bw.close();
+	        br.close();	        
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   	
+    }
+    
 	/**
 	 * Create new Transitions with the values calculated by the clustering.
 	 * 
