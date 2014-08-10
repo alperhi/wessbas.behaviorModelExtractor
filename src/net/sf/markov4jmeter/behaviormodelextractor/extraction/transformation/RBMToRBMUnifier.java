@@ -2,13 +2,13 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation;
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
-import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.AbstractClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.KMeansClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.NoClusteringStrategy;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.SimpleClusteringStrategy;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering.XMeansClusteringStrategy;
 
 /**
  * This class provides methods for transforming Behavior Models to a Behavior
@@ -33,6 +33,9 @@ public class RBMToRBMUnifier {
 
     /** Clustering type constant for kmeans-based clustering. */
     public final static String CLUSTERING_TYPE_KMEANS = "kmeans";
+    
+    /** Clustering type constant for xmeans-based clustering. */
+    public final static String CLUSTERING_TYPE_XMEANS = "xmeans";
 
     /** Warning message for the case that an unknown clustering type has been
      *  specified. */
@@ -123,6 +126,11 @@ public class RBMToRBMUnifier {
             case RBMToRBMUnifier.CLUSTERING_TYPE_KMEANS:
 
                 clusteringStrategy = new KMeansClusteringStrategy();
+                break;
+                
+            case RBMToRBMUnifier.CLUSTERING_TYPE_XMEANS:
+
+                clusteringStrategy = new XMeansClusteringStrategy();
                 break;
 
             default:

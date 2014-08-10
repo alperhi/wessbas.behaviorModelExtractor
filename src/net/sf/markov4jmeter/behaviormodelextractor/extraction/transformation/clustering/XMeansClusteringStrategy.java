@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
-import weka.clusterers.SimpleKMeans;
+import weka.clusterers.XMeans;
 import weka.core.Attribute;
 import weka.core.DistanceFunction;
 import weka.core.EuclideanDistance;
@@ -27,12 +27,12 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionExceptio
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
 
 /**
- * This class represents a <i>kmeans</i> clustering strategy.
+ * This class represents a <i>xmeans</i> clustering strategy.
  * 
  * @author Christian Voegele (voegele@fortiss.org)
  * @version 1.0
  */
-public class KMeansClusteringStrategy extends AbstractClusteringStrategy {	
+public class XMeansClusteringStrategy extends AbstractClusteringStrategy {	
 	
 	/* ************************** public methods ************************** */
 
@@ -40,7 +40,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 	 * {@inheritDoc}
 	 * 
 	 * <p>
-	 * This method is specialized for <b>kmeans</b> clustering.
+	 * This method is specialized for <b>xmeans</b> clustering.
 	 */
     @Override
     public BehaviorMix apply (
@@ -65,8 +65,8 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			saver.setFile(new File(CommandLineArgumentsHandler.getOutputDirectory() + "/data_clustering.arff"));
 			saver.writeBatch();	
 		
-			// KMeans --> Weka
-			SimpleKMeans kmeans = new SimpleKMeans();
+			// XMeans --> Weka
+			XMeans xmeans = new XMeans();
 			
 			// distance function with option don*t normalize
 			DistanceFunction euclideanDistance = new EuclideanDistance();		
@@ -74,43 +74,46 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			options[0] = "-D";
 			euclideanDistance.setInstances(instances);
 			euclideanDistance.setOptions(options);			
-			kmeans.setDistanceFunction(euclideanDistance);
-			kmeans.setPreserveInstancesOrder(true);
-			
+			xmeans.setDistanceF(euclideanDistance);
+
 			int[] clustersize = null;
-			int[] assignments = null;	
+			// create new assignments			
+			int[] assignments = new int[instances.numInstances()];	
 			
 			// get number of clusters to be generated.
 			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
 			
 			// clustering
-			for (int clusterSize = numberOfClusters; clusterSize <= numberOfClusters; clusterSize++) {
-				// must be specified in a fix way
-				kmeans.setNumClusters(clusterSize);
+			xmeans.setMinNumClusters(numberOfClusters);
+			xmeans.setMaxNumClusters(numberOfClusters+10);
 
-				// build cluster
-				kmeans.buildClusterer(instances);
-
-				clustersize = kmeans.getClusterSizes();
-				assignments = kmeans.getAssignments();		
+			// build cluster
+			xmeans.buildClusterer(instances);
+			
+			// clusterSize
+			clustersize = new int[xmeans.getClusterCenters().numInstances()];
+			
+			// set assignments and clustersize
+			for (int s = 0; s < instances.numInstances(); s++) {
+				assignments[s] = xmeans.clusterInstance(instances.instance(s));
+				clustersize[xmeans.clusterInstance(instances.instance(s))]++;
+			}
 				
-				ClusteringMetrics clusteringMetrics = new ClusteringMetrics();
-				clusteringMetrics.calculateInterClusteringSimilarity(kmeans.getClusterCentroids());
-				clusteringMetrics.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);				
-				clusteringMetrics.calculateBetas();
-				
-				clusteringMetrics.printErrorMetricsHeader();
-				clusteringMetrics.printErrorMetrics(kmeans.getClusterCentroids().numInstances());
-				clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
-							
-			}			
+			ClusteringMetrics clusteringMetrics = new ClusteringMetrics();
+			clusteringMetrics.calculateInterClusteringSimilarity(xmeans.getClusterCenters());
+			clusteringMetrics.calculateIntraClusteringSimilarity(xmeans.getClusterCenters(), instances, assignments);				
+			clusteringMetrics.calculateBetas();
+			
+			clusteringMetrics.printErrorMetricsHeader();
+			clusteringMetrics.printErrorMetrics(xmeans.getClusterCenters().numInstances());
+			clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
+			clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
 
-			Instances resultingCentroids = kmeans.getClusterCentroids();
+			Instances resultingCentroids = xmeans.getClusterCenters();
 
 			// for each centroid instance, create new behaviorModelRelative
 			for (int i = 0; i < resultingCentroids.numInstances(); i++) {
-
+				
 				Instance centroid = resultingCentroids.instance(i);
 				
 				// create a Behavior Model, which includes all vertices only;
@@ -161,7 +164,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 		return behaviorMix;
 	}
-       
+    
 	/**
 	 * Create new Transitions with the values calculated by the clustering.
 	 * 
@@ -241,7 +244,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
             }
 		}
 	}
-
+	
 	/**
 	 * This method creates a new instance set based on the available
 	 * behaviorModelsAbsolute.
@@ -379,5 +382,6 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 		return fastVector;
 	}
+
 
 }
