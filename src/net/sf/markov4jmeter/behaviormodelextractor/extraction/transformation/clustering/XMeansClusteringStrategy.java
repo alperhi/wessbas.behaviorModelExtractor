@@ -85,7 +85,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// clustering
 			xmeans.setMinNumClusters(numberOfClusters);
-			xmeans.setMaxNumClusters(numberOfClusters+10);
+			xmeans.setMaxNumClusters(numberOfClusters+20);
 
 			// build cluster
 			xmeans.buildClusterer(instances);
@@ -232,9 +232,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 						// calculate new mean/deviation values, based on time
 						// ranges;
 						
-						for (BigDecimal timeDiff : timeDiffs) {
-							newTransition.getTimeDiffs().add(timeDiff);
-						}						
+						newTransition.getTimeDiffs().addAll(timeDiffs);				
 						
 					}
 					indexOfAttribute++;

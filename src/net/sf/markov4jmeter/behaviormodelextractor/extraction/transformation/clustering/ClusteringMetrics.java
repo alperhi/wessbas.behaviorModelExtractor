@@ -179,9 +179,9 @@ public class ClusteringMetrics {
 					sumInstances++;
 				}
 			}
-			System.out.println("Clustersize " + ";" +  (double)clustersize[i]/(double)instances.numInstances() + 
-					          " avg sessionLength " + sumAttributes/sumInstances + 
-					          " min session length " + minSessionLength + 
+			System.out.println("Clustersize " + (double)clustersize[i]/(double)instances.numInstances() + ";" +
+					          " avg sessionLength " + sumAttributes/sumInstances + ";" +
+					          " min session length " + minSessionLength + ";" +
 					          " max session length " + maxSessionLength);
 			sumInstances = 0;
 			sumAttributes = 0;
@@ -208,7 +208,7 @@ public class ClusteringMetrics {
 	        }	      
 	        
 	        FileWriter fw = new FileWriter(new File(CommandLineArgumentsHandler.getOutputDirectory() 
-	        		+ "/generated_session_logs_with_clusters" +  clusterSize + ".dat"));
+	        		+ "/data_clustering_" +  clusterSize + ".dat"));
 	        BufferedWriter bw = new BufferedWriter(fw);
 	        
 	        for (String stringInstance: tmpString) {

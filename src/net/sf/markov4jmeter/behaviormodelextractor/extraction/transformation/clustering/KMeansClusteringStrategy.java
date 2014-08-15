@@ -97,12 +97,12 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 				ClusteringMetrics clusteringMetrics = new ClusteringMetrics();
 				clusteringMetrics.calculateInterClusteringSimilarity(kmeans.getClusterCentroids());
 				clusteringMetrics.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);				
-				clusteringMetrics.calculateBetas();
-				
-				clusteringMetrics.printErrorMetricsHeader();
+				clusteringMetrics.calculateBetas();				
+			
+//				clusteringMetrics.printErrorMetricsHeader();
 				clusteringMetrics.printErrorMetrics(kmeans.getClusterCentroids().numInstances());
 				clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
+//				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
 							
 			}			
 
@@ -183,6 +183,8 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			if (srcVertex.getUseCase() != null) {  // no final state
 				for (final Vertex dstVertex : vertices) {
 					
+
+					
 					Transition newTransition = installTransition(srcVertex,
 							dstVertex);
 					
@@ -202,7 +204,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 					// (no ID);
 					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
 							.getId() : null;
-							
+										
 					final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
 
 					// iterate assignments
@@ -229,9 +231,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 						// calculate new mean/deviation values, based on time
 						// ranges;
 						
-						for (BigDecimal timeDiff : timeDiffs) {
-							newTransition.getTimeDiffs().add(timeDiff);
-						}						
+						newTransition.getTimeDiffs().addAll(timeDiffs);
 						
 					}
 					indexOfAttribute++;
