@@ -12,6 +12,7 @@ import weka.core.EuclideanDistance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.ManhattanDistance;
 import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
@@ -75,8 +76,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			euclideanDistance.setInstances(instances);
 			euclideanDistance.setOptions(options);			
 			kmeans.setDistanceFunction(euclideanDistance);
-			kmeans.setPreserveInstancesOrder(true);
-			
+						
 			int[] clustersize = null;
 			int[] assignments = null;	
 			

@@ -179,7 +179,8 @@ public class ClusteringMetrics {
 					sumInstances++;
 				}
 			}
-			System.out.println("Clustersize " + (double)clustersize[i]/(double)instances.numInstances() + ";" +
+			System.out.println("Clustersize " + clustersize[i] + ";" +
+					          " Clusterpercentage " + (double)clustersize[i]/(double)instances.numInstances() + ";" +
 					          " avg sessionLength " + sumAttributes/sumInstances + ";" +
 					          " min session length " + minSessionLength + ";" +
 					          " max session length " + maxSessionLength);

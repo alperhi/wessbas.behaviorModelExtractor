@@ -12,6 +12,7 @@ import weka.core.EuclideanDistance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.ManhattanDistance;
 import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
@@ -69,13 +70,20 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			XMeans xmeans = new XMeans();
 			
 			// distance function with option don*t normalize
-			DistanceFunction euclideanDistance = new EuclideanDistance();		
+//			DistanceFunction euclideanDistance = new EuclideanDistance();		
+//			String[] options = new String[1];
+//			options[0] = "-D";
+//			euclideanDistance.setInstances(instances);
+//			euclideanDistance.setOptions(options);			
+//			xmeans.setDistanceF(euclideanDistance);
+			
+			DistanceFunction manhattanDistance = new ManhattanDistance();		
 			String[] options = new String[1];
 			options[0] = "-D";
-			euclideanDistance.setInstances(instances);
-			euclideanDistance.setOptions(options);			
-			xmeans.setDistanceF(euclideanDistance);
-
+			manhattanDistance.setInstances(instances);
+			manhattanDistance.setOptions(options);			
+			xmeans.setDistanceF(manhattanDistance);			
+			
 			int[] clustersize = null;
 			// create new assignments			
 			int[] assignments = new int[instances.numInstances()];	
@@ -107,7 +115,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			clusteringMetrics.printErrorMetricsHeader();
 			clusteringMetrics.printErrorMetrics(xmeans.getClusterCenters().numInstances());
 			clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-			clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
+		//	clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
 
 			Instances resultingCentroids = xmeans.getClusterCenters();
 

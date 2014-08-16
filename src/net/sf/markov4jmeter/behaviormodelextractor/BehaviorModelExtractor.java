@@ -38,6 +38,7 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.UseCaseMapping;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.ParseException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.Parser;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.SessionData;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.UseCase;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToRBMUnifier;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
@@ -362,15 +363,30 @@ public class BehaviorModelExtractor {
        final ArrayList<SessionData> sessions = new ArrayList<SessionData>();
 
        SessionData sessionData;
-
+       
+//       long minStartTime = 1408200632154500450L;
+//       long maxStartTime = 1408200915153128571L;
+        
        // nextSession() might throw a Parse- or IOException;
        while (( sessionData = iterator.nextSession() ) != null) {
-
-           sessions.add(sessionData);
+    	   
+    	   sessions.add(sessionData);
+  	   
+//    	   if (sessionData.getUseCases().get(0).getStartTime() >= minStartTime && sessionData.getUseCases().get(0).getStartTime() <= maxStartTime) {
+//    		   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);
+//    		   if (lastUseCase.getName().equals("logout")) {
+//    			   sessions.add(sessionData);
+//    		   } else  {
+//    			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
+//    			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
+//       			   sessionData.getUseCases().add(useCaseHome);
+//       			   sessionData.getUseCases().add(useCaseLogOut);
+//    		   } 
+//    	   }           
+           
        }
-
+       
        iterator.close();  // closes the input stream;
-
        return sessions;
    }
 
