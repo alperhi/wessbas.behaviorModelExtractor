@@ -30,7 +30,7 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.parser;
 public class UseCase {
 
     /** Name of the use case. */
-    private final String name;
+    private String name;
 
     /** Start time of the use case. */
     private final long startTime;
@@ -64,6 +64,15 @@ public class UseCase {
     public String getName () {
 
         return this.name;
+    }
+    
+    /**
+     * Returns the name of the use case.
+     *
+     * @return name of the use case.
+     */
+    public void setName (String name) {
+        this.name = name;
     }
 
     /**

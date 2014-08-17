@@ -252,6 +252,7 @@ public class SessionRepositoryHandler {
         eSession.setId( session.getId() );
         eSession.setStartTime( timeBounds[0] );
         eSession.setEndTime( timeBounds[1] );
+        eSession.setTransactionType(session.getTransactionType());
 
         sessionRepository.getSessions().add(eSession);
     }

@@ -21,316 +21,316 @@ import org.eclipse.emf.ecore.EObject;
  */
 public class BehaviorAdapterFactory extends AdapterFactoryImpl {
     /**
-     * The cached model package.
-     * <!-- begin-user-doc -->
+	 * The cached model package.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected static BehaviorPackage modelPackage;
 
     /**
-     * Creates an instance of the adapter factory.
-     * <!-- begin-user-doc -->
+	 * Creates an instance of the adapter factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public BehaviorAdapterFactory() {
-        if (modelPackage == null) {
-            modelPackage = BehaviorPackage.eINSTANCE;
-        }
-    }
+		if (modelPackage == null) {
+			modelPackage = BehaviorPackage.eINSTANCE;
+		}
+	}
 
     /**
-     * Returns whether this factory is applicable for the type of the object.
-     * <!-- begin-user-doc -->
+	 * Returns whether this factory is applicable for the type of the object.
+	 * <!-- begin-user-doc -->
      * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
      * <!-- end-user-doc -->
-     * @return whether this factory is applicable for the type of the object.
-     * @generated
-     */
+	 * @return whether this factory is applicable for the type of the object.
+	 * @generated
+	 */
     @Override
     public boolean isFactoryForType(Object object) {
-        if (object == modelPackage) {
-            return true;
-        }
-        if (object instanceof EObject) {
-            return ((EObject)object).eClass().getEPackage() == modelPackage;
-        }
-        return false;
-    }
+		if (object == modelPackage) {
+			return true;
+		}
+		if (object instanceof EObject) {
+			return ((EObject)object).eClass().getEPackage() == modelPackage;
+		}
+		return false;
+	}
 
     /**
-     * The switch that delegates to the <code>createXXX</code> methods.
-     * <!-- begin-user-doc -->
+	 * The switch that delegates to the <code>createXXX</code> methods.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected BehaviorSwitch<Adapter> modelSwitch =
         new BehaviorSwitch<Adapter>() {
-            @Override
-            public Adapter caseUseCase(UseCase object) {
-                return createUseCaseAdapter();
-            }
-            @Override
-            public Adapter caseUseCaseRepository(UseCaseRepository object) {
-                return createUseCaseRepositoryAdapter();
-            }
-            @Override
-            public Adapter caseSessionRepository(SessionRepository object) {
-                return createSessionRepositoryAdapter();
-            }
-            @Override
-            public Adapter caseSession(Session object) {
-                return createSessionAdapter();
-            }
-            @Override
-            public Adapter caseObservedUseCaseExecution(ObservedUseCaseExecution object) {
-                return createObservedUseCaseExecutionAdapter();
-            }
-            @Override
-            public Adapter caseAbstractUseCaseExecution(AbstractUseCaseExecution object) {
-                return createAbstractUseCaseExecutionAdapter();
-            }
-            @Override
-            public Adapter caseAbstractBehaviorModelGraph(AbstractBehaviorModelGraph object) {
-                return createAbstractBehaviorModelGraphAdapter();
-            }
-            @Override
-            public Adapter caseVertex(Vertex object) {
-                return createVertexAdapter();
-            }
-            @Override
-            public Adapter caseTransition(Transition object) {
-                return createTransitionAdapter();
-            }
-            @Override
-            public Adapter caseBehaviorModelAbsolute(BehaviorModelAbsolute object) {
-                return createBehaviorModelAbsoluteAdapter();
-            }
-            @Override
-            public Adapter caseBehaviorModelRelative(BehaviorModelRelative object) {
-                return createBehaviorModelRelativeAdapter();
-            }
-            @Override
-            public Adapter caseBehaviorMix(BehaviorMix object) {
-                return createBehaviorMixAdapter();
-            }
-            @Override
-            public Adapter caseBehaviorMixEntry(BehaviorMixEntry object) {
-                return createBehaviorMixEntryAdapter();
-            }
-            @Override
-            public Adapter defaultCase(EObject object) {
-                return createEObjectAdapter();
-            }
-        };
+			@Override
+			public Adapter caseUseCase(UseCase object) {
+				return createUseCaseAdapter();
+			}
+			@Override
+			public Adapter caseUseCaseRepository(UseCaseRepository object) {
+				return createUseCaseRepositoryAdapter();
+			}
+			@Override
+			public Adapter caseSessionRepository(SessionRepository object) {
+				return createSessionRepositoryAdapter();
+			}
+			@Override
+			public Adapter caseSession(Session object) {
+				return createSessionAdapter();
+			}
+			@Override
+			public Adapter caseObservedUseCaseExecution(ObservedUseCaseExecution object) {
+				return createObservedUseCaseExecutionAdapter();
+			}
+			@Override
+			public Adapter caseAbstractUseCaseExecution(AbstractUseCaseExecution object) {
+				return createAbstractUseCaseExecutionAdapter();
+			}
+			@Override
+			public Adapter caseAbstractBehaviorModelGraph(AbstractBehaviorModelGraph object) {
+				return createAbstractBehaviorModelGraphAdapter();
+			}
+			@Override
+			public Adapter caseVertex(Vertex object) {
+				return createVertexAdapter();
+			}
+			@Override
+			public Adapter caseTransition(Transition object) {
+				return createTransitionAdapter();
+			}
+			@Override
+			public Adapter caseBehaviorModelAbsolute(BehaviorModelAbsolute object) {
+				return createBehaviorModelAbsoluteAdapter();
+			}
+			@Override
+			public Adapter caseBehaviorModelRelative(BehaviorModelRelative object) {
+				return createBehaviorModelRelativeAdapter();
+			}
+			@Override
+			public Adapter caseBehaviorMix(BehaviorMix object) {
+				return createBehaviorMixAdapter();
+			}
+			@Override
+			public Adapter caseBehaviorMixEntry(BehaviorMixEntry object) {
+				return createBehaviorMixEntryAdapter();
+			}
+			@Override
+			public Adapter defaultCase(EObject object) {
+				return createEObjectAdapter();
+			}
+		};
 
     /**
-     * Creates an adapter for the <code>target</code>.
-     * <!-- begin-user-doc -->
+	 * Creates an adapter for the <code>target</code>.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param target the object to adapt.
-     * @return the adapter for the <code>target</code>.
-     * @generated
-     */
+	 * @param target the object to adapt.
+	 * @return the adapter for the <code>target</code>.
+	 * @generated
+	 */
     @Override
     public Adapter createAdapter(Notifier target) {
-        return modelSwitch.doSwitch((EObject)target);
-    }
+		return modelSwitch.doSwitch((EObject)target);
+	}
 
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.UseCase <em>Use Case</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.UseCase <em>Use Case</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.UseCase
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.UseCase
+	 * @generated
+	 */
     public Adapter createUseCaseAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.UseCaseRepository <em>Use Case Repository</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.UseCaseRepository <em>Use Case Repository</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.UseCaseRepository
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.UseCaseRepository
+	 * @generated
+	 */
     public Adapter createUseCaseRepositoryAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.SessionRepository <em>Session Repository</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.SessionRepository <em>Session Repository</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.SessionRepository
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.SessionRepository
+	 * @generated
+	 */
     public Adapter createSessionRepositoryAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Session <em>Session</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Session <em>Session</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.Session
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.Session
+	 * @generated
+	 */
     public Adapter createSessionAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.ObservedUseCaseExecution <em>Observed Use Case Execution</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.ObservedUseCaseExecution <em>Observed Use Case Execution</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.ObservedUseCaseExecution
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.ObservedUseCaseExecution
+	 * @generated
+	 */
     public Adapter createObservedUseCaseExecutionAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.AbstractUseCaseExecution <em>Abstract Use Case Execution</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.AbstractUseCaseExecution <em>Abstract Use Case Execution</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.AbstractUseCaseExecution
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.AbstractUseCaseExecution
+	 * @generated
+	 */
     public Adapter createAbstractUseCaseExecutionAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph <em>Abstract Behavior Model Graph</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph <em>Abstract Behavior Model Graph</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph
+	 * @generated
+	 */
     public Adapter createAbstractBehaviorModelGraphAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Vertex <em>Vertex</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Vertex <em>Vertex</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.Vertex
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.Vertex
+	 * @generated
+	 */
     public Adapter createVertexAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Transition <em>Transition</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.Transition <em>Transition</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.Transition
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.Transition
+	 * @generated
+	 */
     public Adapter createTransitionAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorModelAbsolute <em>Model Absolute</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorModelAbsolute <em>Model Absolute</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.BehaviorModelAbsolute
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorModelAbsolute
+	 * @generated
+	 */
     public Adapter createBehaviorModelAbsoluteAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorModelRelative <em>Model Relative</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorModelRelative <em>Model Relative</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.BehaviorModelRelative
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorModelRelative
+	 * @generated
+	 */
     public Adapter createBehaviorModelRelativeAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorMix <em>Mix</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorMix <em>Mix</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.BehaviorMix
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorMix
+	 * @generated
+	 */
     public Adapter createBehaviorMixAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorMixEntry <em>Mix Entry</em>}'.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for an object of class '{@link net.sf.markov4jmeter.behavior.BehaviorMixEntry <em>Mix Entry</em>}'.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see net.sf.markov4jmeter.behavior.BehaviorMixEntry
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorMixEntry
+	 * @generated
+	 */
     public Adapter createBehaviorMixEntryAdapter() {
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * Creates a new adapter for the default case.
-     * <!-- begin-user-doc -->
+	 * Creates a new adapter for the default case.
+	 * <!-- begin-user-doc -->
      * This default implementation returns null.
      * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @generated
-     */
+	 * @return the new adapter.
+	 * @generated
+	 */
     public Adapter createEObjectAdapter() {
-        return null;
-    }
+		return null;
+	}
 
 } //BehaviorAdapterFactory

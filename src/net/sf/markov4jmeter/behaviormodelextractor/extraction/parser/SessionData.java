@@ -35,9 +35,21 @@ public class SessionData {
 
     /** Use cases of the session. */
     private final List<UseCase> useCases;
+    
+    private String transactionType;    
 
 
-    /**
+    public String getTransactionType() {
+		return transactionType;
+	}
+
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
+
+
+	/**
      * Constructor for a <code>SessionData</code> instance with a specific ID
      * and a list of use cases.
      *

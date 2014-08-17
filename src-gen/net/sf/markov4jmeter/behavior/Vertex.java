@@ -22,19 +22,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Vertex extends AbstractUseCaseExecution {
     /**
-     * Returns the value of the '<em><b>Outgoing Transitions</b></em>' containment reference list.
-     * The list contents are of type {@link net.sf.markov4jmeter.behavior.Transition}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Outgoing Transitions</b></em>' containment reference list.
+	 * The list contents are of type {@link net.sf.markov4jmeter.behavior.Transition}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Outgoing Transitions</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Outgoing Transitions</em>' containment reference list.
-     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getVertex_OutgoingTransitions()
-     * @model containment="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Outgoing Transitions</em>' containment reference list.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getVertex_OutgoingTransitions()
+	 * @model containment="true"
+	 * @generated
+	 */
     EList<Transition> getOutgoingTransitions();
 
 } // Vertex

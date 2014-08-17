@@ -35,118 +35,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class SessionRepositoryImpl extends EObjectImpl implements SessionRepository {
     /**
-     * The cached value of the '{@link #getSessions() <em>Sessions</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getSessions() <em>Sessions</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getSessions()
-     * @generated
-     * @ordered
-     */
+	 * @see #getSessions()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Session> sessions;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected SessionRepositoryImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.SESSION_REPOSITORY;
-    }
+		return BehaviorPackage.Literals.SESSION_REPOSITORY;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Session> getSessions() {
-        if (sessions == null) {
-            sessions = new EObjectContainmentEList<Session>(Session.class, this, BehaviorPackage.SESSION_REPOSITORY__SESSIONS);
-        }
-        return sessions;
-    }
+		if (sessions == null) {
+			sessions = new EObjectContainmentEList<Session>(Session.class, this, BehaviorPackage.SESSION_REPOSITORY__SESSIONS);
+		}
+		return sessions;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
-                return ((InternalEList<?>)getSessions()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
+				return ((InternalEList<?>)getSessions()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
-                return getSessions();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
+				return getSessions();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
-                getSessions().clear();
-                getSessions().addAll((Collection<? extends Session>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
+				getSessions().clear();
+				getSessions().addAll((Collection<? extends Session>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
-                getSessions().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
+				getSessions().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
-                return sessions != null && !sessions.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.SESSION_REPOSITORY__SESSIONS:
+				return sessions != null && !sessions.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //SessionRepositoryImpl

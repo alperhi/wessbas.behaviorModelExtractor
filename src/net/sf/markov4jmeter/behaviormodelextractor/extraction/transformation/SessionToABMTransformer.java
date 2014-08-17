@@ -155,6 +155,8 @@ public class SessionToABMTransformer {
 
         // fill the absolute Behavior Model with vertices (and transitions);
         behaviorModelAbsolute.getVertices().addAll(vertices);
+        
+        behaviorModelAbsolute.setTransactionType(session.getTransactionType());
 
         return behaviorModelAbsolute;
     }

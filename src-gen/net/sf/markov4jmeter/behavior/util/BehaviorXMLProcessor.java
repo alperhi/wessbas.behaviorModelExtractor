@@ -21,30 +21,30 @@ import org.eclipse.emf.ecore.xmi.util.XMLProcessor;
 public class BehaviorXMLProcessor extends XMLProcessor {
 
     /**
-     * Public constructor to instantiate the helper.
-     * <!-- begin-user-doc -->
+	 * Public constructor to instantiate the helper.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public BehaviorXMLProcessor() {
-        super((EPackage.Registry.INSTANCE));
-        BehaviorPackage.eINSTANCE.eClass();
-    }
+		super((EPackage.Registry.INSTANCE));
+		BehaviorPackage.eINSTANCE.eClass();
+	}
     
     /**
-     * Register for "*" and "xml" file extensions the BehaviorResourceFactoryImpl factory.
-     * <!-- begin-user-doc -->
+	 * Register for "*" and "xml" file extensions the BehaviorResourceFactoryImpl factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected Map<String, Resource.Factory> getRegistrations() {
-        if (registrations == null) {
-            super.getRegistrations();
-            registrations.put(XML_EXTENSION, new BehaviorResourceFactoryImpl());
-            registrations.put(STAR_EXTENSION, new BehaviorResourceFactoryImpl());
-        }
-        return registrations;
-    }
+		if (registrations == null) {
+			super.getRegistrations();
+			registrations.put(XML_EXTENSION, new BehaviorResourceFactoryImpl());
+			registrations.put(STAR_EXTENSION, new BehaviorResourceFactoryImpl());
+		}
+		return registrations;
+	}
 
 } //BehaviorXMLProcessor

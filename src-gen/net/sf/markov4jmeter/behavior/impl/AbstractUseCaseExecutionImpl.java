@@ -29,129 +29,129 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public abstract class AbstractUseCaseExecutionImpl extends EObjectImpl implements AbstractUseCaseExecution {
     /**
-     * The cached value of the '{@link #getUseCase() <em>Use Case</em>}' reference.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getUseCase() <em>Use Case</em>}' reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getUseCase()
-     * @generated
-     * @ordered
-     */
+	 * @see #getUseCase()
+	 * @generated
+	 * @ordered
+	 */
     protected UseCase useCase;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected AbstractUseCaseExecutionImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.ABSTRACT_USE_CASE_EXECUTION;
-    }
+		return BehaviorPackage.Literals.ABSTRACT_USE_CASE_EXECUTION;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public UseCase getUseCase() {
-        if (useCase != null && useCase.eIsProxy()) {
-            InternalEObject oldUseCase = (InternalEObject)useCase;
-            useCase = (UseCase)eResolveProxy(oldUseCase);
-            if (useCase != oldUseCase) {
-                if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE, oldUseCase, useCase));
-            }
-        }
-        return useCase;
-    }
+		if (useCase != null && useCase.eIsProxy()) {
+			InternalEObject oldUseCase = (InternalEObject)useCase;
+			useCase = (UseCase)eResolveProxy(oldUseCase);
+			if (useCase != oldUseCase) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE, oldUseCase, useCase));
+			}
+		}
+		return useCase;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public UseCase basicGetUseCase() {
-        return useCase;
-    }
+		return useCase;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setUseCase(UseCase newUseCase) {
-        UseCase oldUseCase = useCase;
-        useCase = newUseCase;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE, oldUseCase, useCase));
-    }
+		UseCase oldUseCase = useCase;
+		useCase = newUseCase;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE, oldUseCase, useCase));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
-                if (resolve) return getUseCase();
-                return basicGetUseCase();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
+				if (resolve) return getUseCase();
+				return basicGetUseCase();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
-                setUseCase((UseCase)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
+				setUseCase((UseCase)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
-                setUseCase((UseCase)null);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
+				setUseCase((UseCase)null);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
-                return useCase != null;
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_USE_CASE_EXECUTION__USE_CASE:
+				return useCase != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //AbstractUseCaseExecutionImpl

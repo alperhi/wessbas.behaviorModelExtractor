@@ -35,118 +35,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class UseCaseRepositoryImpl extends EObjectImpl implements UseCaseRepository {
     /**
-     * The cached value of the '{@link #getUseCases() <em>Use Cases</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getUseCases() <em>Use Cases</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getUseCases()
-     * @generated
-     * @ordered
-     */
+	 * @see #getUseCases()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<UseCase> useCases;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected UseCaseRepositoryImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.USE_CASE_REPOSITORY;
-    }
+		return BehaviorPackage.Literals.USE_CASE_REPOSITORY;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<UseCase> getUseCases() {
-        if (useCases == null) {
-            useCases = new EObjectContainmentEList<UseCase>(UseCase.class, this, BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES);
-        }
-        return useCases;
-    }
+		if (useCases == null) {
+			useCases = new EObjectContainmentEList<UseCase>(UseCase.class, this, BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES);
+		}
+		return useCases;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
-                return ((InternalEList<?>)getUseCases()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
+				return ((InternalEList<?>)getUseCases()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
-                return getUseCases();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
+				return getUseCases();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
-                getUseCases().clear();
-                getUseCases().addAll((Collection<? extends UseCase>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
+				getUseCases().clear();
+				getUseCases().addAll((Collection<? extends UseCase>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
-                getUseCases().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
+				getUseCases().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
-                return useCases != null && !useCases.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.USE_CASE_REPOSITORY__USE_CASES:
+				return useCases != null && !useCases.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //UseCaseRepositoryImpl

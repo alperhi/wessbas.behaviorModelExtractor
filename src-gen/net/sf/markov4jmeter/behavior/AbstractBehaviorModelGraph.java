@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph#getVertices <em>Vertices</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph#getTransactionType <em>Transaction Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -24,19 +25,45 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface AbstractBehaviorModelGraph extends EObject {
     /**
-     * Returns the value of the '<em><b>Vertices</b></em>' containment reference list.
-     * The list contents are of type {@link net.sf.markov4jmeter.behavior.Vertex}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Vertices</b></em>' containment reference list.
+	 * The list contents are of type {@link net.sf.markov4jmeter.behavior.Vertex}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Vertices</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Vertices</em>' containment reference list.
-     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractBehaviorModelGraph_Vertices()
-     * @model containment="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Vertices</em>' containment reference list.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractBehaviorModelGraph_Vertices()
+	 * @model containment="true"
+	 * @generated
+	 */
     EList<Vertex> getVertices();
+
+				/**
+	 * Returns the value of the '<em><b>Transaction Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Transaction Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Transaction Type</em>' attribute.
+	 * @see #setTransactionType(String)
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractBehaviorModelGraph_TransactionType()
+	 * @model
+	 * @generated
+	 */
+	String getTransactionType();
+
+				/**
+	 * Sets the value of the '{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph#getTransactionType <em>Transaction Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transaction Type</em>' attribute.
+	 * @see #getTransactionType()
+	 * @generated
+	 */
+	void setTransactionType(String value);
 
 } // AbstractBehaviorModelGraph

@@ -24,19 +24,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface UseCaseRepository extends EObject {
     /**
-     * Returns the value of the '<em><b>Use Cases</b></em>' containment reference list.
-     * The list contents are of type {@link net.sf.markov4jmeter.behavior.UseCase}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Use Cases</b></em>' containment reference list.
+	 * The list contents are of type {@link net.sf.markov4jmeter.behavior.UseCase}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Use Cases</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Use Cases</em>' containment reference list.
-     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getUseCaseRepository_UseCases()
-     * @model containment="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Use Cases</em>' containment reference list.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getUseCaseRepository_UseCases()
+	 * @model containment="true"
+	 * @generated
+	 */
     EList<UseCase> getUseCases();
 
 } // UseCaseRepository

@@ -364,27 +364,38 @@ public class BehaviorModelExtractor {
 
        SessionData sessionData;
        
-//       long minStartTime = 1408200632154500450L;
-//       long maxStartTime = 1408200915153128571L;
+       long minStartTime = 1408277863900718926L;
+       long maxStartTime = 1408277978648367428L;
         
        // nextSession() might throw a Parse- or IOException;
-       while (( sessionData = iterator.nextSession() ) != null) {
+       while (( sessionData = iterator.nextSession() ) != null) {   
+    	   	   
+    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);
     	   
-    	   sessions.add(sessionData);
-  	   
-//    	   if (sessionData.getUseCases().get(0).getStartTime() >= minStartTime && sessionData.getUseCases().get(0).getStartTime() <= maxStartTime) {
-//    		   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);
-//    		   if (lastUseCase.getName().equals("logout")) {
-//    			   sessions.add(sessionData);
-//    		   } else  {
-//    			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
-//    			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
-//       			   sessionData.getUseCases().add(useCaseHome);
-//       			   sessionData.getUseCases().add(useCaseLogOut);
-//    		   } 
-//    	   }           
-           
-       }
+     	   if (lastUseCase.getEndTime() >= minStartTime && lastUseCase.getEndTime() <= maxStartTime) {     		   
+        	      		   
+        	   for (UseCase useCase : sessionData.getUseCases()) {
+        		   if (useCase.getName().contains("login_")) {
+        			   final String[] paramSplit = useCase.getName().split("_");
+        			   useCase.setName(paramSplit[0]);
+        			   sessionData.setTransactionType(paramSplit[1]);
+        			   break;
+        		   }    		   
+        	   }     		   
+     		   
+    		   
+    		   if (!lastUseCase.getName().equals("logout")) {
+    			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
+    			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
+       			   sessionData.getUseCases().add(useCaseHome);
+       			   sessionData.getUseCases().add(useCaseLogOut);
+    		   } 
+    	
+    		   sessions.add(sessionData);
+    		   
+    	   }
+       
+       }      
        
        iterator.close();  // closes the input stream;
        return sessions;

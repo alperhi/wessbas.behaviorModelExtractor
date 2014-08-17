@@ -24,19 +24,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface SessionRepository extends EObject {
     /**
-     * Returns the value of the '<em><b>Sessions</b></em>' containment reference list.
-     * The list contents are of type {@link net.sf.markov4jmeter.behavior.Session}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Sessions</b></em>' containment reference list.
+	 * The list contents are of type {@link net.sf.markov4jmeter.behavior.Session}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Sessions</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Sessions</em>' containment reference list.
-     * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getSessionRepository_Sessions()
-     * @model containment="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Sessions</em>' containment reference list.
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getSessionRepository_Sessions()
+	 * @model containment="true"
+	 * @generated
+	 */
     EList<Session> getSessions();
 
 } // SessionRepository
