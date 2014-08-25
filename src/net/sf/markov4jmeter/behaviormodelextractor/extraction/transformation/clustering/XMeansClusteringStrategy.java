@@ -2,6 +2,7 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.cl
 
 import weka.clusterers.XMeans;
 import weka.core.DistanceFunction;
+import weka.core.EuclideanDistance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.ManhattanDistance;
@@ -48,22 +49,23 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			Instances instances = getInstances(behaviorModelsAbsolute); 
 		
 			// XMeans --> Weka
-			XMeans xmeans = new XMeans();
+			XMeans xmeans = new XMeans();		
+			xmeans.setSeed(10);
 			
 			// distance function with option don*t normalize
-//			DistanceFunction euclideanDistance = new EuclideanDistance();		
-//			String[] options = new String[1];
-//			options[0] = "-D";
-//			euclideanDistance.setInstances(instances);
-//			euclideanDistance.setOptions(options);			
-//			xmeans.setDistanceF(euclideanDistance);
-			
-			DistanceFunction manhattanDistance = new ManhattanDistance();		
+			DistanceFunction euclideanDistance = new EuclideanDistance();		
 			String[] options = new String[1];
 			options[0] = "-D";
-			manhattanDistance.setInstances(instances);
-			manhattanDistance.setOptions(options);			
-			xmeans.setDistanceF(manhattanDistance);			
+			euclideanDistance.setOptions(options);	
+			euclideanDistance.setInstances(instances);					
+			xmeans.setDistanceF(euclideanDistance);
+			
+//			DistanceFunction manhattanDistance = new ManhattanDistance();		
+//			String[] options = new String[1];
+//			options[0] = "-D";
+//			manhattanDistance.setOptions(options);	
+//			manhattanDistance.setInstances(instances);					
+//			xmeans.setDistanceF(manhattanDistance);			
 			
 			int[] clustersize = null;
 			// create new assignments			
@@ -74,7 +76,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// clustering
 			xmeans.setMinNumClusters(numberOfClusters);
-			xmeans.setMaxNumClusters(numberOfClusters+20);
+			xmeans.setMaxNumClusters(numberOfClusters+18);
 
 			// build cluster
 			xmeans.buildClusterer(instances);
@@ -96,7 +98,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			clusteringMetrics.printErrorMetricsHeader();
 			clusteringMetrics.printErrorMetrics(xmeans.getClusterCenters().numInstances());
 			clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-		//	clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
+			clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
 
 			Instances resultingCentroids = xmeans.getClusterCenters();
 
