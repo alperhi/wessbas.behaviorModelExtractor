@@ -5,6 +5,7 @@ import weka.core.DistanceFunction;
 import weka.core.EuclideanDistance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.ManhattanDistance;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
@@ -50,15 +51,23 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
 			
-			// distance function with option don*t normalize
-			DistanceFunction euclideanDistance = new EuclideanDistance();		
+			DistanceFunction manhattanDistance = new ManhattanDistance();		
 			String[] options = new String[1];
 			options[0] = "-D";
-			euclideanDistance.setInstances(instances);
-			euclideanDistance.setOptions(options);			
-			kmeans.setDistanceFunction(euclideanDistance);
+			manhattanDistance.setOptions(options);	
+			manhattanDistance.setInstances(instances);					
+			kmeans.setDistanceFunction(manhattanDistance);		
+			
+			// distance function with option don*t normalize
+//			DistanceFunction euclideanDistance = new EuclideanDistance();		
+//			String[] options = new String[1];
+//			options[0] = "-D";
+//			euclideanDistance.setOptions(options);			
+//			euclideanDistance.setInstances(instances);
+//			kmeans.setDistanceFunction(euclideanDistance);			
+			
 			kmeans.setPreserveInstancesOrder(true);
-						
+								
 			int[] clustersize = null;
 			int[] assignments = null;	
 			
@@ -81,10 +90,10 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 				clusteringMetrics.calculateIntraClusteringSimilarity(kmeans.getClusterCentroids(), instances, assignments);				
 				clusteringMetrics.calculateBetas();				
 			
-//				clusteringMetrics.printErrorMetricsHeader();
+				clusteringMetrics.printErrorMetricsHeader();
 				clusteringMetrics.printErrorMetrics(kmeans.getClusterCentroids().numInstances());
 				clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-//				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
+				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
 							
 			}			
 
