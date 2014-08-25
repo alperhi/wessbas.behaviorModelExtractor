@@ -362,38 +362,30 @@ public class BehaviorModelExtractor {
 
        final ArrayList<SessionData> sessions = new ArrayList<SessionData>();
 
-       SessionData sessionData;
+       SessionData sessionData;      
        
-       long minStartTime = 1408277863900718926L;
-       long maxStartTime = 1408277978648367428L;
-        
        // nextSession() might throw a Parse- or IOException;
        while (( sessionData = iterator.nextSession() ) != null) {   
-    	   	   
-    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);
-    	   
-     	   if (lastUseCase.getEndTime() >= minStartTime && lastUseCase.getEndTime() <= maxStartTime) {     		   
-        	      		   
-        	   for (UseCase useCase : sessionData.getUseCases()) {
-        		   if (useCase.getName().contains("login_")) {
-        			   final String[] paramSplit = useCase.getName().split("_");
-        			   useCase.setName(paramSplit[0]);
-        			   sessionData.setTransactionType(paramSplit[1]);
-        			   break;
-        		   }    		   
-        	   }     		   
-     		   
-    		   
-    		   if (!lastUseCase.getName().equals("logout")) {
-    			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
-    			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
-       			   sessionData.getUseCases().add(useCaseHome);
-       			   sessionData.getUseCases().add(useCaseLogOut);
-    		   } 
-    	
-    		   sessions.add(sessionData);
-    		   
-    	   }
+    	       	   	   
+    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);    	   
+ 		          	      		   
+    	   for (UseCase useCase : sessionData.getUseCases()) {
+    		   if (useCase.getName().contains("login_")) {
+    			   final String[] paramSplit = useCase.getName().split("_");
+    			   useCase.setName(paramSplit[0]);
+    			   sessionData.setTransactionType(paramSplit[1]);
+    			   break;
+    		   }    		   
+    	   }     		  
+		   
+		   if (!lastUseCase.getName().equals("logout")) {
+			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
+			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
+   			   sessionData.getUseCases().add(useCaseHome);
+   			   sessionData.getUseCases().add(useCaseLogOut);
+		   } 
+	
+		   sessions.add(sessionData);     
        
        }      
        
