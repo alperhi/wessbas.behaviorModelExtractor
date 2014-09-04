@@ -51,20 +51,20 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();
 			
-			DistanceFunction manhattanDistance = new ManhattanDistance();		
-			String[] options = new String[1];
-			options[0] = "-D";
-			manhattanDistance.setOptions(options);	
-			manhattanDistance.setInstances(instances);					
-			kmeans.setDistanceFunction(manhattanDistance);		
-			
-			// distance function with option don*t normalize
-//			DistanceFunction euclideanDistance = new EuclideanDistance();		
+//			DistanceFunction manhattanDistance = new ManhattanDistance();		
 //			String[] options = new String[1];
 //			options[0] = "-D";
-//			euclideanDistance.setOptions(options);			
-//			euclideanDistance.setInstances(instances);
-//			kmeans.setDistanceFunction(euclideanDistance);			
+//			manhattanDistance.setOptions(options);	
+//			manhattanDistance.setInstances(instances);					
+//			kmeans.setDistanceFunction(manhattanDistance);		
+			
+			// distance function with option don*t normalize
+			DistanceFunction euclideanDistance = new EuclideanDistance();		
+			String[] options = new String[1];
+			options[0] = "-D";
+			euclideanDistance.setOptions(options);			
+			euclideanDistance.setInstances(instances);
+			kmeans.setDistanceFunction(euclideanDistance);			
 			
 			kmeans.setPreserveInstancesOrder(true);
 								

@@ -580,10 +580,7 @@ public abstract class AbstractClusteringStrategy {
 					Transition newTransition = installTransition(srcVertex,
 							dstVertex);
 					
-					// set Value for transition probability
-					newTransition.setValue(centroid.value(indexOfAttribute));
-
-					// CalculateThinkTimeParams. Think Times must be calculated
+	    			// CalculateThinkTimeParams. Think Times must be calculated
 					// based on the original behaviorModelsRelative, as the
 					// clusters are only build based on the transition
 					// probabilities.
@@ -598,6 +595,8 @@ public abstract class AbstractClusteringStrategy {
 							.getId() : null;
 										
 					final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
+					double transitionCount = 0;
+					double nbrOfItems = 0;
 
 					// iterate assignments
 					for (int i = 0; i < assignments.length; i++) {
@@ -607,6 +606,7 @@ public abstract class AbstractClusteringStrategy {
 						if (assignments[i] == centroidIndex) {
 							// get transition of behaviorModel which belongs to
 							// the cluster.
+							nbrOfItems++;
 							
 							Transition transition =  this
 										.findTransitionByUseCaseIDs(behaviorModelsAbsolute[i],
@@ -615,17 +615,21 @@ public abstract class AbstractClusteringStrategy {
 							if (transition != null) {
 								// store tinkTimeDiffs
 								timeDiffs.addAll(transition.getTimeDiffs());
+								transitionCount += transition.getValue();
 							}
 						}
 					}
 
-					if (timeDiffs.size() > 0) {
-						// calculate new mean/deviation values, based on time
-						// ranges;
-						
+					if (timeDiffs.size() > 0) {				
 						newTransition.getTimeDiffs().addAll(timeDiffs);
-						
 					}
+					
+					if (transitionCount > 0) {
+						newTransition.setValue(transitionCount);
+					} else {
+						newTransition.setValue(0);
+					}
+								
 					indexOfAttribute++;
 				}
 			} else {

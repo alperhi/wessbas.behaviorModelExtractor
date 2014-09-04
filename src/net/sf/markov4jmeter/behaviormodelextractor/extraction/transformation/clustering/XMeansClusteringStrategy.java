@@ -1,5 +1,6 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
+import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.XMeans;
 import weka.core.DistanceFunction;
 import weka.core.EuclideanDistance;
@@ -54,9 +55,9 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			
 			// distance function with option don*t normalize
 			DistanceFunction euclideanDistance = new EuclideanDistance();		
-			String[] options = new String[1];
-			options[0] = "-D";
-			euclideanDistance.setOptions(options);	
+//			String[] options = new String[1];
+//			options[0] = "-D";
+//			euclideanDistance.setOptions(options);	
 			euclideanDistance.setInstances(instances);					
 			xmeans.setDistanceF(euclideanDistance);
 			
@@ -80,6 +81,11 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 			// build cluster
 			xmeans.buildClusterer(instances);
+			
+			ClusterEvaluation clusterEvaluation = new  ClusterEvaluation(); 
+			clusterEvaluation.setClusterer(xmeans);
+			clusterEvaluation.evaluateClusterer(instances);
+			System.out.println(clusterEvaluation.clusterResultsToString());
 			
 			// clusterSize
 			clustersize = new int[xmeans.getClusterCenters().numInstances()];
@@ -106,6 +112,12 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			for (int i = 0; i < resultingCentroids.numInstances(); i++) {
 				
 				Instance centroid = resultingCentroids.instance(i);
+								
+//				for (int p = 0; p < centroid.numAttributes(); p++) {
+//					System.out.println(centroid.attribute(p).name() + " "+ centroid.value(p));
+//				}
+//				
+//				System.out.println("----------------");
 				
 				// create a Behavior Model, which includes all vertices only;
 				// the vertices are associated with the use cases, and a dedicated
