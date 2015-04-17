@@ -18,22 +18,22 @@ import org.eclipse.emf.ecore.EClass;
  */
 public class BehaviorModelAbsoluteImpl extends AbstractBehaviorModelGraphImpl implements BehaviorModelAbsolute {
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected BehaviorModelAbsoluteImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.BEHAVIOR_MODEL_ABSOLUTE;
-    }
+		return BehaviorPackage.Literals.BEHAVIOR_MODEL_ABSOLUTE;
+	}
 
 } //BehaviorModelAbsoluteImpl

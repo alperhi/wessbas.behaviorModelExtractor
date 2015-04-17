@@ -1,0 +1,3 @@
+gen_behavior_model; 0.3605577689243028; C:\Users\voegele\Applications\eclipse-jee-kepler-SR2-win32-x86_64\eclipse\workspace\net.sf.markov4jmeter.behaviormodelextractor\.\examples\specj\output\menasce\behaviormodel0.csv
+gen_behavior_model; 0.5119521912350598; C:\Users\voegele\Applications\eclipse-jee-kepler-SR2-win32-x86_64\eclipse\workspace\net.sf.markov4jmeter.behaviormodelextractor\.\examples\specj\output\menasce\behaviormodel1.csv
+gen_behavior_model; 0.12749003984063745; C:\Users\voegele\Applications\eclipse-jee-kepler-SR2-win32-x86_64\eclipse\workspace\net.sf.markov4jmeter.behaviormodelextractor\.\examples\specj\output\menasce\behaviormodel2.csv

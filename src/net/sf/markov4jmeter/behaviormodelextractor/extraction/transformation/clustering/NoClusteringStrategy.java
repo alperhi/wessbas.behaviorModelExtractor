@@ -2,8 +2,10 @@ package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.cl
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
 
 /**
  * This class represents a <i>no-clustering</i> strategy, that is each single
@@ -28,8 +30,14 @@ public class NoClusteringStrategy extends AbstractClusteringStrategy {
      */
     @Override
     public BehaviorMix apply (
-            final BehaviorModelRelative[] behaviorModelsRelative,
+            final BehaviorModelAbsolute[] behaviorModelsAbsolute,
             final UseCaseRepository useCaseRepository) {
+
+        final ABMToRBMTransformer abmToRbmTransformer =
+                new ABMToRBMTransformer();
+        
+        final BehaviorModelRelative[] behaviorModelsRelative =
+                abmToRbmTransformer.transform(behaviorModelsAbsolute);
 
         // Behavior Mix to be returned;
         final BehaviorMix behaviorMix = this.createBehaviorMix();

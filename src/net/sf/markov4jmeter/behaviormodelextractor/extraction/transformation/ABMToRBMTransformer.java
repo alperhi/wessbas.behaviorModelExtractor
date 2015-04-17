@@ -95,7 +95,7 @@ public class ABMToRBMTransformer {
      * @return
      *     the resulting relative Behavior Model.
      */
-    private BehaviorModelRelative transform (
+    public BehaviorModelRelative transform (
             final BehaviorModelAbsolute behaviorModelAbsolute) {
 
         final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
@@ -127,13 +127,13 @@ public class ABMToRBMTransformer {
      *     the vertex whose outgoing transitions' labels will be converted.
      */
     private void convertOutgoingTransitionValues (final Vertex vertex) {
-
+    	    	
         final List<Transition> outgoingTransitions =
                 vertex.getOutgoingTransitions();
 
         // count number of transition occurrences (note that each transition
         // might fire several times to a certain target vertex);
-        int n = 0;
+        double n = 0;
 
         for (final Transition outgoingTransition : outgoingTransitions) {
 
@@ -147,7 +147,7 @@ public class ABMToRBMTransformer {
 
             final double value = outgoingTransition.getValue();
             final double relValue = value / n;  // n > 0 here;
-
+            
             outgoingTransition.setValue(relValue);
 
             // conversion: times -> think times;
@@ -176,6 +176,7 @@ public class ABMToRBMTransformer {
 
             thinkTimeParams.add(mean);
             thinkTimeParams.add(deviation);
+                        
         }
     }
 }

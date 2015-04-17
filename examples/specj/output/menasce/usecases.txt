@@ -1,0 +1,17 @@
+_init
+doSupplierSetAllURLs
+doAtomicityTests
+doCacheTest
+doLogin
+doVehicleQuotes
+doAddToShoppingCart
+doDeferedPurchase
+doHome
+doShoppingCart
+doClearCart
+doPurchase
+doInventory
+doSell
+doLogout
+doCancelOrder
+doRemoveFromShoppingCart

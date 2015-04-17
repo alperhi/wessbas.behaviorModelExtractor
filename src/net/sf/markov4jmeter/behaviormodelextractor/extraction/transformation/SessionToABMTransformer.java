@@ -155,6 +155,8 @@ public class SessionToABMTransformer {
 
         // fill the absolute Behavior Model with vertices (and transitions);
         behaviorModelAbsolute.getVertices().addAll(vertices);
+        
+        behaviorModelAbsolute.setTransactionType(session.getTransactionType());
 
         return behaviorModelAbsolute;
     }
@@ -257,7 +259,7 @@ public class SessionToABMTransformer {
 
                 final long timeDistance =
                         dstUCExecution.getStartTime() -
-                        srcUCExecution.getStartTime();
+                        srcUCExecution.getEndTime();
 
                 if (timeDistance < 0) {
 

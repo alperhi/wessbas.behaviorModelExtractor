@@ -33,118 +33,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class VertexImpl extends AbstractUseCaseExecutionImpl implements Vertex {
     /**
-     * The cached value of the '{@link #getOutgoingTransitions() <em>Outgoing Transitions</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getOutgoingTransitions() <em>Outgoing Transitions</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOutgoingTransitions()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOutgoingTransitions()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Transition> outgoingTransitions;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected VertexImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.VERTEX;
-    }
+		return BehaviorPackage.Literals.VERTEX;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Transition> getOutgoingTransitions() {
-        if (outgoingTransitions == null) {
-            outgoingTransitions = new EObjectContainmentEList<Transition>(Transition.class, this, BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS);
-        }
-        return outgoingTransitions;
-    }
+		if (outgoingTransitions == null) {
+			outgoingTransitions = new EObjectContainmentEList<Transition>(Transition.class, this, BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS);
+		}
+		return outgoingTransitions;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
-                return ((InternalEList<?>)getOutgoingTransitions()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
+				return ((InternalEList<?>)getOutgoingTransitions()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
-                return getOutgoingTransitions();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
+				return getOutgoingTransitions();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
-                getOutgoingTransitions().clear();
-                getOutgoingTransitions().addAll((Collection<? extends Transition>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
+				getOutgoingTransitions().clear();
+				getOutgoingTransitions().addAll((Collection<? extends Transition>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
-                getOutgoingTransitions().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
+				getOutgoingTransitions().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
-                return outgoingTransitions != null && !outgoingTransitions.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.VERTEX__OUTGOING_TRANSITIONS:
+				return outgoingTransitions != null && !outgoingTransitions.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //VertexImpl

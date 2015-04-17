@@ -1,15 +1,26 @@
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
+import weka.core.Attribute;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ArffSaver;
+import weka.filters.Filter;
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
+import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.Transition;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
+import net.sf.markov4jmeter.behaviormodelextractor.CommandLineArgumentsHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
 
 /**
@@ -62,13 +73,56 @@ public abstract class AbstractClusteringStrategy {
      *     if any clustering error occurs.
      */
     public abstract BehaviorMix apply (
-            final BehaviorModelRelative[] behaviorModelsRelative,
+            final BehaviorModelAbsolute[] behaviorModelsAbsolute,
             final UseCaseRepository useCaseRepository)
                     throws ExtractionException;
 
-
     /* *************************  protected methods  ************************ */
 
+    
+    /**
+     * Searches for a Behavior Model transition between two use cases,
+     * respectively their associated vertices.
+     *
+     * @param behaviorModelRelative
+     *     Behavior Model to be searched through.
+     * @param srcUseCaseId
+     *     identifier of the use case which is associated with the source
+     *     vertex.
+     * @param dstUseCaseId
+     *     identifier of the use case which is associated with the target
+     *     vertex; <code>null</code> might be passed for the final state.
+     *
+     * @return
+     *     a matching transition, or <code>null</code> if such a transition
+     *     does not exist.
+     */
+    protected Transition findTransitionByUseCaseIDs (
+            final BehaviorModelAbsolute behaviorModelAbsolute,
+            final String srcUseCaseId,
+            final String dstUseCaseId) {
+
+        final Vertex srcVertex =
+                this.findVertexByUseCaseId(behaviorModelAbsolute, srcUseCaseId);
+
+        if (srcVertex != null) {
+
+            for (final Transition transition :
+                 srcVertex.getOutgoingTransitions()) {
+
+                final UseCase useCase =
+                        transition.getTargetVertex().getUseCase();
+
+                if ((useCase != null && useCase.getId().equals(dstUseCaseId)) ||
+                    (useCase == null && dstUseCaseId == null)) {
+
+                    return transition;
+                }
+            }
+        }
+
+        return null;  // no matching transition found;
+    }
 
     /**
      * Searches for a Behavior Model transition between two use cases,
@@ -159,6 +213,52 @@ public abstract class AbstractClusteringStrategy {
 
         return null;  // no matching vertex found;
     }
+    
+    /**
+     * Searches for a Behavior Model Absolut vertex which is associated with a specific
+     * use case or with the final state.
+     *
+     * @param behaviorModelAbsolut
+     *     Behavior Model whose vertices shall be searched through.
+     * @param useCaseId
+     *     an identifier of the use case which is associated with the vertex to
+     *     be searched, or <code>null</code> for searching the vertex that
+     *     represents the final state.
+     *
+     * @return
+     *     a matching vertex, or <code>null</code> if such a vertex does not
+     *     exist.
+     */
+    protected Vertex findVertexByUseCaseId (
+            final BehaviorModelAbsolute behaviorModelAbsolute,
+            final String useCaseId) {
+
+        final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
+
+        for (final Vertex vertex : vertices) {
+
+            final UseCase vertexUseCase = vertex.getUseCase();
+
+            if (vertexUseCase != null) {
+
+                final String vertexUseCaseId  = vertexUseCase.getId();
+
+                if ( useCaseId.equals(vertexUseCaseId) ) {
+
+                    return vertex;
+                }
+
+            } else {  // vertexUseCase == null  -->  final state found;
+
+                if (useCaseId == null) {  // searching for final state?
+
+                    return vertex;
+                }
+            }
+        }
+
+        return null;  // no matching vertex found;
+    }
 
     /**
      * Creates a Behavior Model which includes the vertices for set of given
@@ -172,13 +272,55 @@ public abstract class AbstractClusteringStrategy {
      * @return
      *     the newly created Behavior Model.
      */
-    protected BehaviorModelRelative createBehaviorModelWithoutTransitions (
+    protected BehaviorModelRelative createBehaviorModelRelativeWithoutTransitions (
             final List<UseCase> useCases) {
 
         final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
 
         final BehaviorModelRelative behaviorModel =
                 factory.createBehaviorModelRelative();  // to be returned;
+
+        final List<Vertex> vertices = behaviorModel.getVertices();
+
+        Vertex vertex;
+
+        for (final UseCase useCase : useCases) {
+
+            vertex = factory.createVertex();
+
+            vertex.setUseCase(useCase);
+            vertices.add(vertex);
+        }
+
+        // add a vertex for the final state at last;
+
+        vertex = factory.createVertex();
+
+        vertex.setUseCase(null);  // no use case associated with final state;
+        vertices.add(vertex);
+
+        return behaviorModel;
+    }
+    
+    /**
+     * Creates a Behavior Model which includes the vertices for set of given
+     * use cases.
+     *
+     * @param useCases
+     *     set of use cases which indicate the vertices to be included to the
+     *     Behavior Model; a vertex that represents the final state will be
+     *     added explicitly.
+     *
+     * @return
+     *     the newly created Behavior Model.
+     */
+    protected BehaviorModelAbsolute createBehaviorModelAbsoluteWithoutTransitions (
+            final List<UseCase> useCases) {
+
+        final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
+
+        final BehaviorModelAbsolute behaviorModel =
+                factory.createBehaviorModelAbsolute();  // to be returned;
 
         final List<Vertex> vertices = behaviorModel.getVertices();
 
@@ -268,4 +410,232 @@ public abstract class AbstractClusteringStrategy {
 
         return transition;
     }
+    
+	/**
+	 * This method creates a new instance set based on the available
+	 * behaviorModelsAbsolute.
+	 * 
+	 * @param behaviorModelsAbsolute
+	 * @return instance set
+	 */
+    protected Instances getInstances(
+			BehaviorModelAbsolute[] behaviorModelsAbsolute) throws Exception {
+		
+		// init the fastVector with attributesNames from the first behaviorModel. 
+		FastVector fastVector = getFastVector(behaviorModelsAbsolute[0]);
+		
+		// create empty instance set with the number of behaviorModelsRelative.
+		Instances instances = new Instances(
+				"BehaviorModelAbsoluteInstanceSet", fastVector,
+				behaviorModelsAbsolute.length);
+		
+		// set the last attribute as class index 
+		instances.setClassIndex(instances.numAttributes() -1);
+		
+		// Each behaviorModelsRelative will be transformed to an instance. To do
+		// that, that transition matrix will be
+		// transformed in a vector. Set number of attributes of instance: n x (n +1) exit state
+		// Matrix.
+		for (BehaviorModelAbsolute behaviorModelAbsolute : behaviorModelsAbsolute) {
+			// retieve instance from behaviorModelRelative
+			Instance instance = getInstance(behaviorModelAbsolute, instances);
+			// add instance to instanceset, at the end of the set
+			instances.add(instance);
+		}
+	
+		// save input data as arff file. This arff file can be opened with weka application.
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(instances);
+		saver.setFile(new File(CommandLineArgumentsHandler.getOutputDirectory() + "/data_clustering.arff"));
+		saver.writeBatch();	
+		
+		// Remove UseLess
+//		weka.filters.unsupervised.attribute.RemoveUseless filterUseLess = new weka.filters.unsupervised.attribute.RemoveUseless();
+//		filterUseLess.setInputFormat(instances);
+//		Instances returnInstances = Filter.useFilter(instances, filterUseLess);
+
+		// filter instances
+		weka.filters.unsupervised.attribute.Remove filter = new weka.filters.unsupervised.attribute.Remove();
+		filter.setAttributeIndices("" + (instances.classIndex() + 1));
+		filter.setInputFormat(instances);
+		Instances filteredInstances = Filter.useFilter(instances, filter);
+		
+		return filteredInstances;
+	}
+
+	/**
+	 * Returns a instance as vector based on a single BehaviorModelAbsolute.
+	 * 
+	 * @param behaviorModelsAbsolute
+	 * @return a instance, transitions of behaviorModelAbsolute as input vector
+	 */
+	protected Instance getInstance(BehaviorModelAbsolute behaviorModelAbsolute, Instances instances) {
+		
+		// create new instance with size n x (n + 1)
+		int nrVertices = behaviorModelAbsolute.getVertices()
+				.size() -1 ; // -1 as srcVertex has one usecase with which is null (exit state)
+		
+		Instance instance = new Instance( (nrVertices * (nrVertices +1)) + 1); // +1 as dummyAttribute for classification
+		
+		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
+		int indexOfAttribute = 0;
+		for (final Vertex srcVertex : vertices) {					
+			if (srcVertex.getUseCase() != null) {  // no final state
+				// for each transition set the value of the instance vector				
+				for (final Vertex dstVertex : vertices) {					
+					final UseCase srcUseCase = srcVertex.getUseCase();
+					final UseCase dstUseCase = dstVertex.getUseCase();
+					final String srcUseCaseId = srcUseCase.getId();
+					
+					// if dstUseCase is null, its vertex denotes the final state
+					// (no ID);
+					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
+							.getId() : null;
+					Transition transition = this
+								.findTransitionByUseCaseIDs(behaviorModelAbsolute,
+										srcUseCaseId, dstUseCaseId);									
+									
+					if (transition != null) {						
+						instance.setValue(indexOfAttribute, transition.getValue());
+					}
+					else {
+						instance.setValue(indexOfAttribute, 0);
+					}
+					indexOfAttribute++;
+				}
+			 } else {
+	                continue;  // skip final state ("$");
+	         }
+		}
+		
+		instance.setDataset(instances);
+		
+		// set attribute for classification
+		instance.setValue(indexOfAttribute, behaviorModelAbsolute.getTransactionType());		
+		return instance;
+	}
+
+	/**
+	 * Returns a FactVector which defines the attributes of the Instance set.
+	 * 
+	 * @param behaviorModelRelative
+	 * @return FastVector defines the attributes of the Instance set
+	 */
+	protected FastVector getFastVector(BehaviorModelAbsolute behaviorModelAbsolute) {
+		FastVector fastVector = new FastVector();
+		final List<Vertex> vertices = behaviorModelAbsolute.getVertices();
+		for (final Vertex srcVertex : vertices) {
+			 if (srcVertex.getUseCase() != null) {  // no final state
+				for (final Vertex dstVertex : vertices) {
+					final UseCase srcUseCase = srcVertex.getUseCase();
+					final String srcUseCaseName = srcUseCase.getName();
+					final UseCase dstUseCase = dstVertex.getUseCase();
+					final String dstUseCaseName = (dstUseCase != null) ? dstUseCase.getName()
+							 : "exit";
+									
+					// set AttributeName
+					fastVector.addElement(new Attribute(srcUseCaseName
+							+ dstUseCaseName, fastVector.size()));
+     			}
+            } else {
+                continue;  // skip final state ("$");
+            }
+		}
+
+
+		// Add dummyClassification. A valid instance set always seams to need a
+		// classification attribute. Otherwise the clustering is not working. 
+		FastVector classification = new FastVector(3);
+		classification.addElement("doBrowseVehicles-1");
+		classification.addElement("doManageInventory-1");
+		classification.addElement("doPurchaseVehicles-1");
+		Attribute classAttribute = new Attribute("theClass",
+				classification);
+		fastVector.addElement(classAttribute);
+
+		return fastVector;
+	}
+	
+	/**
+	 * Create new Transitions with the values calculated by the clustering.
+	 * 
+	 * @param behaviorModel
+	 * @param centroid
+	 * @param centroidInstances
+	 * @param centroidIndex
+	 */
+	protected void installTransitions(
+			final BehaviorModelAbsolute[] behaviorModelsAbsolute,
+			final BehaviorModelAbsolute behaviorModel,
+			final Instance centroid,
+			final int[] assignments, 
+			final int centroidIndex) {
+
+		final List<Vertex> vertices = behaviorModel.getVertices();
+		int indexOfAttribute = 0;
+		for (final Vertex srcVertex : vertices) {
+			if (srcVertex.getUseCase() != null) {  // no final state
+				for (final Vertex dstVertex : vertices) {
+					
+					Transition newTransition = installTransition(srcVertex,
+							dstVertex);
+					
+	    			// CalculateThinkTimeParams. Think Times must be calculated
+					// based on the original behaviorModelsRelative, as the
+					// clusters are only build based on the transition
+					// probabilities.
+
+					// first get srcUseCaseId and dstUseCaseID
+					final UseCase srcUseCase = srcVertex.getUseCase();
+					final UseCase dstUseCase = dstVertex.getUseCase();
+					final String srcUseCaseId = srcUseCase.getId();
+					// if dstUseCase is null, its vertex denotes the final state
+					// (no ID);
+					final String dstUseCaseId = (dstUseCase != null) ? dstUseCase
+							.getId() : null;
+										
+					final LinkedList<BigDecimal> timeDiffs = new LinkedList<BigDecimal>();
+					double transitionCount = 0;
+					double nbrOfItems = 0;
+
+					// iterate assignments
+					for (int i = 0; i < assignments.length; i++) {
+						// if assignment at position i is equal to
+						// centroidIndex, then take the behaviorModelsRelative
+						// at index i
+						if (assignments[i] == centroidIndex) {
+							// get transition of behaviorModel which belongs to
+							// the cluster.
+							nbrOfItems++;
+							
+							Transition transition =  this
+										.findTransitionByUseCaseIDs(behaviorModelsAbsolute[i],
+												srcUseCaseId, dstUseCaseId);							
+
+							if (transition != null) {
+								// store tinkTimeDiffs
+								timeDiffs.addAll(transition.getTimeDiffs());
+								transitionCount += transition.getValue();
+							}
+						}
+					}
+
+					if (timeDiffs.size() > 0) {				
+						newTransition.getTimeDiffs().addAll(timeDiffs);
+					}
+					
+					if (transitionCount > 0) {
+						newTransition.setValue(transitionCount);
+					} else {
+						newTransition.setValue(0);
+					}
+								
+					indexOfAttribute++;
+				}
+			} else {
+                continue;  // skip final state ("$");
+            }
+		}
+	}
+
 }

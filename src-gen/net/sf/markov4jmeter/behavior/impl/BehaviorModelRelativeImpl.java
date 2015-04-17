@@ -18,22 +18,22 @@ import org.eclipse.emf.ecore.EClass;
  */
 public class BehaviorModelRelativeImpl extends AbstractBehaviorModelGraphImpl implements BehaviorModelRelative {
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected BehaviorModelRelativeImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.BEHAVIOR_MODEL_RELATIVE;
-    }
+		return BehaviorPackage.Literals.BEHAVIOR_MODEL_RELATIVE;
+	}
 
 } //BehaviorModelRelativeImpl

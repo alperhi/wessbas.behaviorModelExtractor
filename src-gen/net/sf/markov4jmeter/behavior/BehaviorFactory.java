@@ -14,119 +14,119 @@ import org.eclipse.emf.ecore.EFactory;
  */
 public interface BehaviorFactory extends EFactory {
     /**
-     * The singleton instance of the factory.
-     * <!-- begin-user-doc -->
+	 * The singleton instance of the factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     BehaviorFactory eINSTANCE = net.sf.markov4jmeter.behavior.impl.BehaviorFactoryImpl.init();
 
     /**
-     * Returns a new object of class '<em>Use Case</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Use Case</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Use Case</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Use Case</em>'.
+	 * @generated
+	 */
     UseCase createUseCase();
 
     /**
-     * Returns a new object of class '<em>Use Case Repository</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Use Case Repository</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Use Case Repository</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Use Case Repository</em>'.
+	 * @generated
+	 */
     UseCaseRepository createUseCaseRepository();
 
     /**
-     * Returns a new object of class '<em>Session Repository</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Session Repository</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Session Repository</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Session Repository</em>'.
+	 * @generated
+	 */
     SessionRepository createSessionRepository();
 
     /**
-     * Returns a new object of class '<em>Session</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Session</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Session</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Session</em>'.
+	 * @generated
+	 */
     Session createSession();
 
     /**
-     * Returns a new object of class '<em>Observed Use Case Execution</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Observed Use Case Execution</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Observed Use Case Execution</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Observed Use Case Execution</em>'.
+	 * @generated
+	 */
     ObservedUseCaseExecution createObservedUseCaseExecution();
 
     /**
-     * Returns a new object of class '<em>Vertex</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Vertex</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Vertex</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Vertex</em>'.
+	 * @generated
+	 */
     Vertex createVertex();
 
     /**
-     * Returns a new object of class '<em>Transition</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Transition</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Transition</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Transition</em>'.
+	 * @generated
+	 */
     Transition createTransition();
 
     /**
-     * Returns a new object of class '<em>Model Absolute</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Model Absolute</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Model Absolute</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Model Absolute</em>'.
+	 * @generated
+	 */
     BehaviorModelAbsolute createBehaviorModelAbsolute();
 
     /**
-     * Returns a new object of class '<em>Model Relative</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Model Relative</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Model Relative</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Model Relative</em>'.
+	 * @generated
+	 */
     BehaviorModelRelative createBehaviorModelRelative();
 
     /**
-     * Returns a new object of class '<em>Mix</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Mix</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Mix</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Mix</em>'.
+	 * @generated
+	 */
     BehaviorMix createBehaviorMix();
 
     /**
-     * Returns a new object of class '<em>Mix Entry</em>'.
-     * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Mix Entry</em>'.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Mix Entry</em>'.
-     * @generated
-     */
+	 * @return a new object of class '<em>Mix Entry</em>'.
+	 * @generated
+	 */
     BehaviorMixEntry createBehaviorMixEntry();
 
     /**
-     * Returns the package supported by this factory.
-     * <!-- begin-user-doc -->
+	 * Returns the package supported by this factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the package supported by this factory.
-     * @generated
-     */
+	 * @return the package supported by this factory.
+	 * @generated
+	 */
     BehaviorPackage getBehaviorPackage();
 
 } //BehaviorFactory

@@ -56,10 +56,15 @@ import org.apache.commons.cli.ParseException;
  *       <td><code> c          </code></td>
  *       <td> (Optional) Clustering method to be applied to the Behavior Models
  *       which have been extracted from session traces; available values are
- *       "simple" and "menasce". If no clustering is specified, the resulting
+ *       "simple" and "kmeans". If no clustering is specified, the resulting
  *       output files contain the trace-related matrices/graphs, as they are
  *       computed before any clustering method is applied to the extracted
  *       Behavior Models.
+ *       </td>
+ *       
+ *       <tr><td><code> number of clusters </code></td>
+ *       <td><code> n          </code></td>
+ *       <td> (Optional) Specifies the number of clusters that are generated with kmeans clustering.
  *       </td>
  * </table>
  *
@@ -161,8 +166,18 @@ public class CommandLineArgumentsHandler {
                     "(Optional) clustering method to be "   // description;
                     + "applied to the extracted Behavior Models. ",
                     false,                                  // !isRequired;
-                    "simple|menasce",                       // argName;
-                    false);                                 // !isRequired;
+                    "simple|kmeans",                       // argName;
+                    false);                                 // !hasOptionalArg;
+    
+    /** (Optional) Number of Clusters. */
+    private final static Option NUMBER_OF_CLUSTERS =
+            CmdlOptionFactory.createOption(
+                    "n",                                    // opt;
+                    "numberClusters",                           // longOpt;
+                    "Number of Clusters. ",                 // description;
+                    false,                                  // !isRequired;
+                    "Min 2",                                // argName;
+                    false);                                 // !hasOptionalArg;
 
     /** Formatter for printing the usage instructions. */
     private final static HelpFormatter HELP_FORMATTER = new HelpFormatter();
@@ -191,11 +206,14 @@ public class CommandLineArgumentsHandler {
 
     /** (Optional) clustering method which has been read from command-line. */
     private static String clusteringMethod;
+    
+    /** (Optional) NUmber of Clusters. */
+    private static String numberOfClusters;
 
     /** Command-line options to be parsed. */
     private static Options options;
-
-
+   
+    
     /* ***************************  static blocks  ************************** */
 
 
@@ -221,6 +239,9 @@ public class CommandLineArgumentsHandler {
 
         CommandLineArgumentsHandler.options.addOption(
                 CommandLineArgumentsHandler.CLUSTERING_METHOD);
+        
+        CommandLineArgumentsHandler.options.addOption(
+                CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS);
     }
 
 
@@ -294,6 +315,16 @@ public class CommandLineArgumentsHandler {
 
         return CommandLineArgumentsHandler.clusteringMethod;
     }
+    
+    /**
+     * Returns the (optional) number of clusters.
+     *
+     * @return  a <code>String</code> which represents the clustering method.
+     */
+    public static String getNumberOfClusters () {
+
+        return CommandLineArgumentsHandler.numberOfClusters;
+    }
 
     /**
      * Prints the usage instructions to standard output.
@@ -361,6 +392,11 @@ public class CommandLineArgumentsHandler {
                 CommandLineArgumentsHandler.readOptionValueAsString(
                         commandLine,
                         CommandLineArgumentsHandler.CLUSTERING_METHOD);
+        
+        CommandLineArgumentsHandler.numberOfClusters =
+                CommandLineArgumentsHandler.readOptionValueAsString(
+                        commandLine,
+                        CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS);
     }
 
 

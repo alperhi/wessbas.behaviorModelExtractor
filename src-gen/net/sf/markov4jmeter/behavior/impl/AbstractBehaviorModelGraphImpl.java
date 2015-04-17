@@ -8,6 +8,7 @@ import net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph;
 import net.sf.markov4jmeter.behavior.BehaviorPackage;
 import net.sf.markov4jmeter.behavior.Vertex;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -15,6 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -28,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.AbstractBehaviorModelGraphImpl#getVertices <em>Vertices</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.impl.AbstractBehaviorModelGraphImpl#getTransactionType <em>Transaction Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,118 +38,184 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public abstract class AbstractBehaviorModelGraphImpl extends EObjectImpl implements AbstractBehaviorModelGraph {
     /**
-     * The cached value of the '{@link #getVertices() <em>Vertices</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getVertices() <em>Vertices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getVertices()
-     * @generated
-     * @ordered
-     */
+	 * @see #getVertices()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Vertex> vertices;
 
     /**
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getTransactionType() <em>Transaction Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTransactionType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TRANSACTION_TYPE_EDEFAULT = null;
+				/**
+	 * The cached value of the '{@link #getTransactionType() <em>Transaction Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTransactionType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String transactionType = TRANSACTION_TYPE_EDEFAULT;
+
+				/**
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected AbstractBehaviorModelGraphImpl() {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass() {
-        return BehaviorPackage.Literals.ABSTRACT_BEHAVIOR_MODEL_GRAPH;
-    }
+		return BehaviorPackage.Literals.ABSTRACT_BEHAVIOR_MODEL_GRAPH;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Vertex> getVertices() {
-        if (vertices == null) {
-            vertices = new EObjectContainmentEList<Vertex>(Vertex.class, this, BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES);
-        }
-        return vertices;
-    }
+		if (vertices == null) {
+			vertices = new EObjectContainmentEList<Vertex>(Vertex.class, this, BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES);
+		}
+		return vertices;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTransactionType(String newTransactionType) {
+		String oldTransactionType = transactionType;
+		transactionType = newTransactionType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__TRANSACTION_TYPE, oldTransactionType, transactionType));
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
-                return ((InternalEList<?>)getVertices()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
+				return ((InternalEList<?>)getVertices()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
-                return getVertices();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
+				return getVertices();
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__TRANSACTION_TYPE:
+				return getTransactionType();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
-                getVertices().clear();
-                getVertices().addAll((Collection<? extends Vertex>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
+				getVertices().clear();
+				getVertices().addAll((Collection<? extends Vertex>)newValue);
+				return;
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__TRANSACTION_TYPE:
+				setTransactionType((String)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
-                getVertices().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
+				getVertices().clear();
+				return;
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__TRANSACTION_TYPE:
+				setTransactionType(TRANSACTION_TYPE_EDEFAULT);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
-                return vertices != null && !vertices.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__VERTICES:
+				return vertices != null && !vertices.isEmpty();
+			case BehaviorPackage.ABSTRACT_BEHAVIOR_MODEL_GRAPH__TRANSACTION_TYPE:
+				return TRANSACTION_TYPE_EDEFAULT == null ? transactionType != null : !TRANSACTION_TYPE_EDEFAULT.equals(transactionType);
+		}
+		return super.eIsSet(featureID);
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (transactionType: ");
+		result.append(transactionType);
+		result.append(')');
+		return result.toString();
+	}
 
 } //AbstractBehaviorModelGraphImpl

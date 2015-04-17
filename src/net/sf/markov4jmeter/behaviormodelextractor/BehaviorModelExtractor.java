@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
 import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
-import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.SessionRepository;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.impl.BehaviorPackageImpl;
@@ -39,12 +38,14 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.UseCaseMapping;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.ParseException;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.Parser;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.SessionData;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.ABMToRBMTransformer;
+import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.UseCase;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToRBMUnifier;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
+
+import org.apache.commons.cli.MissingOptionException;
 
 /**
  * This is the main class of the Behavior Model Extractor.
@@ -235,9 +236,6 @@ public class BehaviorModelExtractor {
         final SessionToABMTransformer sessionToAbmTransformer =
                 new SessionToABMTransformer();
 
-        final ABMToRBMTransformer abmToRbmTransformer =
-                new ABMToRBMTransformer();
-
         final RBMToRBMUnifier rbmToRBMUnifier =
                 new RBMToRBMUnifier();
 
@@ -254,12 +252,9 @@ public class BehaviorModelExtractor {
                         this.useCaseIdGenerator,
                         clusteringMethod.equals(RBMToRBMUnifier.CLUSTERING_TYPE_NONE));
 
-        final BehaviorModelRelative[] behaviorModelsRelative =
-                abmToRbmTransformer.transform(behaviorModelsAbsolute);
-
         final BehaviorMix behaviorMix =
                 rbmToRBMUnifier.transform(
-                        behaviorModelsRelative,
+                		behaviorModelsAbsolute,
                         clusteringMethod,
                         this.useCaseRepository);
 
@@ -333,6 +328,11 @@ public class BehaviorModelExtractor {
                     outputDirectory,
                     clusteringMethod);
 
+        } catch (final MissingOptionException ex) {
+
+        	// this exception type indicates that no argument has been passed;
+            CommandLineArgumentsHandler.printUsage();
+
         } catch (final Exception ex) {
 
             System.err.println( ex.getMessage() );
@@ -362,16 +362,34 @@ public class BehaviorModelExtractor {
 
        final ArrayList<SessionData> sessions = new ArrayList<SessionData>();
 
-       SessionData sessionData;
-
+       SessionData sessionData;      
+       
        // nextSession() might throw a Parse- or IOException;
-       while (( sessionData = iterator.nextSession() ) != null) {
-
-           sessions.add(sessionData);
-       }
-
+       while (( sessionData = iterator.nextSession() ) != null) {   
+    	       	   	   
+    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);    	   
+ 		          	      		   
+    	   for (UseCase useCase : sessionData.getUseCases()) {
+    		   if (useCase.getName().contains("login_")) {
+    			   final String[] paramSplit = useCase.getName().split("_");
+    			   useCase.setName(paramSplit[0]);
+    			   sessionData.setTransactionType(paramSplit[1]);
+    			   break;
+    		   }    		   
+    	   }     		  
+		   
+		   if (!lastUseCase.getName().equals("logout")) {
+			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
+			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
+   			   sessionData.getUseCases().add(useCaseHome);
+   			   sessionData.getUseCases().add(useCaseLogOut);
+		   } 
+	
+		   sessions.add(sessionData);     
+       
+       }      
+       
        iterator.close();  // closes the input stream;
-
        return sessions;
    }
 
