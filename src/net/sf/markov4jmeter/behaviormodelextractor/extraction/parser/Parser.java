@@ -308,8 +308,17 @@ public class Parser {
         final String[] useCaseTokens =
                 str.split(Parser.USECASE_TOKEN_SEPARATOR);
 
-        if (useCaseTokens.length == 10) {
-
+        if (useCaseTokens.length == 3) {
+            final String name    = useCaseTokens[0].trim();
+            final long startTime = this.parseTime(useCaseTokens[1]);
+            final long endTime   = this.parseTime(useCaseTokens[2]);
+            if (Parser.REMOVES_QUOTES_FROM_USE_CASE_NAMES) {
+                final String plainName = this.removeQuotes(name);
+                useCase = new UseCase(plainName, startTime, endTime);
+            } else {
+                useCase = new UseCase(name, startTime, endTime);
+            }
+        } else if (useCaseTokens.length == 10) {
             final String name    = useCaseTokens[0].trim();
             final long startTime = this.parseTime(useCaseTokens[1]);
             final long endTime   = this.parseTime(useCaseTokens[2]);
@@ -327,7 +336,9 @@ public class Parser {
             } else {
                 useCase = new UseCase(name, startTime, endTime, uri, port, ip, protocol, methode, queryString, encoding);
             }
-        } else {
+        } 
+        
+        else {
             useCase = null;  // insufficient use case informations in token;
         }
         return useCase;

@@ -105,6 +105,37 @@ public class UseCase {
         this.queryString   = queryString;
         this.encoding   = encoding;
     }
+    
+    /**
+     * Constructor for a <code>UseCase</code> instance with specific start time,
+     * ending time and a name.
+     *
+     * @param name       name of the use case.
+     * @param startTime  start time of the use case.
+     * @param endTime    ending time of the use case.
+     * @param uri
+     * @param port
+     * @param ip
+     * @param protocol
+     * @param methode
+     * @param queryString
+     * @param encoding
+     */
+    public UseCase (
+            final String name,
+            final long startTime,
+            final long endTime) {
+        this.name      = name;
+        this.startTime = startTime;
+        this.endTime   = endTime;
+        this.uri   = null;
+        this.port   = 0;
+        this.ip   = null;
+        this.protocol   = null;
+        this.methode   = null;
+        this.queryString   = null;
+        this.encoding   = null;
+    }
 
 
     /**
