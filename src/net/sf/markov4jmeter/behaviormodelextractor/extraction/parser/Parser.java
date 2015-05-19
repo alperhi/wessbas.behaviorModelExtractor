@@ -308,19 +308,24 @@ public class Parser {
         final String[] useCaseTokens =
                 str.split(Parser.USECASE_TOKEN_SEPARATOR);
 
-        if (useCaseTokens.length == 3) {
+        if (useCaseTokens.length == 10) {
 
             final String name    = useCaseTokens[0].trim();
             final long startTime = this.parseTime(useCaseTokens[1]);
             final long endTime   = this.parseTime(useCaseTokens[2]);
+            final String uri   = useCaseTokens[3].trim();
+            final int port   = Integer.parseInt(useCaseTokens[4]);
+            final String ip   = useCaseTokens[5].trim();
+            final String protocol   = useCaseTokens[6].trim();
+            final String methode   = useCaseTokens[7].trim();
+            final String queryString   = useCaseTokens[8].trim();
+            final String encoding   = useCaseTokens[9].trim();
 
             if (Parser.REMOVES_QUOTES_FROM_USE_CASE_NAMES) {
-
                 final String plainName = this.removeQuotes(name);
-
-                useCase = new UseCase(plainName, startTime, endTime);
+                useCase = new UseCase(plainName, startTime, endTime, uri, port, ip, protocol, methode, queryString, encoding);
             } else {
-                useCase = new UseCase(name, startTime, endTime);
+                useCase = new UseCase(name, startTime, endTime, uri, port, ip, protocol, methode, queryString, encoding);
             }
         } else {
             useCase = null;  // insufficient use case informations in token;

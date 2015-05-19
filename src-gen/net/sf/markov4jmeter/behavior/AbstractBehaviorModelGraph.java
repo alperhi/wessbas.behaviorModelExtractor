@@ -42,6 +42,7 @@ public interface AbstractBehaviorModelGraph extends EObject {
 
 				/**
 	 * Returns the value of the '<em><b>Transaction Type</b></em>' attribute.
+	 * The default value is <code>"noType"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Transaction Type</em>' attribute isn't clear,
@@ -51,7 +52,7 @@ public interface AbstractBehaviorModelGraph extends EObject {
 	 * @return the value of the '<em>Transaction Type</em>' attribute.
 	 * @see #setTransactionType(String)
 	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractBehaviorModelGraph_TransactionType()
-	 * @model
+	 * @model default="noType"
 	 * @generated
 	 */
 	String getTransactionType();

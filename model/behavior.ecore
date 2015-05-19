@@ -39,7 +39,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="AbstractBehaviorModelGraph" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vertices" upperBound="-1"
         eType="#//Vertex" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="noType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Vertex" eSuperTypes="#//AbstractUseCaseExecution">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"

@@ -549,6 +549,7 @@ public abstract class AbstractClusteringStrategy {
 		classification.addElement("doBrowseVehicles-1");
 		classification.addElement("doManageInventory-1");
 		classification.addElement("doPurchaseVehicles-1");
+		classification.addElement("noSessionType");
 		Attribute classAttribute = new Attribute("theClass",
 				classification);
 		fastVector.addElement(classAttribute);

@@ -230,7 +230,6 @@ public class BehaviorModelExtractor {
                 this.useCaseMapping,
                 this.useCaseIdGenerator);
 
-
         // ----  initialize transformers  ----;
 
         final SessionToABMTransformer sessionToAbmTransformer =
@@ -241,7 +240,6 @@ public class BehaviorModelExtractor {
 
         final RBMToMarkovMatrixTransformer rbmToMarkovMatrixTransformer =
                 new RBMToMarkovMatrixTransformer(this.markovMatrixHandler);
-
 
         // ----  start transformation process  ----;
 
@@ -352,7 +350,7 @@ public class BehaviorModelExtractor {
     * @throws ParseException
     * @throws ExtractionException
     */
-   private static ArrayList<SessionData> parseSessionsIntoSessionsRepository (
+   public static ArrayList<SessionData> parseSessionsIntoSessionsRepository (
            final String sessionInputFilePath)
                    throws IOException, ParseException, ExtractionException {
 
@@ -367,7 +365,8 @@ public class BehaviorModelExtractor {
        // nextSession() might throw a Parse- or IOException;
        while (( sessionData = iterator.nextSession() ) != null) {   
     	       	   	   
-    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);    	   
+    	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);  
+    	   sessionData.setTransactionType("noSessionType");
  		          	      		   
     	   for (UseCase useCase : sessionData.getUseCases()) {
     		   if (useCase.getName().contains("login_")) {
@@ -377,10 +376,16 @@ public class BehaviorModelExtractor {
     			   break;
     		   }    		   
     	   }     		  
-		   
+    	   
 		   if (!lastUseCase.getName().equals("logout")) {
-			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), lastUseCase.getEndTime()); 
-			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(), lastUseCase.getEndTime());     			   
+			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), 
+					   lastUseCase.getEndTime(), lastUseCase.getUri(), 
+					   lastUseCase.getPort(), lastUseCase.getIp(), lastUseCase.getProtocol(), 
+					   lastUseCase.getMethode(), lastUseCase.getQueryString(),lastUseCase.getEncoding()); 
+			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(),
+					   lastUseCase.getEndTime(), lastUseCase.getUri(), lastUseCase.getPort(), 
+					   lastUseCase.getIp(), lastUseCase.getProtocol(), lastUseCase.getMethode(), 
+					   lastUseCase.getQueryString(),lastUseCase.getEncoding()); 	   
    			   sessionData.getUseCases().add(useCaseHome);
    			   sessionData.getUseCases().add(useCaseLogOut);
 		   } 

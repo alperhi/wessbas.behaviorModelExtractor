@@ -85,7 +85,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			ClusterEvaluation clusterEvaluation = new  ClusterEvaluation(); 
 			clusterEvaluation.setClusterer(xmeans);
 			clusterEvaluation.evaluateClusterer(instances);
-			System.out.println(clusterEvaluation.clusterResultsToString());
+			//System.out.println(clusterEvaluation.clusterResultsToString());
 			
 			// clusterSize
 			clustersize = new int[xmeans.getClusterCenters().numInstances()];

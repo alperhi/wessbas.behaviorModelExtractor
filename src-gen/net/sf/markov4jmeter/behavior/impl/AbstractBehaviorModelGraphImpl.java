@@ -55,7 +55,7 @@ public abstract class AbstractBehaviorModelGraphImpl extends EObjectImpl impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TRANSACTION_TYPE_EDEFAULT = null;
+	protected static final String TRANSACTION_TYPE_EDEFAULT = "noType";
 				/**
 	 * The cached value of the '{@link #getTransactionType() <em>Transaction Type</em>}' attribute.
 	 * <!-- begin-user-doc -->

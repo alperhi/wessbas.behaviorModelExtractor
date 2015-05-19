@@ -38,6 +38,34 @@ public class UseCase {
     /** Ending time of the use case. */
     private final long endTime;
 
+    /**
+     * Uri.
+     */
+    private final String uri;
+    /**
+     * serverport.
+     */
+    private final int port;
+    /**
+     * serverip.
+     */
+    private final String ip;
+    /**
+     * used protocol
+     */
+    private final String protocol ;
+    /**
+     * used method
+     */
+    private final String methode ;
+    /**
+     * queryString.
+     */
+    private final String queryString  ;
+    /**
+     * used encoding,
+     */
+    private final String encoding ;
 
     /**
      * Constructor for a <code>UseCase</code> instance with specific start time,
@@ -46,13 +74,36 @@ public class UseCase {
      * @param name       name of the use case.
      * @param startTime  start time of the use case.
      * @param endTime    ending time of the use case.
+     * @param uri
+     * @param port
+     * @param ip
+     * @param protocol
+     * @param methode
+     * @param queryString
+     * @param encoding
      */
     public UseCase (
-            final String name, final long startTime, final long endTime) {
+            final String name,
+            final long startTime,
+            final long endTime,
+            final String uri,
+            final int port,
+            final String ip,
+            final String protocol,
+            final String methode,
+            final String queryString,
+            final String encoding) {
 
         this.name      = name;
         this.startTime = startTime;
         this.endTime   = endTime;
+        this.uri   = uri;
+        this.port   = port;
+        this.ip   = ip;
+        this.protocol   = protocol;
+        this.methode   = methode;
+        this.queryString   = queryString;
+        this.encoding   = encoding;
     }
 
 
@@ -95,9 +146,73 @@ public class UseCase {
         return this.endTime;
     }
 
-    @Override
-    public String toString() {
 
-        return name + ":" + startTime + ":" + endTime;
-    }
+	/**
+	 * @return the uri
+	 */
+	public final String getUri() {
+		return uri;
+	}
+
+
+	/**
+	 * @return the port
+	 */
+	public final int getPort() {
+		return port;
+	}
+
+
+	/**
+	 * @return the ip
+	 */
+	public final String getIp() {
+		return ip;
+	}
+
+
+	/**
+	 * @return the protocol
+	 */
+	public final String getProtocol() {
+		return protocol;
+	}
+
+
+	/**
+	 * @return the methode
+	 */
+	public final String getMethode() {
+		return methode;
+	}
+
+
+	/**
+	 * @return the queryString
+	 */
+	public final String getQueryString() {
+		return queryString;
+	}
+
+
+	/**
+	 * @return the encoding
+	 */
+	public final String getEncoding() {
+		return encoding;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "UseCase [name=" + name + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ", uri=" + uri + ", port=" + port
+				+ ", ip=" + ip + ", protocol=" + protocol + ", methode="
+				+ methode + ", queryString=" + queryString + ", encoding="
+				+ encoding + "]";
+	}    
+    
 }

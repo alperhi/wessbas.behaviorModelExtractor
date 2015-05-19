@@ -23,6 +23,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/startTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/endTime"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference behavior.ecore#//Session/observedUseCaseExecutions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Session/transactionType"/>
     </genClasses>
     <genClasses ecoreClass="behavior.ecore#//ObservedUseCaseExecution">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//ObservedUseCaseExecution/startTime"/>
@@ -33,6 +34,7 @@
     </genClasses>
     <genClasses image="false" ecoreClass="behavior.ecore#//AbstractBehaviorModelGraph">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//AbstractBehaviorModelGraph/vertices"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//AbstractBehaviorModelGraph/transactionType"/>
     </genClasses>
     <genClasses ecoreClass="behavior.ecore#//Vertex">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//Vertex/outgoingTransitions"/>
@@ -40,7 +42,8 @@
     <genClasses ecoreClass="behavior.ecore#//Transition">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//Transition/targetVertex"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/value"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/times"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/timeDiffs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/thinkTimeParams"/>
     </genClasses>
     <genClasses ecoreClass="behavior.ecore#//BehaviorModelAbsolute"/>
     <genClasses ecoreClass="behavior.ecore#//BehaviorModelRelative"/>
@@ -51,7 +54,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/behaviorModelName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/relativeFrequency"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//BehaviorMixEntry/behaviorModel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//BehaviorMixEntry/filename"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
