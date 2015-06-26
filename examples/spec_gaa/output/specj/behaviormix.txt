@@ -1,0 +1,3 @@
+gen_behavior_model; 0.5001616852219707; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\spec_gaa\output\specj\behaviormodel0.csv
+gen_behavior_model; 0.24543816695154064; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\spec_gaa\output\specj\behaviormodel1.csv
+gen_behavior_model; 0.2544001478264887; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\spec_gaa\output\specj\behaviormodel2.csv

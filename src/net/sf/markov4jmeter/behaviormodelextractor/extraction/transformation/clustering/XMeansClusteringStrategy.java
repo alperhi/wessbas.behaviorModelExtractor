@@ -51,7 +51,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 		
 			// XMeans --> Weka
 			XMeans xmeans = new XMeans();		
-			xmeans.setSeed(10);
+			xmeans.setSeed(5);
 			
 			// distance function with option don*t normalize
 			DistanceFunction euclideanDistance = new EuclideanDistance();		
@@ -76,8 +76,8 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
 			
 			// clustering
-			xmeans.setMinNumClusters(numberOfClusters);
-			xmeans.setMaxNumClusters(numberOfClusters+18);
+			xmeans.setMinNumClusters(3);
+			xmeans.setMaxNumClusters(3);
 
 			// build cluster
 			xmeans.buildClusterer(instances);
@@ -104,7 +104,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			clusteringMetrics.printErrorMetricsHeader();
 			clusteringMetrics.printErrorMetrics(xmeans.getClusterCenters().numInstances());
 			clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-			clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
+		//	clusteringMetrics.printClusterAssignmentsToSession(assignments, xmeans.getClusterCenters().numInstances());
 
 			Instances resultingCentroids = xmeans.getClusterCenters();
 

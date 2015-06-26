@@ -64,8 +64,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			options[0] = "-D";
 			euclideanDistance.setOptions(options);			
 			euclideanDistance.setInstances(instances);
-			kmeans.setDistanceFunction(euclideanDistance);			
-			
+			kmeans.setDistanceFunction(euclideanDistance);					
 			kmeans.setPreserveInstancesOrder(true);
 								
 			int[] clustersize = null;
@@ -93,7 +92,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 				clusteringMetrics.printErrorMetricsHeader();
 				clusteringMetrics.printErrorMetrics(kmeans.getClusterCentroids().numInstances());
 				clusteringMetrics.printClusteringMetrics(clustersize, assignments, instances);
-				clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
+			//	clusteringMetrics.printClusterAssignmentsToSession(assignments, clusterSize);
 							
 			}			
 

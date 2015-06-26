@@ -329,13 +329,14 @@ public class Parser {
             final String methode   = useCaseTokens[7].trim();
             final String queryString   = useCaseTokens[8].trim();
             final String encoding   = useCaseTokens[9].trim();
-
+            
             if (Parser.REMOVES_QUOTES_FROM_USE_CASE_NAMES) {
                 final String plainName = this.removeQuotes(name);
                 useCase = new UseCase(plainName, startTime, endTime, uri, port, ip, protocol, methode, queryString, encoding);
             } else {
                 useCase = new UseCase(name, startTime, endTime, uri, port, ip, protocol, methode, queryString, encoding);
             }
+                        
         } 
         
         else {

@@ -366,32 +366,52 @@ public class BehaviorModelExtractor {
        while (( sessionData = iterator.nextSession() ) != null) {   
     	       	   	   
     	   UseCase lastUseCase = sessionData.getUseCases().get(sessionData.getUseCases().size() -1);  
-    	   sessionData.setTransactionType("noSessionType");
- 		          	      		   
+    	  
+//    	   UseCase lastUseCase2 = null;
+//    	   if (sessionData.getUseCases().size() > 1) {
+//    		   lastUseCase2 = sessionData.getUseCases().get(sessionData.getUseCases().size() -2); 
+//    	   }
+    	    
+    	   sessionData.setTransactionType("noSessionType");	      	
+    	   
     	   for (UseCase useCase : sessionData.getUseCases()) {
-    		   if (useCase.getName().contains("login_")) {
-    			   final String[] paramSplit = useCase.getName().split("_");
-    			   useCase.setName(paramSplit[0]);
-    			   sessionData.setTransactionType(paramSplit[1]);
+    		   if (useCase.getName().contains("login")) {
+    			   if (useCase.getQueryString().contains("doBrowseVehicles-1")) {
+    				   sessionData.setTransactionType("doBrowseVehicles-1");	     
+    			   } else if (useCase.getQueryString().contains("doManageInventory-1")) {
+    				   sessionData.setTransactionType("doManageInventory-1");	     
+     			   } else if (useCase.getQueryString().contains("doPurchaseVehicles-1")) {
+     				  sessionData.setTransactionType("doPurchaseVehicles-1");	     
+     			   }
     			   break;
     		   }    		   
-    	   }     		  
+    	   }   
+    	   		   
+//    	   if (sessionData.getUseCases().size() > 1 && lastUseCase2.getName().equals("sellinventory") && lastUseCase.getName().equals("logout")) {
+//    		   System.out.println(sessionData.getId());
+//    	   }
     	   
-		   if (!lastUseCase.getName().equals("logout")) {
+    	   if (!lastUseCase.getName().equals("logout")) {
 			   UseCase useCaseHome = new UseCase("home", lastUseCase.getEndTime(), 
 					   lastUseCase.getEndTime(), lastUseCase.getUri(), 
 					   lastUseCase.getPort(), lastUseCase.getIp(), lastUseCase.getProtocol(), 
-					   lastUseCase.getMethode(), lastUseCase.getQueryString(),lastUseCase.getEncoding()); 
+					   lastUseCase.getMethode(),"action=home","<no-encoding>"); 
 			   UseCase useCaseLogOut = new UseCase("logout", lastUseCase.getEndTime(),
 					   lastUseCase.getEndTime(), lastUseCase.getUri(), lastUseCase.getPort(), 
 					   lastUseCase.getIp(), lastUseCase.getProtocol(), lastUseCase.getMethode(), 
-					   lastUseCase.getQueryString(),lastUseCase.getEncoding()); 	   
+					   "action=logout","<no-encoding>"); 	   
    			   sessionData.getUseCases().add(useCaseHome);
    			   sessionData.getUseCases().add(useCaseLogOut);
-		   } 
-	
-		   sessions.add(sessionData);     
-       
+		   }    
+    	       	    	   
+		   long startTime = 1434383177000000000L;
+		   long endTime = 1434383897000000000L;   
+		   if (sessionData.getUseCases().get(0).getStartTime() > startTime && sessionData.getUseCases().get(0).getStartTime() < endTime) {
+			   sessions.add(sessionData);     
+		   }
+		          
+//		   sessions.add(sessionData);     
+		   
        }      
        
        iterator.close();  // closes the input stream;

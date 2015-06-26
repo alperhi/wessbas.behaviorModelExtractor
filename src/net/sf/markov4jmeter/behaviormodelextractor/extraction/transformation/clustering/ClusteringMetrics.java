@@ -191,42 +191,42 @@ public class ClusteringMetrics {
 		}		
     }
 	
-	 /**
-     * Create sessionFile with clusterInformation.
-     * 
-     * @param assignments
-     */
-    protected void printClusterAssignmentsToSession(final int[] assignments, final int clusterSize) {    	
-    	try {
-			FileReader fr = new FileReader(new File(CommandLineArgumentsHandler.getInputFile()));
-            BufferedReader br = new BufferedReader(fr);  
-	        String line = null;
-	        int counter = 0;
-	        List<String> tmpString = new ArrayList<String>();
-	        while ( (line = br.readLine()) != null) {
-	        	tmpString.add(assignments[counter] + ";" + line);
-	        	counter++;
-	        }	      
-	        
-	        FileWriter fw = new FileWriter(new File(CommandLineArgumentsHandler.getOutputDirectory() 
-	        		+ "/data_clustering_" +  clusterSize + ".dat"));
-	        BufferedWriter bw = new BufferedWriter(fw);
-	        
-	        for (String stringInstance: tmpString) {
-	        	bw.append(stringInstance);	
-	        	bw.append("\n");
-	        }
-	        
-	        tmpString = null;	        
-	        bw.close();
-	        br.close();	        
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}   	
-    }
+//	 /**
+//     * Create sessionFile with clusterInformation.
+//     * 
+//     * @param assignments
+//     */
+//    protected void printClusterAssignmentsToSession(final int[] assignments, final int clusterSize) {    	
+//    	try {
+//			FileReader fr = new FileReader(new File(CommandLineArgumentsHandler.getInputFile()));
+//            BufferedReader br = new BufferedReader(fr);  
+//	        String line = null;
+//	        int counter = 0;
+//	        List<String> tmpString = new ArrayList<String>();
+//	        while ( (line = br.readLine()) != null) {
+//	        	tmpString.add(assignments[counter] + ";" + line);
+//	        	counter++;
+//	        }	      
+//	        
+//	        FileWriter fw = new FileWriter(new File(CommandLineArgumentsHandler.getOutputDirectory() 
+//	        		+ "/data_clustering_" +  clusterSize + ".dat"));
+//	        BufferedWriter bw = new BufferedWriter(fw);
+//	        
+//	        for (String stringInstance: tmpString) {
+//	        	bw.append(stringInstance);	
+//	        	bw.append("\n");
+//	        }
+//	        
+//	        tmpString = null;	        
+//	        bw.close();
+//	        br.close();	        
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}   	
+//    }
 	
 }
