@@ -76,8 +76,8 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
 			
 			// clustering
-			xmeans.setMinNumClusters(3);
-			xmeans.setMaxNumClusters(3);
+			xmeans.setMinNumClusters(numberOfClusters);
+			xmeans.setMaxNumClusters(numberOfClusters + 100);
 
 			// build cluster
 			xmeans.buildClusterer(instances);
