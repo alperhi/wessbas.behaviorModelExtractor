@@ -22,6 +22,7 @@ import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behavior.Vertex;
 import net.sf.markov4jmeter.behaviormodelextractor.CommandLineArgumentsHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionException;
+import net.sf.markov4jmeter.behaviormodelextractor.util.MathUtil;
 
 /**
  * Abstract base class for all clustering strategies.
@@ -382,7 +383,7 @@ public abstract class AbstractClusteringStrategy {
                 factory.createBehaviorMixEntry();  // to be returned;
 
         behaviorMixEntry.setBehaviorModelName(behaviorModelName);
-        behaviorMixEntry.setRelativeFrequency(frequency);
+        behaviorMixEntry.setRelativeFrequency(MathUtil.round(frequency));
         behaviorMixEntry.setBehaviorModel(behaviorModel);
 
         return behaviorMixEntry;

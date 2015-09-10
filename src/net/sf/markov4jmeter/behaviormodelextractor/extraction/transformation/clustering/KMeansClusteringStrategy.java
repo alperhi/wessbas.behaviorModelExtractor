@@ -71,7 +71,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 			int[] assignments = null;	
 			
 			// get number of clusters to be generated.
-			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
+			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClustersMin());
 			
 			// clustering
 			for (int clusterSize = numberOfClusters; clusterSize <= numberOfClusters; clusterSize++) {

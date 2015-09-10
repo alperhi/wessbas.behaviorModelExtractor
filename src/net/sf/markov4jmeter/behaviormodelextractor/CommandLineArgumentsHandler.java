@@ -170,13 +170,23 @@ public class CommandLineArgumentsHandler {
                     false);                                 // !hasOptionalArg;
     
     /** (Optional) Number of Clusters. */
-    private final static Option NUMBER_OF_CLUSTERS =
+    private final static Option NUMBER_OF_CLUSTERS_MIN =
             CmdlOptionFactory.createOption(
-                    "n",                                    // opt;
+                    "min",                                    // opt;
                     "numberClusters",                           // longOpt;
                     "Number of Clusters. ",                 // description;
                     false,                                  // !isRequired;
                     "Min 2",                                // argName;
+                    false);                                 // !hasOptionalArg;
+    
+    /** (Optional) Number of Clusters. */
+    private final static Option NUMBER_OF_CLUSTERS_MAX =
+            CmdlOptionFactory.createOption(
+                    "max",                                    // opt;
+                    "numberClusters",                       // longOpt;
+                    "Number of Clusters. ",                 // description;
+                    false,                                  // !isRequired;
+                    "Max 2",                                // argName;
                     false);                                 // !hasOptionalArg;
 
     /** Formatter for printing the usage instructions. */
@@ -208,7 +218,10 @@ public class CommandLineArgumentsHandler {
     private static String clusteringMethod;
     
     /** (Optional) NUmber of Clusters. */
-    private static String numberOfClusters;
+    private static String numberOfClustersMin;
+    
+    /** (Optional) NUmber of Clusters. */
+    private static String numberOfClustersMax;
 
     /** Command-line options to be parsed. */
     private static Options options;
@@ -241,7 +254,10 @@ public class CommandLineArgumentsHandler {
                 CommandLineArgumentsHandler.CLUSTERING_METHOD);
         
         CommandLineArgumentsHandler.options.addOption(
-                CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS);
+                CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MIN);
+        
+        CommandLineArgumentsHandler.options.addOption(
+                CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
     }
 
 
@@ -317,13 +333,23 @@ public class CommandLineArgumentsHandler {
     }
     
     /**
-     * Returns the (optional) number of clusters.
+     * Returns the (optional) number of clusters min.
      *
      * @return  a <code>String</code> which represents the clustering method.
      */
-    public static String getNumberOfClusters () {
+    public static String getNumberOfClustersMin () {
 
-        return CommandLineArgumentsHandler.numberOfClusters;
+        return CommandLineArgumentsHandler.numberOfClustersMin;
+    }
+    
+    /**
+     * Returns the (optional) number of clusters max.
+     *
+     * @return  a <code>String</code> which represents the clustering method.
+     */
+    public static String getNumberOfClustersMax () {
+
+        return CommandLineArgumentsHandler.numberOfClustersMax;
     }
 
     /**
@@ -393,10 +419,15 @@ public class CommandLineArgumentsHandler {
                         commandLine,
                         CommandLineArgumentsHandler.CLUSTERING_METHOD);
         
-        CommandLineArgumentsHandler.numberOfClusters =
+        CommandLineArgumentsHandler.numberOfClustersMin =
                 CommandLineArgumentsHandler.readOptionValueAsString(
                         commandLine,
-                        CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS);
+                        CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MIN);
+                
+        CommandLineArgumentsHandler.numberOfClustersMax =
+                CommandLineArgumentsHandler.readOptionValueAsString(
+                        commandLine,
+                        CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
     }
 
 

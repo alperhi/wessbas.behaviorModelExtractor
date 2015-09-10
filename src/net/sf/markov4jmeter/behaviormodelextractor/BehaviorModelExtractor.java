@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import net.sf.markov4jmeter.behavior.BehaviorFactory;
 import net.sf.markov4jmeter.behavior.BehaviorMix;
+import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelAbsolute;
 import net.sf.markov4jmeter.behavior.SessionRepository;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
@@ -231,6 +232,22 @@ public class BehaviorModelExtractor {
 		final BehaviorMix behaviorMix = rbmToRBMUnifier.transform(
 				behaviorModelsAbsolute, clusteringMethod,
 				this.useCaseRepository);
+		
+		// check if sumProbability is one
+		double sumProbability = 0;		
+		for (BehaviorMixEntry behaviorMixEntry : behaviorMix.getEntries()) {
+			sumProbability += behaviorMixEntry.getRelativeFrequency();
+		}
+		
+		if (sumProbability != 1) {
+			double diff = 1 - sumProbability;
+			for (BehaviorMixEntry behaviorMixEntry : behaviorMix.getEntries()) {
+				if ((behaviorMixEntry.getRelativeFrequency() + diff) > 0) {
+					behaviorMixEntry.setRelativeFrequency(behaviorMixEntry.getRelativeFrequency() + diff); 
+					break;
+				}
+			}
+		}
 
 		// (RBM-to-matrix transformation is nested into file writer below);
 

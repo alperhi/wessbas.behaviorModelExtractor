@@ -73,11 +73,17 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			int[] assignments = new int[instances.numInstances()];	
 			
 			// get number of clusters to be generated.
-			int numberOfClusters = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClusters());
+			int numberOfClustersMin = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClustersMin());
+			int numberOfClustersMax = 0;
+			if (CommandLineArgumentsHandler.getNumberOfClustersMax() != "") {
+				numberOfClustersMax = Integer.parseInt(CommandLineArgumentsHandler.getNumberOfClustersMax());
+			} else {
+				numberOfClustersMax = numberOfClustersMin;
+			}
 			
 			// clustering
-			xmeans.setMinNumClusters(numberOfClusters);
-			xmeans.setMaxNumClusters(numberOfClusters + 100);
+			xmeans.setMinNumClusters(numberOfClustersMin);
+			xmeans.setMaxNumClusters(numberOfClustersMax);
 
 			// build cluster
 			xmeans.buildClusterer(instances);
@@ -85,7 +91,6 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			ClusterEvaluation clusterEvaluation = new  ClusterEvaluation(); 
 			clusterEvaluation.setClusterer(xmeans);
 			clusterEvaluation.evaluateClusterer(instances);
-			//System.out.println(clusterEvaluation.clusterResultsToString());
 			
 			// clusterSize
 			clustersize = new int[xmeans.getClusterCenters().numInstances()];
@@ -112,13 +117,7 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			for (int i = 0; i < resultingCentroids.numInstances(); i++) {
 				
 				Instance centroid = resultingCentroids.instance(i);
-								
-//				for (int p = 0; p < centroid.numAttributes(); p++) {
-//					System.out.println(centroid.attribute(p).name() + " "+ centroid.value(p));
-//				}
-//				
-//				System.out.println("----------------");
-				
+											
 				// create a Behavior Model, which includes all vertices only;
 				// the vertices are associated with the use cases, and a dedicated
 				// vertex that represents the final state will be added;

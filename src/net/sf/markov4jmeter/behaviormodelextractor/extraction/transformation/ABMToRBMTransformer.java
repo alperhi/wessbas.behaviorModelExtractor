@@ -134,9 +134,9 @@ public class ABMToRBMTransformer {
         // count number of transition occurrences (note that each transition
         // might fire several times to a certain target vertex);
         double n = 0;
+        double sumProbability = 0;
 
         for (final Transition outgoingTransition : outgoingTransitions) {
-
             final double value = outgoingTransition.getValue();
             n += value;
         }
@@ -146,7 +146,7 @@ public class ABMToRBMTransformer {
             // conversion: absolute values -> relative values;
 
             final double value = outgoingTransition.getValue();
-            final double relValue = value / n;  // n > 0 here;
+            final double relValue = MathUtil.round(value / n);  // n > 0 here;            
             
             outgoingTransition.setValue(relValue);
 
@@ -156,7 +156,7 @@ public class ABMToRBMTransformer {
             final BigDecimal deviation;
 
             final List<BigDecimal> timeDiffs =
-                    outgoingTransition.getTimeDiffs();
+            		outgoingTransition.getTimeDiffs();
 
             if (timeDiffs.size() > 0) {
 
@@ -172,11 +172,36 @@ public class ABMToRBMTransformer {
             // store mean and deviation values as think time parameters;
 
             final List<BigDecimal> thinkTimeParams =
-                    outgoingTransition.getThinkTimeParams();
+            		outgoingTransition.getThinkTimeParams();
 
             thinkTimeParams.add(mean);
             thinkTimeParams.add(deviation);
                         
         }
+        
+        // ensure that the sum of the probabilities is one
+        for (final Transition outgoingTransition : outgoingTransitions) {
+        	sumProbability += outgoingTransition.getValue();
+        }        
+        
+        if (sumProbability != 1.0 && n > 0) {
+        	
+        	boolean diffIsDistributed = false;
+        	double diff = 1.0 - sumProbability;
+        	
+        	for (final Transition outgoingTransition : outgoingTransitions) {
+            	if (outgoingTransition.getValue() + diff > 0) {
+            		outgoingTransition.setValue(outgoingTransition.getValue() + diff);
+            		diffIsDistributed = true;
+            		break;
+            	}
+            } 
+        	
+        	if (!diffIsDistributed) {
+            	throw new RuntimeException("Probabilities do not sum up to one!");
+            }
+        	
+        }     
+                
     }
 }
