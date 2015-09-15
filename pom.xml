@@ -3,6 +3,7 @@
   <groupId>wessbas.behaviorModelExtractor</groupId>
   <artifactId>wessbas.behaviorModelExtractor</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <parent>
   	<groupId>wessbas</groupId>
   	<artifactId>parent</artifactId>
