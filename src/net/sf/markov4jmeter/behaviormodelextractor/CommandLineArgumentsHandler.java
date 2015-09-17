@@ -166,7 +166,7 @@ public class CommandLineArgumentsHandler {
                     "(Optional) clustering method to be "   // description;
                     + "applied to the extracted Behavior Models. ",
                     false,                                  // !isRequired;
-                    "simple|kmeans",                       // argName;
+                    "simple|kmeans|xmeans",                  // argName;
                     false);                                 // !hasOptionalArg;
     
     /** (Optional) Number of Clusters. */

@@ -1,25 +1,38 @@
-(TODO:)
-  
-  - implementation of class RBMToRBMUnifier;
-
-  - DOT-graph generation code needs to be tested/revised;
-  
-
-
 
 INTRODUCTION
 ------------
 
-<TODO: description, license issues, transformation>
+This package reads wessbas logs and generates behavior mix and behavior models based on clustering 
+algorithms. 
+
+Input: Logfiles in form of the wessbas logfile format. The wessbas.ui package can be used to 
+transform logfiles (HTTP web logs) into the wessbas logfile format. 
+
+Output: The output is the behavior mix and the behavior models.  
 
 License:
 
-  MIT-license (class "dynamod.behavior.extractor.util.Util").
+  MIT-license?
 
 Transformation:
 
-  sessions.dat -->  ABMS  -->  RBMS  -->  RBM ("merged")  -->  Markov matrix
+  sessions.dat -->  Absolut Behavior Models  -->  Clustering --> Relative Behavior Model
+  --> Markov matrix as cvs files.
 
+SYSTEM REQUIREMENTS
+-------------------
+
+The project has been developed with the use of the following tools:
+
+  - JDK 1.7
+  - Xtext 2.5.4
+  - Eclipse Modeling Tools
+  
+ACADEMIC LITERATURE
+------------------  
+  
+Automatic extraction of probabilistic workload specifications for 
+load testing session-based application systems  (Hoorn, Vögele, Schulz, Hasselbring, Krcmar)  
 
 ENHANCEMENTS
 ------------
@@ -40,8 +53,6 @@ ENHANCEMENTS
 
   - line-break parameter for output files;
 
-  - added internal IDs for use cases, removed AIDA-specific ID handling;
-
 
 USAGE
 -----
@@ -50,7 +61,7 @@ Example for command-line parameters (one row):
 
   -i "./examples/aida/sessions.dat" -t "./examples/aida/template.csv"
     -m "./examples/aida/mapping.csv"  -l 2 -o "./output/behaviormodel.csv"
-      -g "./output/gen_graph"
+      -g "./output/gen_graph" -c xmeans -min 3 -max 20
 
 
 OPEN ISSUES / FUTURE WORK
@@ -59,6 +70,10 @@ OPEN ISSUES / FUTURE WORK
   - caching solution for too many Markov states
     (thousands of states, e.g., 11200 states lead to a heap-out-of-memory error,
     since the 2-dimensional matrix-arrays of the MarkovMatrixHandler class
-    exceed the amount of available memory);
-    
-  - initial states have to be set manually in the resulting matrices;
+    exceed the amount of available memory);  
+  
+TODO:
+------------
+  
+  - DOT-graph generation code needs to be tested/revised;
+  
