@@ -36,10 +36,6 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.ExtractionExceptio
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.MarkovMatrixHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.SessionRepositoryHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.UseCaseMapping;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.ParseException;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.Parser;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.SessionData;
-import net.sf.markov4jmeter.behaviormodelextractor.extraction.parser.UseCase;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToRBMUnifier;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
@@ -47,6 +43,11 @@ import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
 
 import org.apache.commons.cli.MissingOptionException;
+
+import wessbas.commons.parser.ParseException;
+import wessbas.commons.parser.Parser;
+import wessbas.commons.parser.SessionData;
+import wessbas.commons.parser.UseCase;
 
 /**
  * This is the main class of the Behavior Model Extractor.
@@ -205,7 +206,7 @@ public class BehaviorModelExtractor {
 					BehaviorModelExtractor.ERROR_NOT_INITIALIZED);
 		}
 
-		final ArrayList<SessionData> sessions = BehaviorModelExtractor
+		final ArrayList<SessionData> sessions = Parser
 				.parseSessionsIntoSessionsRepository(inputFile);
 
 		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(
@@ -324,59 +325,5 @@ public class BehaviorModelExtractor {
 	}
 
 	// TODO: revise remaining methods!
-
-	/**
-	 * 
-	 * @param sessionInputFilePath
-	 * @return
-	 * @throws IOException
-	 * @throws ParseException
-	 * @throws ExtractionException
-	 */
-	public static ArrayList<SessionData> parseSessionsIntoSessionsRepository(
-			final String sessionInputFilePath) throws IOException,
-			ParseException, ExtractionException {
-
-		// might throw a FileNotFound- or SecurityException;
-		final Parser.Iterator iterator = Parser.getInstance().getIterator(
-				sessionInputFilePath);
-
-		final ArrayList<SessionData> sessions = new ArrayList<SessionData>();
-
-		SessionData sessionData;
-
-		// nextSession() might throw a Parse- or IOException;
-		while ((sessionData = iterator.nextSession()) != null) {
-
-			sessionData.setTransactionType("noSessionType");
-
-			for (UseCase useCase : sessionData.getUseCases()) {
-				if (useCase.getName().contains("login")) {
-					if (useCase.getQueryString() != null) {
-						if (useCase.getQueryString().contains(
-								"doBrowseVehicles-1")) {
-							sessionData
-									.setTransactionType("doBrowseVehicles-1");
-						} else if (useCase.getQueryString().contains(
-								"doManageInventory-1")) {
-							sessionData
-									.setTransactionType("doManageInventory-1");
-						} else if (useCase.getQueryString().contains(
-								"doPurchaseVehicles-1")) {
-							sessionData
-									.setTransactionType("doPurchaseVehicles-1");
-						}
-						break;
-					}
-				}
-			}
-
-			sessions.add(sessionData);
-
-		}
-
-		iterator.close(); // closes the input stream;
-		return sessions;
-	}
 
 }

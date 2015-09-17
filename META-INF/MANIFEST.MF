@@ -15,7 +15,8 @@ Export-Package: net.sf.markov4jmeter.behavior,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
- org.junit;visibility:=reexport
+ org.junit;visibility:=reexport,
+ wessbas.commons;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Import-Package: org.objectweb.asm
