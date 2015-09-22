@@ -271,6 +271,10 @@ public class BehaviorModelExtractor {
 	public static void main(final String[] argv) {
 
 		try {
+			
+			System.out.println("****************************");
+			System.out.println("Start BehaviorModelExtractor");
+			System.out.println("****************************");
 
 			// ---- read command-line parameters ----;
 
@@ -311,6 +315,10 @@ public class BehaviorModelExtractor {
 			// might throw an IO-, Parse- or ExtractionException;
 			behaviorModelExtractor.extract(inputFile, outputDirectory,
 					clusteringMethod);
+			
+			System.out.println("****************************");
+			System.out.println("END BehaviorModelExtractor");
+			System.out.println("****************************");
 
 		} catch (final MissingOptionException ex) {
 

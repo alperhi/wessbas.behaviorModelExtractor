@@ -12,6 +12,7 @@ import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.Vertex;
+import net.sf.markov4jmeter.behaviormodelextractor.CommandLineArgumentsHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 
@@ -63,9 +64,6 @@ public class BehaviorModelWriter {
     /** Information message for the case that a file has been written. */
     private final static String INFO_FILE_WRITTEN =
             "File \"%s\" written successfully.";
-
-    /** Information message for the case that an operation has been finished. */
-    private final static String INFO_FINISHED = "Finished.";
 
     /** Suffix of DOT-files. */
     private final static String DOT_FILE_SUFFIX = ".dot";
@@ -285,6 +283,10 @@ public class BehaviorModelWriter {
             final String suffixedCsvFile = (n > 1) ?
                     this.getIndexedCsvFilename(filenameBehaviorModels, i) :
                     this.getCsvFilename(filenameBehaviorModels);
+                    
+            final String suffixedOutputCsvFile = (n > 1) ?
+                    this.getIndexedCsvFilename(CommandLineArgumentsHandler.getOutputDirectory() + "\\" + behaviorModelName, i) :
+                    this.getCsvFilename(CommandLineArgumentsHandler.getOutputDirectory() + behaviorModelName);
 
             final String suffixedOutputDotFile = (n > 1) ?
                     this.getIndexedDotFilename(filenameGraphs, i) :
@@ -302,9 +304,10 @@ public class BehaviorModelWriter {
             this.writeDotGraphToFile(suffixedOutputDotFile, matrix);
 
             behaviorMixRows[i] = new String[]{
-                    behaviorModelName,
+                    ((i == 0) ? "behaviorModels = " : "") + behaviorModelName + i,
+                    " " + suffixedOutputCsvFile.replace("\\", "/"), 
                     " " + relativeFrequency,
-                    " " + suffixedCsvFile
+                    " " + suffixedCsvFile.replace("\\", "/") + ( (n > 1 && i != (n-1)) ? ", \\" : "")
             };
         }
 
@@ -320,7 +323,6 @@ public class BehaviorModelWriter {
                         filenameUseCases,
                         BehaviorModelWriter.TXT_FILE_SUFFIX), behaviorMix);
 
-        System.out.println(BehaviorModelWriter.INFO_FINISHED);
     }
 
 
@@ -359,6 +361,7 @@ public class BehaviorModelWriter {
         final CSVHandler csvHandler = new CSVHandler(";");
 
         // might throw a FileNotFound-, IO-, Security- or NullPointerException;
+        
         csvHandler.writeValues(filename, behaviorMixRows);
 
         this.printFileWrittenInfo(filename);
