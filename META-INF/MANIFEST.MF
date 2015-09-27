@@ -1,9 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: net.sf.markov4jmeter.behaviormodelextractor;singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: .
+Bundle-SymbolicName: wessbas.behaviorModelExtractor;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .,
+ lib/commons-cli-20040117.000000.jar,
+ lib/commons-logging-1.1.3.jar,
+ lib/weka.jar
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -11,12 +14,20 @@ Export-Package: net.sf.markov4jmeter.behavior,
  net.sf.markov4jmeter.behavior.impl,
  net.sf.markov4jmeter.behavior.tests,
  net.sf.markov4jmeter.behavior.util,
- net.sf.markov4jmeter.behaviormodelextractor
-Require-Bundle: org.eclipse.core.runtime,
+ net.sf.markov4jmeter.behaviormodelextractor,
+ net.sf.markov4jmeter.behaviormodelextractor.extraction,
+ net.sf.markov4jmeter.behaviormodelextractor.extraction.parser,
+ net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation,
+ net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering,
+ net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.helper,
+ net.sf.markov4jmeter.behaviormodelextractor.test,
+ net.sf.markov4jmeter.behaviormodelextractor.util
+Require-Bundle: wessbas.dsl;bundle-version="1.0.0",
+ org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.junit;visibility:=reexport,
- wessbas.commons;bundle-version="1.0.0"
+ org.eclipse.emf;bundle-version="2.6.0"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Import-Package: org.objectweb.asm
