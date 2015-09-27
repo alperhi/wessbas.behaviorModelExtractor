@@ -28,9 +28,10 @@ import net.sf.markov4jmeter.behavior.SessionRepository;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.UseCaseRepository;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
-import net.sf.markov4jmeter.behaviormodelextractor.util.SessionData;
 
 import org.eclipse.emf.common.util.EList;
+
+import wessbas.commons.parser.SessionData;
 
 /**
  * This class provides methods for adding sessions and use cases, which build
@@ -239,7 +240,7 @@ public class SessionRepositoryHandler {
         // session to be stored in the repository;
         final Session eSession = factory.createSession();
 
-        final List<net.sf.markov4jmeter.behaviormodelextractor.util.UseCase> useCases =
+        final List<wessbas.commons.parser.UseCase> useCases =
                 session.getUseCases();
 
         final long[] timeBounds = this.addUseCasesToSession(
@@ -293,7 +294,7 @@ public class SessionRepositoryHandler {
      *     detected.
      */
     private long[] addUseCasesToSession (
-            final List<net.sf.markov4jmeter.behaviormodelextractor.util.UseCase> useCases,
+            final List<wessbas.commons.parser.UseCase> useCases,
             final Session eSession,
             final UseCaseRepository useCaseRepository,
             final UseCaseMapping useCaseMapping,
@@ -304,7 +305,7 @@ public class SessionRepositoryHandler {
 
         final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
 
-        for (net.sf.markov4jmeter.behaviormodelextractor.util.UseCase useCase : useCases) {
+        for (wessbas.commons.parser.UseCase useCase : useCases) {
 
             // retrieve observation properties from use case data;
             String name          = useCase.getName();

@@ -41,11 +41,12 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBM
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
-import net.sf.markov4jmeter.behaviormodelextractor.util.ParseException;
-import net.sf.markov4jmeter.behaviormodelextractor.util.Parser;
-import net.sf.markov4jmeter.behaviormodelextractor.util.SessionData;
 
 import org.apache.commons.cli.MissingOptionException;
+
+import wessbas.commons.parser.ParseException;
+import wessbas.commons.parser.Parser;
+import wessbas.commons.parser.SessionData;
 
 /**
  * This is the main class of the Behavior Model Extractor.
