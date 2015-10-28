@@ -131,7 +131,7 @@ public class RBMToMarkovMatrixTransformer {
             double valueSum = 0;
 
             final String srcVertexName = this.getVertexName(srcVertex);
-
+            
             if ( !finalStateName.equals(srcVertexName) ) {
 
                 for (final Transition transition :
@@ -140,16 +140,13 @@ public class RBMToMarkovMatrixTransformer {
                     // round the probability to 4 digits behind the comma, to
                     // avoid rounding errors when the sum of the outgoing
                     // transition probabilities of a state is validated;
-                    final double probability = transition.getValue();
+                    double probability = transition.getValue();
 
                     final Vertex dstVertex     = transition.getTargetVertex();
                     final String dstVertexName = this.getVertexName(dstVertex);
 
-                    if ( !finalStateName.equals(dstVertexName) ) {
-
-                        valueSum += probability;
-                    }
-
+                    valueSum += probability;
+                
                     final List<BigDecimal> thinkTimeParams =
                             transition.getThinkTimeParams();
 
@@ -169,6 +166,14 @@ public class RBMToMarkovMatrixTransformer {
 
                         mean      = 0.0d;
                         deviation = 0.0d;
+                    }                    
+                    
+                    double diff = 0.0;
+                    if (finalStateName.equals(dstVertexName)) {
+                    	if (valueSum != 1.0 && valueSum > 0) {
+                    		diff = 1.0 - valueSum;
+                    		probability += diff;
+                    	}
                     }
 
                     this.markovMatrixHandler.setValueAtCell(
@@ -179,12 +184,6 @@ public class RBMToMarkovMatrixTransformer {
                             matrix);
                 }
 
-                this.markovMatrixHandler.setValueAtCell(
-                        MathUtil.round(1.0 - valueSum) + "; " +
-                            this.markovMatrixHandler.getDefaultThinkTimeValue(),
-                        srcVertexName,
-                        finalStateName,
-                        matrix);
             }
         }
 

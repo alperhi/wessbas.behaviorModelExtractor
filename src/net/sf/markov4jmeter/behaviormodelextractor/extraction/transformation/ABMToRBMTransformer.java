@@ -140,15 +140,18 @@ public class ABMToRBMTransformer {
             final double value = outgoingTransition.getValue();
             n += value;
         }
-
+        
         for (final Transition outgoingTransition : outgoingTransitions) {
 
             // conversion: absolute values -> relative values;
 
             final double value = outgoingTransition.getValue();
-            final double relValue = MathUtil.round(value / n);  // n > 0 here;            
             
-            outgoingTransition.setValue(relValue);
+            if (n > 0) {
+            	// final double relValue = MathUtil.round(value / n);  // n > 0 here;     
+                final double relValue = MathUtil.round(value / n);  // n > 0 here;
+                outgoingTransition.setValue(relValue);
+            }          
 
             // conversion: times -> think times;
 
