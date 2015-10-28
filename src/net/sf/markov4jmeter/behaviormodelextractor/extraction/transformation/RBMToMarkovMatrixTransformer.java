@@ -180,7 +180,7 @@ public class RBMToMarkovMatrixTransformer {
                 }
 
                 this.markovMatrixHandler.setValueAtCell(
-                        MathUtil.round(1.0 - valueSum) + "; " +
+                        MathUtil.round( valueSum > 0 ? (1.0 - valueSum) : 0.0) + "; " +
                             this.markovMatrixHandler.getDefaultThinkTimeValue(),
                         srcVertexName,
                         finalStateName,
