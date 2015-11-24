@@ -34,177 +34,174 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 /**
  * This class provides methods for transforming "absolute" Behavior Models to
  * "relative" Behavior Models.
- *
+ * 
  * @see SessionToABMTransformer
  * @see RBMToMarkovMatrixTransformer
- *
+ * 
  * @author Eike Schulz (esc@informatik.uni-kiel.de)
- *
+ * 
  * @version 1.0
  */
 public class ABMToRBMTransformer {
 
+	/* ************************** public methods ************************** */
 
-    /* **************************  public methods  ************************** */
+	/**
+	 * Transforms a set of "absolute" Behavior Models to "relative" Behavior
+	 * Models.
+	 * 
+	 * @param behaviorModelsAbsolute
+	 *            the absolute Behavior Models to be transformed to relative
+	 *            Behavior Models.
+	 * 
+	 * @return the resulting relative Behavior Models.
+	 */
+	public BehaviorModelRelative[] transform(
+			final BehaviorModelAbsolute[] behaviorModelsAbsolute) {
 
+		final int n = behaviorModelsAbsolute.length;
 
-    /**
-     * Transforms a set of "absolute" Behavior Models to "relative" Behavior
-     * Models.
-     *
-     * @param behaviorModelsAbsolute
-     *     the absolute Behavior Models to be transformed to relative Behavior
-     *     Models.
-     *
-     * @return
-     *     the resulting relative Behavior Models.
-     */
-    public BehaviorModelRelative[] transform (
-            final BehaviorModelAbsolute[] behaviorModelsAbsolute) {
+		// to models to be returned;
+		final BehaviorModelRelative[] behaviorModelsRelative = new BehaviorModelRelative[n];
 
-        final int n = behaviorModelsAbsolute.length;
+		for (int i = 0; i < n; i++) {
 
-        // to models to be returned;
-        final BehaviorModelRelative[] behaviorModelsRelative =
-                new BehaviorModelRelative[n];
+			final BehaviorModelAbsolute behaviorModelAbsolute = behaviorModelsAbsolute[i];
 
-        for (int i = 0; i < n; i++) {
+			final BehaviorModelRelative behaviorModelRelative = this
+					.transform(behaviorModelAbsolute);
 
-            final BehaviorModelAbsolute behaviorModelAbsolute =
-                    behaviorModelsAbsolute[i];
+			behaviorModelsRelative[i] = behaviorModelRelative;
+		}
+		return behaviorModelsRelative;
+	}
 
-            final BehaviorModelRelative behaviorModelRelative =
-                    this.transform(behaviorModelAbsolute);
+	/* ************************** private methods ************************* */
 
-            behaviorModelsRelative[i] = behaviorModelRelative;
-        }
-        return behaviorModelsRelative;
-    }
+	/**
+	 * Transforms an "absolute" Behavior Model to a "relative" Behavior Model.
+	 * 
+	 * @param behaviorModelAbsolute
+	 *            the absolute Behavior Model to be transformed to a relative
+	 *            Behavior Model.
+	 * 
+	 * @return the resulting relative Behavior Model.
+	 */
+	public BehaviorModelRelative transform(
+			final BehaviorModelAbsolute behaviorModelAbsolute) {
 
+		final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
 
-    /* **************************  private methods  ************************* */
+		// to model to be returned;
+		final BehaviorModelRelative behaviorModelRelative = factory
+				.createBehaviorModelRelative();
 
+		final List<Vertex> aVertices = behaviorModelAbsolute.getVertices();
+		final List<Vertex> rVertices = behaviorModelRelative.getVertices();
 
-    /**
-     * Transforms an "absolute" Behavior Model to a "relative" Behavior Model.
-     *
-     * @param behaviorModelAbsolute
-     *     the absolute Behavior Model to be transformed to a relative Behavior
-     *     Model.
-     *
-     * @return
-     *     the resulting relative Behavior Model.
-     */
-    public BehaviorModelRelative transform (
-            final BehaviorModelAbsolute behaviorModelAbsolute) {
+		for (final Vertex aVertex : aVertices) {
 
-        final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
+			// clone the original model recursively (including transitions);
+			final Vertex rVertex = EcoreUtil.copy(aVertex);
 
-        // to model to be returned;
-        final BehaviorModelRelative behaviorModelRelative =
-                factory.createBehaviorModelRelative();
+			this.convertOutgoingTransitionValues(rVertex);
+			rVertices.add(rVertex);
+		}
 
-        final List<Vertex> aVertices = behaviorModelAbsolute.getVertices();
-        final List<Vertex> rVertices = behaviorModelRelative.getVertices();
+		return behaviorModelRelative;
+	}
 
-        for (final Vertex aVertex : aVertices) {
+	/**
+	 * Converts the label values of all outgoing transitions of a given vertex
+	 * from absolute to relative values.
+	 * 
+	 * @param vertex
+	 *            the vertex whose outgoing transitions' labels will be
+	 *            converted.
+	 */
+	private void convertOutgoingTransitionValues(final Vertex vertex) {
 
-            // clone the original model recursively (including transitions);
-            final Vertex rVertex = EcoreUtil.copy(aVertex);
+		final List<Transition> outgoingTransitions = vertex
+				.getOutgoingTransitions();
 
-            this.convertOutgoingTransitionValues(rVertex);
-            rVertices.add(rVertex);
-        }
+		// count number of transition occurrences (note that each transition
+		// might fire several times to a certain target vertex);
+		double n = 0;
+		double sumProbability = 0;
 
-        return behaviorModelRelative;
-    }
+		for (final Transition outgoingTransition : outgoingTransitions) {
+			final double value = outgoingTransition.getValue();
+			n += value;
+		}
 
-    /**
-     * Converts the label values of all outgoing transitions of a given vertex
-     * from absolute to relative values.
-     *
-     * @param vertex
-     *     the vertex whose outgoing transitions' labels will be converted.
-     */
-    private void convertOutgoingTransitionValues (final Vertex vertex) {
-    	    	
-        final List<Transition> outgoingTransitions =
-                vertex.getOutgoingTransitions();
+		for (final Transition outgoingTransition : outgoingTransitions) {
 
-        // count number of transition occurrences (note that each transition
-        // might fire several times to a certain target vertex);
-        double n = 0;
-        double sumProbability = 0;
+			// conversion: absolute values -> relative values;
 
-        for (final Transition outgoingTransition : outgoingTransitions) {
-            final double value = outgoingTransition.getValue();
-            n += value;
-        }
-        
-        for (final Transition outgoingTransition : outgoingTransitions) {
+			final double value = outgoingTransition.getValue();
 
-            // conversion: absolute values -> relative values;
+			if (n > 0) {
+				// final double relValue = MathUtil.round(value / n); // n > 0
+				// here;
+				final double relValue = MathUtil.round(value / n); // n > 0
+																	// here;
+				outgoingTransition.setValue(relValue);
+			}
 
-            final double value = outgoingTransition.getValue();
-            
-            if (n > 0) {
-            	// final double relValue = MathUtil.round(value / n);  // n > 0 here;     
-                final double relValue = MathUtil.round(value / n);  // n > 0 here;
-                outgoingTransition.setValue(relValue);
-            }          
+			// conversion: times -> think times;
 
-            // conversion: times -> think times;
+			final BigDecimal mean;
+			final BigDecimal deviation;
 
-            final BigDecimal mean;
-            final BigDecimal deviation;
+			final List<BigDecimal> timeDiffs = outgoingTransition
+					.getTimeDiffs();
 
-            final List<BigDecimal> timeDiffs =
-            		outgoingTransition.getTimeDiffs();
+			if (timeDiffs.size() > 0) {
 
-            if (timeDiffs.size() > 0) {
+				mean = MathUtil.computeMean(timeDiffs);
+				deviation = MathUtil.computeDeviation(timeDiffs);
 
-                mean      = MathUtil.computeMean(timeDiffs);
-                deviation = MathUtil.computeDeviation(timeDiffs);
+			} else { // times.size() == 0;
 
-            } else {  // times.size() == 0;
+				mean = BigDecimal.ZERO;
+				deviation = BigDecimal.ZERO;
+			}
 
-                mean      = BigDecimal.ZERO;
-                deviation = BigDecimal.ZERO;
-            }
+			// store mean and deviation values as think time parameters;
 
-            // store mean and deviation values as think time parameters;
+			final List<BigDecimal> thinkTimeParams = outgoingTransition
+					.getThinkTimeParams();
 
-            final List<BigDecimal> thinkTimeParams =
-            		outgoingTransition.getThinkTimeParams();
+			thinkTimeParams.add(mean);
+			thinkTimeParams.add(deviation);
 
-            thinkTimeParams.add(mean);
-            thinkTimeParams.add(deviation);
-                        
-        }
-        
-        // ensure that the sum of the probabilities is one
-        for (final Transition outgoingTransition : outgoingTransitions) {
-        	sumProbability += outgoingTransition.getValue();
-        }        
-        
-        if (sumProbability != 1.0 && n > 0) {
-        	
-        	boolean diffIsDistributed = false;
-        	double diff = 1.0 - sumProbability;
-        	
-        	for (final Transition outgoingTransition : outgoingTransitions) {
-            	if (outgoingTransition.getValue() + diff > 0) {
-            		outgoingTransition.setValue(outgoingTransition.getValue() + diff);
-            		diffIsDistributed = true;
-            		break;
-            	}
-            } 
-        	
-        	if (!diffIsDistributed) {
-            	throw new RuntimeException("Probabilities do not sum up to one!");
-            }
-        	
-        }     
-                
-    }
+		}
+
+		// ensure that the sum of the probabilities is one
+		for (final Transition outgoingTransition : outgoingTransitions) {
+			sumProbability += outgoingTransition.getValue();
+		}
+
+		if (sumProbability != 1.0 && n > 0) {
+
+			boolean diffIsDistributed = false;
+			double diff = 1.0 - sumProbability;
+
+			for (final Transition outgoingTransition : outgoingTransitions) {
+				if (outgoingTransition.getValue() > 0) {
+					outgoingTransition.setValue(outgoingTransition.getValue()
+							+ diff);
+					diffIsDistributed = true;
+					break;
+				}
+			}
+
+			if (!diffIsDistributed) {
+				throw new RuntimeException(
+						"Probabilities do not sum up to one!");
+			}
+
+		}
+
+	}
 }
