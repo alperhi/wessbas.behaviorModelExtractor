@@ -205,8 +205,15 @@ public class BehaviorModelExtractor {
 					BehaviorModelExtractor.ERROR_NOT_INITIALIZED);
 		}
 
+		int sessionThreshold = 0;
+		if (CommandLineArgumentsHandler.getThresholdSessionTime() != null) {
+			sessionThreshold = Integer.parseInt(CommandLineArgumentsHandler
+					.getThresholdSessionTime());
+		}
+
 		final ArrayList<SessionData> sessions = Parser
-				.parseSessionsIntoSessionsRepository(inputFile);
+				.parseSessionsIntoSessionsRepository(inputFile,
+						sessionThreshold);
 
 		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(
 				sessions, this.sessionRepository, this.useCaseRepository,
@@ -232,18 +239,19 @@ public class BehaviorModelExtractor {
 		final BehaviorMix behaviorMix = rbmToRBMUnifier.transform(
 				behaviorModelsAbsolute, clusteringMethod,
 				this.useCaseRepository);
-		
+
 		// check if sumProbability is one
-		double sumProbability = 0;		
+		double sumProbability = 0;
 		for (BehaviorMixEntry behaviorMixEntry : behaviorMix.getEntries()) {
 			sumProbability += behaviorMixEntry.getRelativeFrequency();
 		}
-		
+
 		if (sumProbability != 1) {
 			double diff = 1 - sumProbability;
 			for (BehaviorMixEntry behaviorMixEntry : behaviorMix.getEntries()) {
 				if ((behaviorMixEntry.getRelativeFrequency() + diff) > 0) {
-					behaviorMixEntry.setRelativeFrequency(behaviorMixEntry.getRelativeFrequency() + diff); 
+					behaviorMixEntry.setRelativeFrequency(behaviorMixEntry
+							.getRelativeFrequency() + diff);
 					break;
 				}
 			}
@@ -270,7 +278,7 @@ public class BehaviorModelExtractor {
 	public static void main(final String[] argv) {
 
 		try {
-			
+
 			System.out.println("****************************");
 			System.out.println("Start BehaviorModelExtractor");
 			System.out.println("****************************");
@@ -314,7 +322,7 @@ public class BehaviorModelExtractor {
 			// might throw an IO-, Parse- or ExtractionException;
 			behaviorModelExtractor.extract(inputFile, outputDirectory,
 					clusteringMethod);
-			
+
 			System.out.println("****************************");
 			System.out.println("END BehaviorModelExtractor");
 			System.out.println("****************************");

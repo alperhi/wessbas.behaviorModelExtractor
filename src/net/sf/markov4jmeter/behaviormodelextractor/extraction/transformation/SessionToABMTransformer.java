@@ -248,6 +248,13 @@ public class SessionToABMTransformer {
 				long timeDistance = dstUCExecution.getStartTime()
 						- srcUCExecution.getEndTime();
 
+				// in case the user starts a new request before the old request
+				// is finished
+				// take the time difference of start user request 1 to star
+
+				long timeDistance2 = dstUCExecution.getStartTime()
+						- srcUCExecution.getStartTime();
+
 				int lengthTimeStamp = String.valueOf(
 						dstUCExecution.getEndTime()).length();
 
@@ -256,7 +263,12 @@ public class SessionToABMTransformer {
 					timeDistance = timeDistance * 1000000;
 				}
 
-				if (timeDistance < 0) {
+				if (timeDistance < 0 && timeDistance2 >= 0) {
+
+					transition.getTimeDiffs()
+							.add(new BigDecimal(timeDistance2));
+
+				} else if (timeDistance < 0 && timeDistance2 < 0) {
 
 					// this case only occurs, if the monitoring data is invalid;
 					final String message = String

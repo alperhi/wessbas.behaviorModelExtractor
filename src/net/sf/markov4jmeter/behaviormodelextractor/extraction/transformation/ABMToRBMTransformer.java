@@ -134,6 +134,8 @@ public class ABMToRBMTransformer {
 			n += value;
 		}
 
+		// List<Transition> removeTransitions = new ArrayList<Transition>();
+
 		for (final Transition outgoingTransition : outgoingTransitions) {
 
 			// conversion: absolute values -> relative values;
@@ -146,6 +148,13 @@ public class ABMToRBMTransformer {
 				final double relValue = MathUtil.round(value / n); // n > 0
 																	// here;
 				outgoingTransition.setValue(relValue);
+
+				// // TODO: configure
+				// if (relValue < 0.001) {
+				// removeTransitions.add(outgoingTransition);
+				// continue;
+				// }
+
 			}
 
 			// conversion: times -> think times;
@@ -176,6 +185,8 @@ public class ABMToRBMTransformer {
 			thinkTimeParams.add(deviation);
 
 		}
+
+		// outgoingTransitions.removeAll(removeTransitions);
 
 		// ensure that the sum of the probabilities is one
 		for (final Transition outgoingTransition : outgoingTransitions) {
