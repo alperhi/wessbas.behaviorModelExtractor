@@ -80,26 +80,23 @@ public class SessionToABMTransformer {
 		final InitialUseCaseHandler initialUseCaseHandler = new InitialUseCaseHandler(
 				useCaseIdGenerator);
 
+		final UseCase initialUseCase = initialUseCaseHandler
+				.getUniqueInitialUseCase();
+
+		defaultUseCases.add(0, initialUseCase);
+
 		for (final Session session : sessions) {
 
 			// if desired, the registered initial use cases must to be cleared
 			// at the beginning of iteration; the determineUniqueInitialState()
 			// call below will always insert a generic state otherwise, as no
 			// registered use case will be available;
-			if (clearRegisteredInitialUseCasesInEachIteration) {
-
-				initialUseCaseHandler.clearRegisteredInitialUseCases();
-			}
-
 			final BehaviorModelAbsolute behaviorModelAbsolute = this
 					.transformSessionToBehaviorModel(session, defaultUseCases,
-							initialUseCaseHandler);
+							initialUseCaseHandler, initialUseCase);
 
 			behaviorModelsAbsolute.add(behaviorModelAbsolute);
 		}
-
-		this.determineUniqueInitialState(behaviorModelsAbsolute,
-				defaultUseCases, initialUseCaseHandler);
 
 		return behaviorModelsAbsolute.toArray(new BehaviorModelAbsolute[] {});
 	}
@@ -130,7 +127,8 @@ public class SessionToABMTransformer {
 	 */
 	private BehaviorModelAbsolute transformSessionToBehaviorModel(
 			final Session session, final List<UseCase> defaultUseCases,
-			final InitialUseCaseHandler initialUseCaseHandler) {
+			final InitialUseCaseHandler initialUseCaseHandler,
+			final UseCase initialUseCase) {
 
 		final BehaviorFactory factory = BehaviorFactory.eINSTANCE;
 
@@ -138,8 +136,9 @@ public class SessionToABMTransformer {
 				.createBehaviorModelAbsolute();
 
 		// collect the session-related vertices including their transitions;
-		final LinkedList<Vertex> vertices = this.transformSessionToVertices(
-				session, defaultUseCases, initialUseCaseHandler);
+		final LinkedList<Vertex> vertices = this
+				.transformSessionToVertices(session, defaultUseCases,
+						initialUseCaseHandler, initialUseCase);
 
 		// fill the absolute Behavior Model with vertices (and transitions);
 		behaviorModelAbsolute.getVertices().addAll(vertices);
@@ -173,7 +172,8 @@ public class SessionToABMTransformer {
 	 */
 	private LinkedList<Vertex> transformSessionToVertices(
 			final Session session, final List<UseCase> defaultUseCases,
-			final InitialUseCaseHandler initialUseCaseHandler) {
+			final InitialUseCaseHandler initialUseCaseHandler,
+			final UseCase initialUseCase) {
 
 		final LinkedList<Vertex> vertices = new LinkedList<Vertex>();
 
@@ -182,7 +182,6 @@ public class SessionToABMTransformer {
 			Vertex vertex;
 
 			for (final UseCase useCase : defaultUseCases) {
-
 				vertex = this.createVertex(useCase);
 				vertices.add(vertex);
 			}
@@ -198,7 +197,6 @@ public class SessionToABMTransformer {
 			dstVertex = this.findVertex(dstUCExecution, vertices);
 
 			if (dstVertex == null) { // vertex not registered yet?
-
 				dstVertex = this.createVertex(dstUCExecution.getUseCase());
 				vertices.add(dstVertex);
 			}
@@ -208,14 +206,18 @@ public class SessionToABMTransformer {
 			// before -> no more vertices nor transitions need to be stored;
 			if (srcUCExecution == null) {
 
-				// register use case as initial state;
-				initialUseCaseHandler.registerInitialState(dstVertex
-						.getUseCase());
+				final Vertex firstVertex = this.findVertexByUseCaseId(
+						initialUseCase.getId(), vertices);
 
 				// shift (initial) vertex to first position, since default
 				// use cases (vertices) might include it at arbitrary position;
-				vertices.remove(dstVertex);
-				vertices.add(0, dstVertex);
+				vertices.remove(firstVertex);
+				vertices.add(0, firstVertex);
+
+				final Transition transition = this.installTransition(
+						firstVertex, dstVertex);
+
+				transition.setValue(1);
 
 			} else { // srcUCExecution != null;
 
@@ -431,68 +433,4 @@ public class SessionToABMTransformer {
 		return null; // no matching transition found;
 	}
 
-	/**
-	 * Determines a unique initial use case for a set of Behavior Models.
-	 * 
-	 * @param behaviorModelsAbsolute
-	 *            Behavior Models with absolute transition values; these
-	 *            Behavior Models build on the given
-	 *            <code>defaultUseCases</code> list.
-	 * @param defaultUseCases
-	 *            list of use cases, which indicates the vertices of the given
-	 *            Behavior Models.
-	 * @param initialUseCaseHandler
-	 *            instance for registering initial use cases and generating a
-	 *            generic initial use case, if necessary; in that case, the
-	 *            generic use case including corresponding transitions will be
-	 *            added as unique initial use case to each Behavior Model.
-	 * 
-	 * @return a unique use case, which is one of the given default use cases;
-	 *         if multiple initial use cases exist in that list, a generic use
-	 *         case will be created and returned.
-	 */
-	private UseCase determineUniqueInitialState(
-			final ArrayList<BehaviorModelAbsolute> behaviorModelsAbsolute,
-			final List<UseCase> defaultUseCases,
-			final InitialUseCaseHandler initialUseCaseHandler) {
-
-		final UseCase initialUseCase = initialUseCaseHandler
-				.getUniqueInitialUseCase();
-
-		if (!defaultUseCases.contains(initialUseCase)) {
-
-			// insert use case at first position, to indicate that this is
-			// the initial state;
-			defaultUseCases.add(0, initialUseCase);
-
-			for (final BehaviorModelAbsolute behaviorModelAbsolute : behaviorModelsAbsolute) {
-
-				final Vertex sourceVertex = this.createVertex(initialUseCase);
-
-				final List<Vertex> vertices = behaviorModelAbsolute
-						.getVertices();
-
-				// insert vertex at first position, to indicate that this is
-				// the initial state;
-				vertices.add(0, sourceVertex);
-
-				for (final UseCase useCase : initialUseCaseHandler
-						.getRegisteredInitialUseCases()) {
-
-					final Vertex targetVertex = this.findVertexByUseCaseId(
-							useCase.getId(), vertices);
-
-					final Transition transition = this.installTransition(
-							sourceVertex, targetVertex);
-
-					final int count = initialUseCaseHandler
-							.getInitialUseCaseOccurrences(useCase);
-
-					transition.setValue(count);
-				}
-			}
-		}
-
-		return initialUseCase;
-	}
 }
