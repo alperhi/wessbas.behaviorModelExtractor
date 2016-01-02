@@ -394,6 +394,7 @@ public abstract class AbstractClusteringStrategy {
 		final Transition transition = factory.createTransition();
 
 		transition.setTargetVertex(targetVertex);
+		transition.setSourceVertex(sourceVertex);
 		sourceVertex.getOutgoingTransitions().add(transition);
 
 		return transition;
@@ -580,6 +581,9 @@ public abstract class AbstractClusteringStrategy {
 			final BehaviorModelAbsolute behaviorModel, final Instance centroid,
 			final int[] assignments, final int centroidIndex) {
 
+		// List<Transition> transitionList = new ArrayList<Transition>();
+		// int transitionCountAll = 0;
+
 		final List<Vertex> vertices = behaviorModel.getVertices();
 		for (final Vertex srcVertex : vertices) {
 
@@ -588,6 +592,7 @@ public abstract class AbstractClusteringStrategy {
 
 					Transition newTransition = installTransition(srcVertex,
 							dstVertex);
+					// transitionList.add(newTransition);
 
 					// CalculateThinkTimeParams. Think Times must be calculated
 					// based on the original behaviorModelsRelative, as the
@@ -622,6 +627,7 @@ public abstract class AbstractClusteringStrategy {
 								// store tinkTimeDiffs
 								timeDiffs.addAll(transition.getTimeDiffs());
 								transitionCount += transition.getValue();
+								// transitionCountAll += transition.getValue();
 							}
 						}
 					}
@@ -640,6 +646,35 @@ public abstract class AbstractClusteringStrategy {
 				continue; // skip final state ("$");
 			}
 		}
+
+		// final int transitionCountAll2 = transitionCountAll;
+		//
+		// Collections.sort(transitionList, new Comparator<Transition>() {
+		// @Override
+		// public int compare(final Transition t1, final Transition t2) {
+		// return (Double.valueOf(t2.getValue() / transitionCountAll2))
+		// .compareTo(Double.valueOf(t1.getValue()
+		// / transitionCountAll2));
+		// }
+		// });
+		//
+		// for (int i = 0; i < 10; i++) {
+		// String target = "/";
+		// if (transitionList.get(i).getTargetVertex().getUseCase() != null) {
+		// target = transitionList.get(i).getTargetVertex().getUseCase()
+		// .getName();
+		// }
+		//
+		// System.out.println(transitionList.get(i).getSourceVertex()
+		// .getUseCase().getName()
+		// + " "
+		// + target
+		// + " "
+		// + transitionList.get(i).getValue()
+		// / transitionCountAll2);
+		// }
+		// System.out.println("");
+
 	}
 
 }

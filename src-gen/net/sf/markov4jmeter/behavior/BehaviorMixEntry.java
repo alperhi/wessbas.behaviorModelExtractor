@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.BehaviorMixEntry#getBehaviorModelName <em>Behavior Model Name</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.BehaviorMixEntry#getRelativeFrequency <em>Relative Frequency</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.BehaviorMixEntry#getBehaviorModel <em>Behavior Model</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getBehaviorMixEntry()
  * @model

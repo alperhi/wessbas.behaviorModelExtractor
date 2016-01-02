@@ -15,13 +15,14 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getTargetVertex <em>Target Vertex</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getTimeDiffs <em>Time Diffs</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getThinkTimeParams <em>Think Time Params</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.Transition#getSourceVertex <em>Source Vertex</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getTransition()
  * @model
@@ -111,5 +112,31 @@ public interface Transition extends EObject {
 	 * @generated
 	 */
     EList<BigDecimal> getThinkTimeParams();
+
+				/**
+	 * Returns the value of the '<em><b>Source Vertex</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Source Vertex</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Source Vertex</em>' reference.
+	 * @see #setSourceVertex(Vertex)
+	 * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getTransition_SourceVertex()
+	 * @model required="true"
+	 * @generated
+	 */
+	Vertex getSourceVertex();
+
+				/**
+	 * Sets the value of the '{@link net.sf.markov4jmeter.behavior.Transition#getSourceVertex <em>Source Vertex</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Source Vertex</em>' reference.
+	 * @see #getSourceVertex()
+	 * @generated
+	 */
+	void setSourceVertex(Vertex value);
 
 } // Transition

@@ -58,9 +58,9 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 			// distance function with option don*t normalize
 			DistanceFunction euclideanDistance = new EuclideanDistance();
-			String[] options = new String[1];
-			options[0] = "-D";
-			euclideanDistance.setOptions(options);
+			// String[] options = new String[1];
+			// options[0] = "-D";
+			// euclideanDistance.setOptions(options);
 			euclideanDistance.setInstances(instances);
 			kmeans.setDistanceFunction(euclideanDistance);
 			kmeans.setPreserveInstancesOrder(true);

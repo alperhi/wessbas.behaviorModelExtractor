@@ -20,12 +20,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.BehaviorMixEntryImpl#getBehaviorModelName <em>Behavior Model Name</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.BehaviorMixEntryImpl#getRelativeFrequency <em>Relative Frequency</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.BehaviorMixEntryImpl#getBehaviorModel <em>Behavior Model</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

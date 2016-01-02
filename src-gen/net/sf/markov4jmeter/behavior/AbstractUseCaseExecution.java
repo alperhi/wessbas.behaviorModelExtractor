@@ -11,10 +11,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.AbstractUseCaseExecution#getUseCase <em>Use Case</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractUseCaseExecution()
  * @model abstract="true"

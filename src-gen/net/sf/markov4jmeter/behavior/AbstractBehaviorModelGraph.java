@@ -13,11 +13,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph#getVertices <em>Vertices</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.AbstractBehaviorModelGraph#getTransactionType <em>Transaction Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getAbstractBehaviorModelGraph()
  * @model abstract="true"

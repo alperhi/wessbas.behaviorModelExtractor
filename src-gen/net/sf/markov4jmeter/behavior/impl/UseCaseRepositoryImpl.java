@@ -26,10 +26,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.UseCaseRepositoryImpl#getUseCases <em>Use Cases</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -44,6 +44,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/timeDiffs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute behavior.ecore#//Transition/thinkTimeParams"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference behavior.ecore#//Transition/sourceVertex"/>
     </genClasses>
     <genClasses ecoreClass="behavior.ecore#//BehaviorModelAbsolute"/>
     <genClasses ecoreClass="behavior.ecore#//BehaviorModelRelative"/>

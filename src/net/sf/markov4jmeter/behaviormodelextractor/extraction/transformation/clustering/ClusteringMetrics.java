@@ -181,7 +181,6 @@ public class ClusteringMetrics {
 								attributeMap.put(attributeNameTemp, value
 										+ instances.instance(j).value(a));
 							}
-
 							sum += instances.instance(j).value(a);
 						}
 					}

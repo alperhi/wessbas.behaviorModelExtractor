@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.SessionImpl#getId <em>Id</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.SessionImpl#getStartTime <em>Start Time</em>}</li>
@@ -35,7 +36,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.SessionImpl#getObservedUseCaseExecutions <em>Observed Use Case Executions</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.SessionImpl#getTransactionType <em>Transaction Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

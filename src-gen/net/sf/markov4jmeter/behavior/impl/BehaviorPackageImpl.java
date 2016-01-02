@@ -438,6 +438,15 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
 
     /**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTransition_SourceVertex() {
+		return (EReference)transitionEClass.getEStructuralFeatures().get(4);
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -572,6 +581,7 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
 		createEAttribute(transitionEClass, TRANSITION__VALUE);
 		createEAttribute(transitionEClass, TRANSITION__TIME_DIFFS);
 		createEAttribute(transitionEClass, TRANSITION__THINK_TIME_PARAMS);
+		createEReference(transitionEClass, TRANSITION__SOURCE_VERTEX);
 
 		behaviorModelAbsoluteEClass = createEClass(BEHAVIOR_MODEL_ABSOLUTE);
 
@@ -656,6 +666,7 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
 		initEAttribute(getTransition_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransition_TimeDiffs(), ecorePackage.getEBigDecimal(), "timeDiffs", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransition_ThinkTimeParams(), ecorePackage.getEBigDecimal(), "thinkTimeParams", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransition_SourceVertex(), this.getVertex(), null, "sourceVertex", null, 1, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(behaviorModelAbsoluteEClass, BehaviorModelAbsolute.class, "BehaviorModelAbsolute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -684,7 +695,7 @@ public class BehaviorPackageImpl extends EPackageImpl implements BehaviorPackage
 	 * @generated
 	 */
     protected void createExtendedMetaDataAnnotations() {
-		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";		
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
 		addAnnotation
 		  (getUseCase_Id(), 
 		   source, 

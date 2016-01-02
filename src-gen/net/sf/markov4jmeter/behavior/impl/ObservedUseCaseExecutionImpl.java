@@ -17,11 +17,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.ObservedUseCaseExecutionImpl#getStartTime <em>Start Time</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.ObservedUseCaseExecutionImpl#getEndTime <em>End Time</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

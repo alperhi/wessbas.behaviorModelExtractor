@@ -13,10 +13,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.SessionRepository#getSessions <em>Sessions</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getSessionRepository()
  * @model

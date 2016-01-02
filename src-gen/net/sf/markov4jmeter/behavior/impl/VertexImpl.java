@@ -24,10 +24,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.VertexImpl#getOutgoingTransitions <em>Outgoing Transitions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

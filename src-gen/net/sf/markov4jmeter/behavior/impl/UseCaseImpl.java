@@ -18,11 +18,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.UseCaseImpl#getId <em>Id</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.UseCaseImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

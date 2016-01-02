@@ -10,11 +10,11 @@ package net.sf.markov4jmeter.behavior;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.ObservedUseCaseExecution#getStartTime <em>Start Time</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.ObservedUseCaseExecution#getEndTime <em>End Time</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.markov4jmeter.behavior.BehaviorPackage#getObservedUseCaseExecution()
  * @model

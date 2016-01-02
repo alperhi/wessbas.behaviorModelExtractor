@@ -261,8 +261,9 @@ public class SessionToABMTransformer {
 						dstUCExecution.getEndTime()).length();
 
 				// case timestamp in milliseconds, add 000000
-				if (lengthTimeStamp == 13) {
+				if (lengthTimeStamp <= 12) {
 					timeDistance = timeDistance * 1000000;
+					timeDistance2 = timeDistance2 * 1000000;
 				}
 
 				if (timeDistance < 0 && timeDistance2 >= 0) {

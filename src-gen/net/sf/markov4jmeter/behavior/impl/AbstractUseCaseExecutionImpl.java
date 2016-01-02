@@ -20,10 +20,10 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.AbstractUseCaseExecutionImpl#getUseCase <em>Use Case</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

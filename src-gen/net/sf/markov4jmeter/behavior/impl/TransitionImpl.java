@@ -28,13 +28,14 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getTargetVertex <em>Target Vertex</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getTimeDiffs <em>Time Diffs</em>}</li>
  *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getThinkTimeParams <em>Think Time Params</em>}</li>
+ *   <li>{@link net.sf.markov4jmeter.behavior.impl.TransitionImpl#getSourceVertex <em>Source Vertex</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -90,6 +91,16 @@ public class TransitionImpl extends EObjectImpl implements Transition {
     protected EList<BigDecimal> thinkTimeParams;
 
     /**
+	 * The cached value of the '{@link #getSourceVertex() <em>Source Vertex</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSourceVertex()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vertex sourceVertex;
+
+				/**
 	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
 	 * @generated
@@ -193,6 +204,44 @@ public class TransitionImpl extends EObjectImpl implements Transition {
 
     /**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vertex getSourceVertex() {
+		if (sourceVertex != null && sourceVertex.eIsProxy()) {
+			InternalEObject oldSourceVertex = (InternalEObject)sourceVertex;
+			sourceVertex = (Vertex)eResolveProxy(oldSourceVertex);
+			if (sourceVertex != oldSourceVertex) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BehaviorPackage.TRANSITION__SOURCE_VERTEX, oldSourceVertex, sourceVertex));
+			}
+		}
+		return sourceVertex;
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vertex basicGetSourceVertex() {
+		return sourceVertex;
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSourceVertex(Vertex newSourceVertex) {
+		Vertex oldSourceVertex = sourceVertex;
+		sourceVertex = newSourceVertex;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BehaviorPackage.TRANSITION__SOURCE_VERTEX, oldSourceVertex, sourceVertex));
+	}
+
+				/**
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -208,6 +257,9 @@ public class TransitionImpl extends EObjectImpl implements Transition {
 				return getTimeDiffs();
 			case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
 				return getThinkTimeParams();
+			case BehaviorPackage.TRANSITION__SOURCE_VERTEX:
+				if (resolve) return getSourceVertex();
+				return basicGetSourceVertex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -235,6 +287,9 @@ public class TransitionImpl extends EObjectImpl implements Transition {
 				getThinkTimeParams().clear();
 				getThinkTimeParams().addAll((Collection<? extends BigDecimal>)newValue);
 				return;
+			case BehaviorPackage.TRANSITION__SOURCE_VERTEX:
+				setSourceVertex((Vertex)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -259,6 +314,9 @@ public class TransitionImpl extends EObjectImpl implements Transition {
 			case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
 				getThinkTimeParams().clear();
 				return;
+			case BehaviorPackage.TRANSITION__SOURCE_VERTEX:
+				setSourceVertex((Vertex)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -279,6 +337,8 @@ public class TransitionImpl extends EObjectImpl implements Transition {
 				return timeDiffs != null && !timeDiffs.isEmpty();
 			case BehaviorPackage.TRANSITION__THINK_TIME_PARAMS:
 				return thinkTimeParams != null && !thinkTimeParams.isEmpty();
+			case BehaviorPackage.TRANSITION__SOURCE_VERTEX:
+				return sourceVertex != null;
 		}
 		return super.eIsSet(featureID);
 	}

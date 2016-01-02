@@ -407,13 +407,22 @@ public interface BehaviorPackage extends EPackage {
     int TRANSITION__THINK_TIME_PARAMS = 3;
 
     /**
+	 * The feature id for the '<em><b>Source Vertex</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__SOURCE_VERTEX = 4;
+
+				/**
 	 * The number of structural features of the '<em>Transition</em>' class.
 	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-    int TRANSITION_FEATURE_COUNT = 4;
+    int TRANSITION_FEATURE_COUNT = 5;
 
     /**
 	 * The meta object id for the '{@link net.sf.markov4jmeter.behavior.impl.BehaviorModelAbsoluteImpl <em>Model Absolute</em>}' class.
@@ -864,6 +873,17 @@ public interface BehaviorPackage extends EPackage {
     EAttribute getTransition_ThinkTimeParams();
 
     /**
+	 * Returns the meta object for the reference '{@link net.sf.markov4jmeter.behavior.Transition#getSourceVertex <em>Source Vertex</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Source Vertex</em>'.
+	 * @see net.sf.markov4jmeter.behavior.Transition#getSourceVertex()
+	 * @see #getTransition()
+	 * @generated
+	 */
+	EReference getTransition_SourceVertex();
+
+				/**
 	 * Returns the meta object for class '{@link net.sf.markov4jmeter.behavior.BehaviorModelAbsolute <em>Model Absolute</em>}'.
 	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1212,6 +1232,14 @@ public interface BehaviorPackage extends EPackage {
         EAttribute TRANSITION__THINK_TIME_PARAMS = eINSTANCE.getTransition_ThinkTimeParams();
 
         /**
+		 * The meta object literal for the '<em><b>Source Vertex</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRANSITION__SOURCE_VERTEX = eINSTANCE.getTransition_SourceVertex();
+
+								/**
 		 * The meta object literal for the '{@link net.sf.markov4jmeter.behavior.impl.BehaviorModelAbsoluteImpl <em>Model Absolute</em>}' class.
 		 * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
