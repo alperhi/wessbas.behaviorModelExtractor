@@ -134,7 +134,6 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 						.createBehaviorModelAbsoluteWithoutTransitions(useCaseRepository
 								.getUseCases());
 
-				System.out.println("top transitions cluster " + i);
 				// install the transitions in between vertices;
 				this.installTransitions(behaviorModelsAbsolute,
 						behaviorModelAbsoluteCentroid, centroid, assignments, i);

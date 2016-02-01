@@ -257,15 +257,6 @@ public class SessionToABMTransformer {
 				long timeDistance2 = dstUCExecution.getStartTime()
 						- srcUCExecution.getStartTime();
 
-				int lengthTimeStamp = String.valueOf(
-						dstUCExecution.getEndTime()).length();
-
-				// case timestamp in milliseconds, add 000000
-				if (lengthTimeStamp <= 12) {
-					timeDistance = timeDistance * 1000000;
-					timeDistance2 = timeDistance2 * 1000000;
-				}
-
 				if (timeDistance < 0 && timeDistance2 >= 0) {
 
 					transition.getTimeDiffs()
