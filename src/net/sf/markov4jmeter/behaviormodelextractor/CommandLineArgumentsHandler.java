@@ -179,14 +179,14 @@ public class CommandLineArgumentsHandler {
 					"Max 2", // argName;
 					false); // !hasOptionalArg;
 
-	/** (Optional) Threshold for session determination. */
-	private final static Option THRESHOLD_MAX_TIME_BETWEEN_REQUESTS = CmdlOptionFactory
-			.createOption("threshold", // opt;
-					"sessionthreshold", // longOpt;
-					"Threshold for session determination. ", // description;
-					false, // !isRequired;
-					"0", // argName;
-					false); // !hasOptionalArg;
+	/** (Optional) Number of Clusters. */
+	private final static Option SEED_VALUE = CmdlOptionFactory.createOption(
+			"seed", // opt;
+			"seed", // longOpt;
+			"Seed value for clustering. ", // description;
+			false, // !isRequired;
+			"seed value", // argName;
+			false); // !hasOptionalArg;
 
 	/** Formatter for printing the usage instructions. */
 	private final static HelpFormatter HELP_FORMATTER = new HelpFormatter();
@@ -220,8 +220,8 @@ public class CommandLineArgumentsHandler {
 	/** (Optional) NUmber of Clusters. */
 	private static String numberOfClustersMax;
 
-	/** (Optional) Threshold for session determination. */
-	private static String thresholdMaxSessionTime;
+	/** (Optional) seed value for clustering. */
+	private static String seed;
 
 	/** Command-line options to be parsed. */
 	private static Options options;
@@ -258,7 +258,8 @@ public class CommandLineArgumentsHandler {
 				.addOption(CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
 
 		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.THRESHOLD_MAX_TIME_BETWEEN_REQUESTS);
+				.addOption(CommandLineArgumentsHandler.SEED_VALUE);
+
 	}
 
 	/* ************************** public methods ************************** */
@@ -354,9 +355,9 @@ public class CommandLineArgumentsHandler {
 	 * 
 	 * @return a <code>String</code> which represents the clustering method.
 	 */
-	public static String getThresholdSessionTime() {
+	public static String getSeedValue() {
 
-		return CommandLineArgumentsHandler.thresholdMaxSessionTime;
+		return CommandLineArgumentsHandler.seed;
 	}
 
 	/**
@@ -429,10 +430,10 @@ public class CommandLineArgumentsHandler {
 				.readOptionValueAsString(commandLine,
 						CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
 
-		CommandLineArgumentsHandler.thresholdMaxSessionTime = CommandLineArgumentsHandler
-				.readOptionValueAsString(
-						commandLine,
-						CommandLineArgumentsHandler.THRESHOLD_MAX_TIME_BETWEEN_REQUESTS);
+		CommandLineArgumentsHandler.seed = CommandLineArgumentsHandler
+				.readOptionValueAsString(commandLine,
+						CommandLineArgumentsHandler.SEED_VALUE);
+
 	}
 
 	/* ************************** private methods ************************* */

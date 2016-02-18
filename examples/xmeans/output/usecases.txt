@@ -1,6 +1,0 @@
-entry
-search
-browse
-select
-addToCart
-pay

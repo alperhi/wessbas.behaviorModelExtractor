@@ -50,7 +50,11 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 			// XMeans --> Weka
 			XMeans xmeans = new XMeans();
-			xmeans.setSeed(5);
+
+			if (CommandLineArgumentsHandler.getSeedValue() != null) {
+				xmeans.setSeed(Integer.parseInt(CommandLineArgumentsHandler
+						.getSeedValue()));
+			}
 
 			// distance function
 			DistanceFunction euclideanDistance = new EuclideanDistance();
@@ -175,5 +179,4 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 		return behaviorMix;
 	}
-
 }

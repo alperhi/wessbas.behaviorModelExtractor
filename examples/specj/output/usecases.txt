@@ -1,0 +1,15 @@
+INITIAL
+login
+View_Items
+home
+logout
+View_Items_quantity
+Add_to_Cart
+shoppingcart
+remove
+deferorder
+purchasecart
+inventory
+sellinventory
+clearcart
+cancelorder

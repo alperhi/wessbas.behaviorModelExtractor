@@ -1,4 +1,0 @@
-gen_behavior_model; 0.24640766365087813; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\specj\output\specj_4_cluster\behaviormodel0.csv
-gen_behavior_model; 0.5005563887948135; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\specj\output\specj_4_cluster\behaviormodel1.csv
-gen_behavior_model; 0.009627945231989937; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\specj\output\specj_4_cluster\behaviormodel2.csv
-gen_behavior_model; 0.24340800232231843; C:\Users\voegele\git\wessbas.behaviorModelExtractor\.\examples\specj\output\specj_4_cluster\behaviormodel3.csv

@@ -1,0 +1,27 @@
+digraph G {
+"INITIAL*" [label="INITIAL*",shape=none];
+"login" [label="login",shape=none];
+"View_Items" [label="View_Items",shape=none];
+"home" [label="home",shape=none];
+"logout" [label="logout",shape=none];
+"View_Items_quantity" [label="View_Items_quantity",shape=none];
+"Add_to_Cart" [label="Add_to_Cart",shape=none];
+"shoppingcart" [label="shoppingcart",shape=none];
+"remove" [label="remove",shape=none];
+"deferorder" [label="deferorder",shape=none];
+"purchasecart" [label="purchasecart",shape=none];
+"inventory" [label="inventory",shape=none];
+"sellinventory" [label="sellinventory",shape=none];
+"clearcart" [label="clearcart",shape=none];
+"cancelorder" [label="cancelorder",shape=none];
+"INITIAL*"->"login" [style=solid,label="1"];
+"login"->"inventory" [style=solid,label="1; n(2750 273)"];
+"home"->"logout" [style=solid,label="1; n(4001 398)"];
+"logout"->"$" [style=solid,label="1"];
+"inventory"->"inventory" [style=solid,label="0.4822; n(1999 200)"];
+"inventory"->"sellinventory" [style=solid,label="0.5; n(2496 253)"];
+"inventory"->"cancelorder" [style=solid,label="0.0178; n(2003 191)"];
+"sellinventory"->"home" [style=solid,label="0.2275; n(3995 398)"];
+"sellinventory"->"sellinventory" [style=solid,label="0.7725; n(4000 399)"];
+"cancelorder"->"inventory" [style=solid,label="1; n(3524 362)"];
+}

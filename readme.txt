@@ -59,9 +59,7 @@ USAGE
 
 Example for command-line parameters (one row):
 
-  -i "./examples/aida/sessions.dat" -t "./examples/aida/template.csv"
-    -m "./examples/aida/mapping.csv"  -l 2 -o "./output/behaviormodel.csv"
-      -g "./output/gen_graph" -c xmeans -min 3 -max 20
+-i examples\specj\input\sessions.dat -o examples\specj\output  -c xmeans -min 3 -max 3 -seed 5
 
 
 OPEN ISSUES / FUTURE WORK

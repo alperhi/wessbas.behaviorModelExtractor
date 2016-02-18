@@ -537,8 +537,6 @@ public abstract class AbstractClusteringStrategy {
 		for (final Vertex srcVertex : vertices) {
 			if (srcVertex.getUseCase() != null) { // no final state
 
-				System.out.println(srcVertex.getUseCase().getName());
-
 				for (final Vertex dstVertex : vertices) {
 					final UseCase srcUseCase = srcVertex.getUseCase();
 					final String srcUseCaseName = srcUseCase.getName();

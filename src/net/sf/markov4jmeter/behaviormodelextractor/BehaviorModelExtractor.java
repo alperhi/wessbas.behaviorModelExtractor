@@ -205,15 +205,8 @@ public class BehaviorModelExtractor {
 					BehaviorModelExtractor.ERROR_NOT_INITIALIZED);
 		}
 
-		int sessionThreshold = 0;
-		if (CommandLineArgumentsHandler.getThresholdSessionTime() != null) {
-			sessionThreshold = Integer.parseInt(CommandLineArgumentsHandler
-					.getThresholdSessionTime());
-		}
-
 		final ArrayList<SessionData> sessions = Parser
-				.parseSessionsIntoSessionsRepository(inputFile,
-						sessionThreshold);
+				.parseSessionsIntoSessionsRepository(inputFile);
 
 		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(
 				sessions, this.sessionRepository, this.useCaseRepository,
