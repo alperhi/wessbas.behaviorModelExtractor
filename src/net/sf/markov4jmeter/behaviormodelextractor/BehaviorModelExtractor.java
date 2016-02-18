@@ -206,7 +206,7 @@ public class BehaviorModelExtractor {
 		}
 
 		final ArrayList<SessionData> sessions = Parser
-				.parseSessionsIntoSessionsRepository(inputFile, true);
+				.parseSessionsIntoSessionsRepository(inputFile);
 
 		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(
 				sessions, this.sessionRepository, this.useCaseRepository,
