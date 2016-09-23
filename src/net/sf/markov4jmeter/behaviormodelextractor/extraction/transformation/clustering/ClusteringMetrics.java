@@ -14,7 +14,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
 import java.util.HashMap;
@@ -218,10 +217,6 @@ public class ClusteringMetrics {
 					+ ";" + " min session length " + minSessionLength + ";"
 					+ " max session length " + maxSessionLength);
 
-			for (String key : attributeMap.keySet()) {
-				System.out.println(key + " " + attributeMap.get(key));
-			}
-
 			sumInstances = 0;
 			sumAttributes = 0;
 			minSessionLength = 999999999;
@@ -229,45 +224,5 @@ public class ClusteringMetrics {
 			attributeMap.clear();
 		}
 	}
-	// /**
-	// * Create sessionFile with clusterInformation.
-	// *
-	// * @param assignments
-	// */
-	// protected void printClusterAssignmentsToSession(final int[] assignments,
-	// final int clusterSize) {
-	// try {
-	// FileReader fr = new FileReader(new
-	// File(CommandLineArgumentsHandler.getInputFile()));
-	// BufferedReader br = new BufferedReader(fr);
-	// String line = null;
-	// int counter = 0;
-	// List<String> tmpString = new ArrayList<String>();
-	// while ( (line = br.readLine()) != null) {
-	// tmpString.add(assignments[counter] + ";" + line);
-	// counter++;
-	// }
-	//
-	// FileWriter fw = new FileWriter(new
-	// File(CommandLineArgumentsHandler.getOutputDirectory()
-	// + "/data_clustering_" + clusterSize + ".dat"));
-	// BufferedWriter bw = new BufferedWriter(fw);
-	//
-	// for (String stringInstance: tmpString) {
-	// bw.append(stringInstance);
-	// bw.append("\n");
-	// }
-	//
-	// tmpString = null;
-	// bw.close();
-	// br.close();
-	// } catch (FileNotFoundException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
 
 }

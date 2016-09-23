@@ -14,8 +14,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-
-
 package net.sf.markov4jmeter.behaviormodelextractor;
 
 import java.io.FileNotFoundException;
@@ -330,7 +328,5 @@ public class BehaviorModelExtractor {
 			CommandLineArgumentsHandler.printUsage();
 		}
 	}
-
-	// TODO: revise remaining methods!
 
 }

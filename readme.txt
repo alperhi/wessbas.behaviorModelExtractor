@@ -10,10 +10,6 @@ transform logfiles (HTTP web logs) into the wessbas logfile format.
 
 Output: The output is the behavior mix and the behavior models.  
 
-License:
-
-  MIT-license?
-
 Transformation:
 
   sessions.dat -->  Absolut Behavior Models  -->  Clustering --> Relative Behavior Model
@@ -32,7 +28,7 @@ ACADEMIC LITERATURE
 ------------------  
   
 Automatic extraction of probabilistic workload specifications for 
-load testing session-based application systems  (Hoorn, VÃ¶gele, Schulz, Hasselbring, Krcmar)  
+load testing session-based application systems  (Hoorn, Vögele, Schulz, Hasselbring, Krcmar)  
 
 ENHANCEMENTS
 ------------
@@ -59,7 +55,7 @@ USAGE
 
 Example for command-line parameters (one row):
 
--i examples\specj\input\sessions.dat -o examples\specj\output  -c xmeans -min 3 -max 3 -seed 5
+-i examples\specj\input\sessions.dat -o examples\specj\output  -c xmeans -min 3 -max 5 -seed 5
 
 
 OPEN ISSUES / FUTURE WORK

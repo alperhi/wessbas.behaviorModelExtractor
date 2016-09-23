@@ -14,7 +14,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-
 package net.sf.markov4jmeter.behaviormodelextractor;
 
 import org.apache.commons.cli.BasicParser;
@@ -114,96 +113,36 @@ import org.apache.commons.cli.ParseException;
 public class CommandLineArgumentsHandler {
 
 	/** Input file which includes the sessions data. */
-	private final static Option INPUT_FILE = CmdlOptionFactory.createOption(
-			"i", // opt;
-			"input", // longOpt;
-			"Input file which includes the " // description;
-					+ "sessions data.", true, // isRequired;
-			"sessions.dat", // argName;
-			false); // !hasOptionalArg;
+	private static Option INPUT_FILE;
 
 	/** Output directory where the output files will be written into. */
-	private final static Option OUTPUT_DIRECTORY = CmdlOptionFactory
-			.createOption("o", // opt;
-					"output", // longOpt;
-					"Output directory where the output " // description;
-							+ "files will be written into.", true, // isRequired;
-					"./output", // argName;
-					false); // !hasOptionalArg;
+	private static Option OUTPUT_DIRECTORY;
 
 	/**
 	 * (Optional) OS-specific line-break type for CSV output files (0 = Windows,
 	 * 1 = Unix, 2 = MacOS); the default value is 0 (Windows).
 	 */
-	private final static Option LINE_BREAK_TYPE = CmdlOptionFactory
-			.createOption(
-					"l", // opt;
-					"linebreak", // longOpt;
-					"(Optional) OS-specific line-break " // description;
-							+ "type for CSV output files (0 = Windows, 1 = Unix, "
-							+ "2 = MacOS); the default value is 0 (Windows).",
-					false, // !isRequired;
-					"0|1|2", // argName;
-					false); // !isRequired;
+	private static Option LINE_BREAK_TYPE;
 
 	/** (Optional) input CSV-file which includes a template matrix. */
-	private final static Option TEMPLATE_FILE = CmdlOptionFactory.createOption(
-			"t", // opt;
-			"template", // longOpt;
-			"(Optional) input CSV-file which " // description;
-					+ "includes a template matrix.", false, // isRequired;
-			"template.csv", // argName;
-			false); // !hasOptionalArg;
+	private static Option TEMPLATE_FILE;
 
 	/** (Optional) use case mapping file. */
-	private final static Option USE_CASE_MAPPING_FILE = CmdlOptionFactory
-			.createOption("m", // opt;
-					"mapping", // longOpt;
-					"(Optional) use case mapping file", // description;
-					false, // isRequired;
-					"mapping.csv", // argName;
-					false); // !hasOptionalArg;
-
+	private static Option USE_CASE_MAPPING_FILE;
 	/**
 	 * (Optional) clustering method to be applied to the extracted Behavior
 	 * Models.
 	 */
-	private final static Option CLUSTERING_METHOD = CmdlOptionFactory
-			.createOption(
-					"c", // opt;
-					"clustering", // longOpt;
-					"(Optional) clustering method to be " // description;
-							+ "applied to the extracted Behavior Models. ",
-					false, // !isRequired;
-					"simple|kmeans|xmeans", // argName;
-					false); // !hasOptionalArg;
+	private static Option CLUSTERING_METHOD;
 
 	/** (Optional) Number of Clusters. */
-	private final static Option NUMBER_OF_CLUSTERS_MIN = CmdlOptionFactory
-			.createOption("min", // opt;
-					"numberClusters", // longOpt;
-					"Number of Clusters. ", // description;
-					false, // !isRequired;
-					"Min 2", // argName;
-					false); // !hasOptionalArg;
+	private static Option NUMBER_OF_CLUSTERS_MIN;
 
 	/** (Optional) Number of Clusters. */
-	private final static Option NUMBER_OF_CLUSTERS_MAX = CmdlOptionFactory
-			.createOption("max", // opt;
-					"numberClusters", // longOpt;
-					"Number of Clusters. ", // description;
-					false, // !isRequired;
-					"Max 2", // argName;
-					false); // !hasOptionalArg;
+	private static Option NUMBER_OF_CLUSTERS_MAX;
 
 	/** (Optional) Number of Clusters. */
-	private final static Option SEED_VALUE = CmdlOptionFactory.createOption(
-			"seed", // opt;
-			"seed", // longOpt;
-			"Seed value for clustering. ", // description;
-			false, // !isRequired;
-			"seed value", // argName;
-			false); // !hasOptionalArg;
+	private static Option SEED_VALUE;
 
 	/** Formatter for printing the usage instructions. */
 	private final static HelpFormatter HELP_FORMATTER = new HelpFormatter();
@@ -231,10 +170,10 @@ public class CommandLineArgumentsHandler {
 	/** (Optional) clustering method which has been read from command-line. */
 	private static String clusteringMethod;
 
-	/** (Optional) NUmber of Clusters. */
+	/** (Optional) Number of Clusters. */
 	private static String numberOfClustersMin;
 
-	/** (Optional) NUmber of Clusters. */
+	/** (Optional) Number of Clusters. */
 	private static String numberOfClustersMax;
 
 	/** (Optional) seed value for clustering. */
@@ -244,40 +183,6 @@ public class CommandLineArgumentsHandler {
 	private static Options options;
 
 	/* *************************** static blocks ************************** */
-
-	static {
-
-		// fill the options container;
-		CommandLineArgumentsHandler.options = new Options();
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.INPUT_FILE);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.OUTPUT_DIRECTORY);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.LINE_BREAK_TYPE);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.TEMPLATE_FILE);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.USE_CASE_MAPPING_FILE);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.CLUSTERING_METHOD);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MIN);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
-
-		CommandLineArgumentsHandler.options
-				.addOption(CommandLineArgumentsHandler.SEED_VALUE);
-
-	}
 
 	/* ************************** public methods ************************** */
 
@@ -411,6 +316,8 @@ public class CommandLineArgumentsHandler {
 	public static void init(final String[] args) throws ParseException,
 			NullPointerException, IllegalArgumentException {
 
+		CommandLineArgumentsHandler.initializeOptions();
+
 		// might throw a ParseException;
 		final CommandLine commandLine = CommandLineArgumentsHandler
 				.parseCommands(args);
@@ -454,6 +361,109 @@ public class CommandLineArgumentsHandler {
 	}
 
 	/* ************************** private methods ************************* */
+
+	/**
+	 * Initialize available options.
+	 */
+	private static void initializeOptions() {
+
+		// fill the options container;
+		CommandLineArgumentsHandler.options = new Options();
+
+		INPUT_FILE = CmdlOptionFactory.createOption("i", // opt;
+				"input", // longOpt;
+				"Input file which includes the " // description;
+						+ "sessions data.", true, // isRequired;
+				"sessions.dat", // argName;
+				false); // !hasOptionalArg;
+
+		OUTPUT_DIRECTORY = CmdlOptionFactory.createOption("o", // opt;
+				"output", // longOpt;
+				"Output directory where the output " // description;
+						+ "files will be written into.", true, // isRequired;
+				"./output", // argName;
+				false); // !hasOptionalArg;
+
+		LINE_BREAK_TYPE = CmdlOptionFactory.createOption(
+				"l", // opt;
+				"linebreak", // longOpt;
+				"(Optional) OS-specific line-break " // description;
+						+ "type for CSV output files (0 = Windows, 1 = Unix, "
+						+ "2 = MacOS); the default value is 0 (Windows).",
+				false, // !isRequired;
+				"0|1|2", // argName;
+				false); // !isRequired;
+
+		TEMPLATE_FILE = CmdlOptionFactory.createOption("t", // opt;
+				"template", // longOpt;
+				"(Optional) input CSV-file which " // description;
+						+ "includes a template matrix.", false, // isRequired;
+				"template.csv", // argName;
+				false); // !hasOptionalArg;
+
+		CLUSTERING_METHOD = CmdlOptionFactory.createOption("c", // opt;
+				"clustering", // longOpt;
+				"(Optional) clustering method to be " // description;
+						+ "applied to the extracted Behavior Models. ", false, // !isRequired;
+				"simple|kmeans|xmeans", // argName;
+				false); // !hasOptionalArg;
+
+		NUMBER_OF_CLUSTERS_MIN = CmdlOptionFactory.createOption("min", // opt;
+				"numberClusters", // longOpt;
+				"Number of Clusters. ", // description;
+				false, // !isRequired;
+				"Min 2", // argName;
+				false); // !hasOptionalArg;
+
+		NUMBER_OF_CLUSTERS_MAX = CmdlOptionFactory.createOption("max", // opt;
+				"numberClusters", // longOpt;
+				"Number of Clusters. ", // description;
+				false, // !isRequired;
+				"Max 2", // argName;
+				false); // !hasOptionalArg;
+
+		SEED_VALUE = CmdlOptionFactory.createOption("seed", // opt;
+				"seed", // longOpt;
+				"Seed value for clustering. ", // description;
+				false, // !isRequired;
+				"seed value", // argName;
+				false); // !hasOptionalArg;
+
+		USE_CASE_MAPPING_FILE = CmdlOptionFactory.createOption("m", // opt;
+				"mapping", // longOpt;
+				"(Optional) use case mapping file", // description;
+				false, // isRequired;
+				"mapping.csv", // argName;
+				false); // !hasOptionalArg;
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.INPUT_FILE);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.OUTPUT_DIRECTORY);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.LINE_BREAK_TYPE);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.TEMPLATE_FILE);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.USE_CASE_MAPPING_FILE);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.CLUSTERING_METHOD);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MIN);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.NUMBER_OF_CLUSTERS_MAX);
+
+		CommandLineArgumentsHandler.options
+				.addOption(CommandLineArgumentsHandler.SEED_VALUE);
+
+	}
 
 	/**
 	 * Reads the value for a given option from the specified command-line as

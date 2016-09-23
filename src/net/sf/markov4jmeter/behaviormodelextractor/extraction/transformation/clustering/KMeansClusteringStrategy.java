@@ -14,7 +14,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-
 package net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.clustering;
 
 import net.sf.markov4jmeter.behavior.BehaviorMix;
