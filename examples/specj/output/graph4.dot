@@ -1,0 +1,29 @@
+digraph G {
+"INITIAL*" [label="INITIAL*",shape=none];
+"login" [label="login",shape=none];
+"View_Itemsquantity" [label="View_Itemsquantity",shape=none];
+"Add_to_Cartquantity" [label="Add_to_Cartquantity",shape=none];
+"shoppingcart" [label="shoppingcart",shape=none];
+"clearcart" [label="clearcart",shape=none];
+"purchasecart" [label="purchasecart",shape=none];
+"home" [label="home",shape=none];
+"logout" [label="logout",shape=none];
+"deferorder" [label="deferorder",shape=none];
+"inventory" [label="inventory",shape=none];
+"sellinventory" [label="sellinventory",shape=none];
+"View_Items" [label="View_Items",shape=none];
+"remove" [label="remove",shape=none];
+"cancelorder" [label="cancelorder",shape=none];
+"INITIAL*"->"login" [style=solid,label="1"];
+"login"->"View_Itemsquantity" [style=solid,label="1; n(1648 643)"];
+"View_Itemsquantity"->"Add_to_Cartquantity" [style=solid,label="1; n(2047 828)"];
+"Add_to_Cartquantity"->"View_Itemsquantity" [style=solid,label="0.6618; n(1542 729)"];
+"Add_to_Cartquantity"->"shoppingcart" [style=solid,label="0.1691; n(4106 967)"];
+"Add_to_Cartquantity"->"purchasecart" [style=solid,label="0.1691; n(4064 928)"];
+"shoppingcart"->"clearcart" [style=solid,label="1; n(1399 490)"];
+"clearcart"->"View_Itemsquantity" [style=solid,label="1; n(1166 687)"];
+"purchasecart"->"home" [style=solid,label="0.9087; n(2751 719)"];
+"purchasecart"->"$" [style=solid,label="0.0913"];
+"home"->"logout" [style=solid,label="1; n(3534 905)"];
+"logout"->"$" [style=solid,label="1"];
+}
