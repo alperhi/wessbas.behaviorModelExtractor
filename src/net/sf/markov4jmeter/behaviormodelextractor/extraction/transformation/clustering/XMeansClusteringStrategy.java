@@ -51,7 +51,8 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 	@Override
 	public BehaviorMix apply(
 			final BehaviorModelAbsolute[] behaviorModelsAbsolute,
-			final UseCaseRepository useCaseRepository) {
+			final UseCaseRepository useCaseRepository,
+			final String outputDirectory) {
 
 		final ABMToRBMTransformer abmToRbmTransformer = new ABMToRBMTransformer();
 
@@ -63,15 +64,16 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			// Returns a valid instances set, generated based on the absolut
 			// behavior models
 
-			Instances instances = getInstances(behaviorModelsAbsolute);
+			Instances instances = getInstances(behaviorModelsAbsolute, outputDirectory);
 
 			// XMeans --> Weka
 			XMeans xmeans = new XMeans();
 
-			if (CommandLineArgumentsHandler.getSeedValue() != null) {
-				xmeans.setSeed(Integer.parseInt(CommandLineArgumentsHandler
-						.getSeedValue()));
-			}
+//			if (CommandLineArgumentsHandler.getSeedValue() != null) {
+//				xmeans.setSeed(Integer.parseInt(CommandLineArgumentsHandler
+//						.getSeedValue()));
+//			}
+			xmeans.setSeed(5);
 
 			// distance function
 			DistanceFunction euclideanDistance = new EuclideanDistance();
@@ -93,17 +95,19 @@ public class XMeansClusteringStrategy extends AbstractClusteringStrategy {
 			int[] assignments = new int[instances.numInstances()];
 
 			// get number of clusters to be generated.
-			int numberOfClustersMin = Integer
-					.parseInt(CommandLineArgumentsHandler
-							.getNumberOfClustersMin());
-			int numberOfClustersMax = 0;
-			if (CommandLineArgumentsHandler.getNumberOfClustersMax() != "") {
-				numberOfClustersMax = Integer
-						.parseInt(CommandLineArgumentsHandler
-								.getNumberOfClustersMax());
-			} else {
-				numberOfClustersMax = numberOfClustersMin;
-			}
+//			int numberOfClustersMin = Integer
+//					.parseInt(CommandLineArgumentsHandler
+//							.getNumberOfClustersMin());
+			int numberOfClustersMin = 3;
+//			int numberOfClustersMax = 0;
+//			if (CommandLineArgumentsHandler.getNumberOfClustersMax() != "") {
+//				numberOfClustersMax = Integer
+//						.parseInt(CommandLineArgumentsHandler
+//								.getNumberOfClustersMax());
+//			} else {
+//				numberOfClustersMax = numberOfClustersMin;
+//			}
+			int numberOfClustersMax = 5;
 
 			// clustering
 			xmeans.setMinNumClusters(numberOfClustersMin);

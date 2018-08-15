@@ -22,13 +22,11 @@ Export-Package: net.sf.markov4jmeter.behavior,
  net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.helper,
  net.sf.markov4jmeter.behaviormodelextractor.test,
  net.sf.markov4jmeter.behaviormodelextractor.util
-Require-Bundle: wessbas.dsl;bundle-version="1.0.0",
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.junit;visibility:=reexport,
- org.eclipse.emf;bundle-version="2.6.0",
- wessbas.commons;bundle-version="1.0.0"
+ org.eclipse.emf;bundle-version="2.6.0"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Import-Package: org.objectweb.asm

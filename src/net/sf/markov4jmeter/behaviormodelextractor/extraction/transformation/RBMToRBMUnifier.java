@@ -87,7 +87,8 @@ public class RBMToRBMUnifier {
     public BehaviorMix transform (
             final BehaviorModelAbsolute[] behaviorModelsAbsolute,
             final String clusteringType,
-            final UseCaseRepository useCaseRepository)
+            final UseCaseRepository useCaseRepository,
+            final String outputDirectory)
                     throws ExtractionException {
 
         final AbstractClusteringStrategy clusteringStrategy =
@@ -95,7 +96,8 @@ public class RBMToRBMUnifier {
 
         return clusteringStrategy.apply(
         		behaviorModelsAbsolute,
-                useCaseRepository);
+                useCaseRepository,
+                outputDirectory);
     }
 
 

@@ -29,7 +29,6 @@ import net.sf.markov4jmeter.behavior.BehaviorMixEntry;
 import net.sf.markov4jmeter.behavior.BehaviorModelRelative;
 import net.sf.markov4jmeter.behavior.UseCase;
 import net.sf.markov4jmeter.behavior.Vertex;
-import net.sf.markov4jmeter.behaviormodelextractor.CommandLineArgumentsHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBMToMarkovMatrixTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 
@@ -220,7 +219,8 @@ public class BehaviorModelWriter {
                 filenameBehaviorModels,
                 filenameGraphs,
                 filenameBehaviorMix,
-                filenameUseCases);
+                filenameUseCases,
+                outputDirectory);
     }
 
     /**
@@ -272,7 +272,8 @@ public class BehaviorModelWriter {
             final String filenameBehaviorModels,
             final String filenameGraphs,
             final String filenameBehaviorMix,
-            final String filenameUseCases) throws SecurityException,
+            final String filenameUseCases,
+            final String outputDirectory) throws SecurityException,
                                                   IOException,
                                                   FileNotFoundException,
                                                   NullPointerException {
@@ -302,8 +303,8 @@ public class BehaviorModelWriter {
                     this.getCsvFilename(filenameBehaviorModels);
                     
             final String suffixedOutputCsvFile = (n > 1) ?
-                    this.getIndexedCsvFilename(CommandLineArgumentsHandler.getOutputDirectory() + "\\" + behaviorModelName, i) :
-                    this.getCsvFilename(CommandLineArgumentsHandler.getOutputDirectory() + behaviorModelName);
+                    this.getIndexedCsvFilename(outputDirectory + "\\" + behaviorModelName, i) :
+                    this.getCsvFilename(outputDirectory + behaviorModelName);
 
             final String suffixedOutputDotFile = (n > 1) ?
                     this.getIndexedDotFilename(filenameGraphs, i) :

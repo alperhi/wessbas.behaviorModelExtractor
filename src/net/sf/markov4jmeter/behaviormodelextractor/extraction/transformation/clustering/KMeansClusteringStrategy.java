@@ -49,7 +49,8 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 	@Override
 	public BehaviorMix apply(
 			final BehaviorModelAbsolute[] behaviorModelsAbsolute,
-			final UseCaseRepository useCaseRepository) {
+			final UseCaseRepository useCaseRepository,
+			final String outputDirectory) {
 
 		final ABMToRBMTransformer abmToRbmTransformer = new ABMToRBMTransformer();
 
@@ -60,7 +61,7 @@ public class KMeansClusteringStrategy extends AbstractClusteringStrategy {
 
 			// Returns a valid instances set, generated based on the absolut
 			// behavior models
-			Instances instances = getInstances(behaviorModelsAbsolute);
+			Instances instances = getInstances(behaviorModelsAbsolute, outputDirectory);
 
 			// KMeans --> Weka
 			SimpleKMeans kmeans = new SimpleKMeans();

@@ -89,7 +89,8 @@ public abstract class AbstractClusteringStrategy {
 	 */
 	public abstract BehaviorMix apply(
 			final BehaviorModelAbsolute[] behaviorModelsAbsolute,
-			final UseCaseRepository useCaseRepository)
+			final UseCaseRepository useCaseRepository,
+			String outputDirectory)
 			throws ExtractionException;
 
 	/* ************************* protected methods ************************ */
@@ -425,7 +426,7 @@ public abstract class AbstractClusteringStrategy {
 	 * @return instance set
 	 */
 	protected Instances getInstances(
-			BehaviorModelAbsolute[] behaviorModelsAbsolute) throws Exception {
+			BehaviorModelAbsolute[] behaviorModelsAbsolute, String outputDirectory) throws Exception {
 
 		// init the fastVector with attributesNames from the first
 		// behaviorModel.
@@ -454,7 +455,7 @@ public abstract class AbstractClusteringStrategy {
 		// application.
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(instances);
-		saver.setFile(new File(CommandLineArgumentsHandler.getOutputDirectory()
+		saver.setFile(new File(outputDirectory
 				+ "/data_clustering.arff"));
 		saver.writeBatch();
 

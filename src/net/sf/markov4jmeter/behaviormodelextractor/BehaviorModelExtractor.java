@@ -38,9 +38,6 @@ import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.RBM
 import net.sf.markov4jmeter.behaviormodelextractor.extraction.transformation.SessionToABMTransformer;
 import net.sf.markov4jmeter.behaviormodelextractor.util.CSVHandler;
 import net.sf.markov4jmeter.behaviormodelextractor.util.IdGenerator;
-
-import org.apache.commons.cli.MissingOptionException;
-
 import wessbas.commons.parser.ParseException;
 import wessbas.commons.parser.Parser;
 import wessbas.commons.parser.SessionData;
@@ -78,8 +75,8 @@ public class BehaviorModelExtractor {
 	private UseCaseRepository useCaseRepository;
 
 	/**
-	 * Mapping of alternative use case names; this might be <code>null</code>,
-	 * if use case names shall not be mapped.
+	 * Mapping of alternative use case names; this might be <code>null</code>, if
+	 * use case names shall not be mapped.
 	 */
 	private UseCaseMapping useCaseMapping;
 
@@ -109,8 +106,8 @@ public class BehaviorModelExtractor {
 	 * @param templateFile
 	 *            template file to be filled with extracted information.
 	 * @param lineBreakType
-	 *            OS-specific line-break type for CSV output files (0 = Windows,
-	 *            1 = Unix, 2 = MacOS); the default value is 0 (Windows).
+	 *            OS-specific line-break type for CSV output files (0 = Windows, 1 =
+	 *            Unix, 2 = MacOS); the default value is 0 (Windows).
 	 * 
 	 * @throws FileNotFoundException
 	 *             in case any specified file does not exist.
@@ -119,17 +116,13 @@ public class BehaviorModelExtractor {
 	 * @throws ExtractionException
 	 * @throws NullPointerException
 	 */
-	public void init(final String useCaseMappingFile,
-			final String templateFile, final int lineBreakType)
-			throws FileNotFoundException, IOException, NullPointerException,
-			ExtractionException {
+	public void init(final String useCaseMappingFile, final String templateFile, final int lineBreakType)
+			throws FileNotFoundException, IOException, NullPointerException, ExtractionException {
 
 		// ---- initialize Markov Matrix Handler and DOT Graph Generator ----;
 
-		this.markovMatrixHandler = new MarkovMatrixHandler(
-				BehaviorModelExtractor.FINAL_VERTEX_NAME, new CSVHandler(
-						lineBreakType),
-				BehaviorModelExtractor.THINK_TIME_DEFAULT_VALUE);
+		this.markovMatrixHandler = new MarkovMatrixHandler(BehaviorModelExtractor.FINAL_VERTEX_NAME,
+				new CSVHandler(lineBreakType), BehaviorModelExtractor.THINK_TIME_DEFAULT_VALUE);
 
 		// TODO: dedicated line-break type for DOT Graph Generator as parameter?
 		this.dotGraphGenerator = new DotGraphGenerator(lineBreakType);
@@ -155,12 +148,8 @@ public class BehaviorModelExtractor {
 			//
 			// collectStatesFromFromCSVFile() might throw a FileNotFound-,
 			// NullPointer-, IO- or ExtractionException;
-			SessionRepositoryHandler.getInstance()
-					.addSessionUseCasesToUseCaseRepository(
-							this.useCaseRepository,
-							this.markovMatrixHandler
-									.collectStatesFromCSVFile(templateFile),
-							this.useCaseIdGenerator);
+			SessionRepositoryHandler.getInstance().addSessionUseCasesToUseCaseRepository(this.useCaseRepository,
+					this.markovMatrixHandler.collectStatesFromCSVFile(templateFile), this.useCaseIdGenerator);
 
 			// no more use cases will be added -> ID-generator not required
 			// anymore (this null-value serves as indicator for some methods!);
@@ -192,22 +181,18 @@ public class BehaviorModelExtractor {
 	 * @throws ParseException
 	 * @throws ExtractionException
 	 */
-	public void extract(final String inputFile, final String outputDirectory,
-			final String clusteringMethod) throws IOException, ParseException,
-			ExtractionException {
+	public void extract(final String inputFile, final String outputDirectory, final String clusteringMethod)
+			throws IOException, ParseException, ExtractionException {
 
 		if (!this.isInitialized) {
 
-			throw new ExtractionException(
-					BehaviorModelExtractor.ERROR_NOT_INITIALIZED);
+			throw new ExtractionException(BehaviorModelExtractor.ERROR_NOT_INITIALIZED);
 		}
 
-		final ArrayList<SessionData> sessions = Parser
-				.parseSessionsIntoSessionsRepository(inputFile, outputDirectory);
+		final ArrayList<SessionData> sessions = Parser.parseSessionsIntoSessionsRepository(inputFile, outputDirectory);
 
-		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(
-				sessions, this.sessionRepository, this.useCaseRepository,
-				this.useCaseMapping, this.useCaseIdGenerator);
+		SessionRepositoryHandler.getInstance().addSessionsToSessionsRepository(sessions, this.sessionRepository,
+				this.useCaseRepository, this.useCaseMapping, this.useCaseIdGenerator);
 
 		// ---- initialize transformers ----;
 
@@ -221,14 +206,12 @@ public class BehaviorModelExtractor {
 		// ---- start transformation process ----;
 
 		final BehaviorModelAbsolute[] behaviorModelsAbsolute = sessionToAbmTransformer
-				.transformSessionsToBehaviorModels(this.sessionRepository
-						.getSessions(), this.useCaseRepository.getUseCases(),
-						this.useCaseIdGenerator, clusteringMethod
-								.equals(RBMToRBMUnifier.CLUSTERING_TYPE_NONE));
+				.transformSessionsToBehaviorModels(this.sessionRepository.getSessions(),
+						this.useCaseRepository.getUseCases(), this.useCaseIdGenerator,
+						clusteringMethod.equals(RBMToRBMUnifier.CLUSTERING_TYPE_NONE));
 
-		final BehaviorMix behaviorMix = rbmToRBMUnifier.transform(
-				behaviorModelsAbsolute, clusteringMethod,
-				this.useCaseRepository);
+		final BehaviorMix behaviorMix = rbmToRBMUnifier.transform(behaviorModelsAbsolute, clusteringMethod,
+				this.useCaseRepository, outputDirectory);
 
 		// check if sumProbability is one
 		double sumProbability = 0;
@@ -240,8 +223,7 @@ public class BehaviorModelExtractor {
 			double diff = 1 - sumProbability;
 			for (BehaviorMixEntry behaviorMixEntry : behaviorMix.getEntries()) {
 				if ((behaviorMixEntry.getRelativeFrequency() + diff) > 0) {
-					behaviorMixEntry.setRelativeFrequency(behaviorMixEntry
-							.getRelativeFrequency() + diff);
+					behaviorMixEntry.setRelativeFrequency(behaviorMixEntry.getRelativeFrequency() + diff);
 					break;
 				}
 			}
@@ -251,8 +233,8 @@ public class BehaviorModelExtractor {
 
 		// ---- write output files ----;
 
-		final BehaviorModelWriter behaviorModelWriter = new BehaviorModelWriter(
-				rbmToMarkovMatrixTransformer, // last transformation;
+		final BehaviorModelWriter behaviorModelWriter = new BehaviorModelWriter(rbmToMarkovMatrixTransformer, // last
+																												// transformation;
 				this.dotGraphGenerator);
 
 		// write the sessions-related CVS- and graph-files;
@@ -267,66 +249,114 @@ public class BehaviorModelExtractor {
 	 */
 	public static void main(final String[] argv) {
 
+		// try {
+		//
+		// System.out.println("****************************");
+		// System.out.println("Start BehaviorModelExtractor");
+		// System.out.println("****************************");
+		//
+		// // ---- read command-line parameters ----;
+		//
+		// // initialize arguments handler for retrieving the command line
+		// // options; might throw a NullPointer-, IllegalArgument- or
+		// // ParseException;
+		// CommandLineArgumentsHandler.init(argv);
+		//
+		// final String inputFile = CommandLineArgumentsHandler.getInputFile();
+		//
+		// final String outputDirectory =
+		// CommandLineArgumentsHandler.getOutputDirectory();
+		//
+		// // template file is optional;
+		// final String templateFile = CommandLineArgumentsHandler.getTemplateFile();
+		//
+		// // use case mapping file is optional;
+		// final String useCaseMappingFile =
+		// CommandLineArgumentsHandler.getUseCaseMappingFile();
+		//
+		// // line-break type of CSV-files is optional;
+		// final int lineBreakType = CommandLineArgumentsHandler.getLineBreakType();
+		//
+		// // clustering method is optional;
+		// final String clusteringMethod =
+		// CommandLineArgumentsHandler.getClusteringMethod();
+		//
+		// // ---- initialize and start the Behavior Model Extractor ----
+		//
+		// final BehaviorModelExtractor behaviorModelExtractor = new
+		// BehaviorModelExtractor();
+		//
+		// // might throw a FileNotFound- or IOException;
+		// behaviorModelExtractor.init(useCaseMappingFile, templateFile, lineBreakType);
+		//
+		// // might throw an IO-, Parse- or ExtractionException;
+		// behaviorModelExtractor.extract(inputFile, outputDirectory, clusteringMethod);
+		//
+		// System.out.println("****************************");
+		// System.out.println("END BehaviorModelExtractor");
+		// System.out.println("****************************");
+		//
+		// // } catch (final MissingOptionException ex) {
+		// //
+		// // // this exception type indicates that no argument has been passed;
+		// // CommandLineArgumentsHandler.printUsage();
+		//
+		// } catch (final Exception ex) {
+		//
+		// System.err.println(ex.getMessage());
+		// CommandLineArgumentsHandler.printUsage();
+		// }
+		// BehaviorModelExtractor extractor = new BehaviorModelExtractor();
+		// extractor.createBehaviorModel();
+	}
+
+	public void createBehaviorModel(String inputFile, String outputDirectory) {
 		try {
 
 			System.out.println("****************************");
 			System.out.println("Start BehaviorModelExtractor");
 			System.out.println("****************************");
 
-			// ---- read command-line parameters ----;
+			// -min 3 -max 5 -seed 5
 
-			// initialize arguments handler for retrieving the command line
-			// options; might throw a NullPointer-, IllegalArgument- or
-			// ParseException;
-			CommandLineArgumentsHandler.init(argv);
-
-			final String inputFile = CommandLineArgumentsHandler.getInputFile();
-
-			final String outputDirectory = CommandLineArgumentsHandler
-					.getOutputDirectory();
+			// final String inputFile = "wessbas/sessions.dat";
+			//
+			// final String outputDirectory = "wessbas/behaviormodelextractor";
 
 			// template file is optional;
-			final String templateFile = CommandLineArgumentsHandler
-					.getTemplateFile();
+			final String templateFile = null;
 
 			// use case mapping file is optional;
-			final String useCaseMappingFile = CommandLineArgumentsHandler
-					.getUseCaseMappingFile();
+			final String useCaseMappingFile = null;
 
 			// line-break type of CSV-files is optional;
-			final int lineBreakType = CommandLineArgumentsHandler
-					.getLineBreakType();
+			final int lineBreakType = 0;
 
 			// clustering method is optional;
-			final String clusteringMethod = CommandLineArgumentsHandler
-					.getClusteringMethod();
+			final String clusteringMethod = "xmeans";
 
 			// ---- initialize and start the Behavior Model Extractor ----
 
 			final BehaviorModelExtractor behaviorModelExtractor = new BehaviorModelExtractor();
 
 			// might throw a FileNotFound- or IOException;
-			behaviorModelExtractor.init(useCaseMappingFile, templateFile,
-					lineBreakType);
+			behaviorModelExtractor.init(useCaseMappingFile, templateFile, lineBreakType);
 
 			// might throw an IO-, Parse- or ExtractionException;
-			behaviorModelExtractor.extract(inputFile, outputDirectory,
-					clusteringMethod);
+			behaviorModelExtractor.extract(inputFile, outputDirectory, clusteringMethod);
 
 			System.out.println("****************************");
 			System.out.println("END BehaviorModelExtractor");
 			System.out.println("****************************");
 
-		} catch (final MissingOptionException ex) {
-
-			// this exception type indicates that no argument has been passed;
-			CommandLineArgumentsHandler.printUsage();
-
 		} catch (final Exception ex) {
 
-			System.err.println(ex.getMessage());
-			CommandLineArgumentsHandler.printUsage();
 		}
 	}
 
+	public void createBehaviorModel() {
+		final String inputFile = "wessbas/sessions.dat";
+		final String outputDirectory = "wessbas/behaviormodelextractor";
+		createBehaviorModel(inputFile, outputDirectory);
+	}
 }

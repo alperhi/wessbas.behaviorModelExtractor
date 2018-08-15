@@ -48,7 +48,8 @@ public class NoClusteringStrategy extends AbstractClusteringStrategy {
     @Override
     public BehaviorMix apply (
             final BehaviorModelAbsolute[] behaviorModelsAbsolute,
-            final UseCaseRepository useCaseRepository) {
+            final UseCaseRepository useCaseRepository,
+            final String outputDirectory) {
 
         final ABMToRBMTransformer abmToRbmTransformer =
                 new ABMToRBMTransformer();
